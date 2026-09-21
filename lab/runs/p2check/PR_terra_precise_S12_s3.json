@@ -1,0 +1,31 @@
+{
+  "source": "PR_terra_precise_S12_s3.json",
+  "gen": "terra",
+  "arm": "precise",
+  "item": "S12",
+  "seed": 3,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/SELECTORS.md",
+      "line_start": 147,
+      "line_end": 147,
+      "quote": "| `/?page=N`                     | Paginated feed            |",
+      "why": "SELECTORS.md 明確規定分頁列表的頁面路由格式包含 ?page=N。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 2,
+      "assertion": "await expect(page).toHaveURL(/[#?&]page=2|offset=10/)",
+      "line": 28,
+      "p2_candidate": true
+    },
+    {
+      "status": "P4 confirmed",
+      "why": "公開材料中並無規定或測試點選第 2 頁後首頁文章列表的特定數量必須恰好為 2 篇。",
+      "row": 3,
+      "assertion": "await expect(articlePreviews).toHaveCount(2)",
+      "line": 31,
+      "p2_candidate": false
+    }
+  ]
+}

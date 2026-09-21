@@ -1,0 +1,47 @@
+{
+  "source": "PR_terra_precise_H03_s2.json",
+  "gen": "terra",
+  "arm": "precise",
+  "item": "H03",
+  "seed": 2,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約與路由規範中標籤篩選網址為 /tag/:tag（見 routing.md 與 SELECTORS.md），並未規定或測試 hash-based 的 #/?tag= 路由格式。",
+      "row": 1,
+      "assertion": "await expect(page).toHaveURL(new RegExp(`#/\\\\?tag=${encodeURIComponent(tag)}`))",
+      "line": 30,
+      "p2_candidate": true
+    },
+    {
+      "supported": true,
+      "file": "specs/e2e/url-navigation.spec.ts",
+      "line_start": 266,
+      "line_end": 268,
+      "quote": "    // Second page should have 5 articles (15 - 10 = 5)\n    const articlesOnPage2 = await page.locator('.article-preview').count();\n    expect(articlesOnPage2).toBe(5);",
+      "why": "E2E 測試在 15 篇帶有特定標籤的文章情境下，明確測試了點選第 2 頁後應該顯示剩餘的 5 篇 article-preview。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 5,
+      "assertion": "await expect(articlePreviews).toHaveCount(5)",
+      "line": 46,
+      "p2_candidate": true
+    },
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約與官方測試僅約定 URL 為 '/'，完全沒有提及或要求包含 Hash 路由符號 '#/$'。",
+      "row": 11,
+      "assertion": "await expect(page).toHaveURL(new RegExp('#/$'))",
+      "line": 68,
+      "p2_candidate": true
+    },
+    {
+      "status": "P4 confirmed",
+      "why": "公開材料中切換回 Global Feed 時僅驗證網址重設為根路徑及文章載入，並未明確斷言在切回 Global Feed 後文章預覽數量必須恰好為 10 筆。",
+      "row": 12,
+      "assertion": "await expect(articlePreviews).toHaveCount(10)",
+      "line": 69,
+      "p2_candidate": true
+    }
+  ]
+}

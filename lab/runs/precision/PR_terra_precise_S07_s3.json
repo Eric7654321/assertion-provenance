@@ -1,0 +1,129 @@
+{
+  "gen": "terra",
+  "gen_model": "gpt-5.6-terra",
+  "arm": "precise",
+  "item": "S07",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S07\n    Scenario: Author deletes own article\n      Given an author opens their own article page\n      When the author deletes the article\n      Then the article no longer appears in the article list on the home page\n",
+  "spec": "generated/PR_terra_precise_S07_s3.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "點選刪除文章按鈕前的可見性確認，屬於確保操作對象存在的守衛斷言。",
+      "assertion": "await expect(page.getByRole('button', { name: /delete article/i })).toBeVisible()",
+      "line": 13
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅主張文章不再出現在首頁列表中，未提及刪除後應導向首頁 URL。",
+      "assertion": "await expect(page).toHaveURL(new RegExp(`${UI.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}/#/?$`))",
+      "line": 16
+    },
+    {
+      "class": "P0",
+      "citation": "刪除後該文章不再出現在首頁的文章列表。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "斷言在重導向至首頁後檢查文章標題連結數量為 0，直接對應驗收要求中「不再出現在首頁的文章列表」之主張。",
+      "assertion": "await expect(page.getByRole('link', { name: article.title })).toHaveCount(0)",
+      "line": 18
+    },
+    {
+      "class": "P0",
+      "citation": "刪除後該文章不再出現在首頁的文章列表。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出刪除後文章不再出現於列表，斷言文章標題文字數量為 0 是對此預期的直接驗證。",
+      "assertion": "await expect(page.getByText(article.title, { exact: true })).toHaveCount(0)",
+      "line": 19
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "點選刪除文章按鈕前的可見性確認，屬於確保操作對象存在的守衛斷言。",
+        "assertion": "await expect(page.getByRole('button', { name: /delete article/i })).toBeVisible()",
+        "line": 13
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅主張文章不再出現在首頁列表中，未提及刪除後應導向首頁 URL。",
+        "assertion": "await expect(page).toHaveURL(new RegExp(`${UI.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}/#/?$`))",
+        "line": 16
+      },
+      {
+        "class": "P0",
+        "citation": "刪除後該文章不再出現在首頁的文章列表。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在重導向至首頁後檢查文章標題連結數量為 0，直接對應驗收要求中「不再出現在首頁的文章列表」之主張。",
+        "assertion": "await expect(page.getByRole('link', { name: article.title })).toHaveCount(0)",
+        "line": 18
+      },
+      {
+        "class": "P0",
+        "citation": "刪除後該文章不再出現在首頁的文章列表。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出刪除後文章不再出現於列表，斷言文章標題文字數量為 0 是對此預期的直接驗證。",
+        "assertion": "await expect(page.getByText(article.title, { exact: true })).toHaveCount(0)",
+        "line": 19
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此可見性斷言位於刪除動作之前，驗收要求與 Gherkin 都未主張刪除按鈕在該時間點可見，僅是操作前守衛。",
+        "assertion": "await expect(page.getByRole('button', { name: /delete article/i })).toBeVisible()",
+        "line": 13
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只要求文章刪除後不再出現在首頁文章列表，未主張刪除後必須導向首頁 URL。",
+        "assertion": "await expect(page).toHaveURL(new RegExp(`${UI.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}/#/?$`))",
+        "line": 16
+      },
+      {
+        "class": "P0",
+        "citation": "刪除後該文章不再出現在首頁的文章列表。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在刪除後確認以文章標題命名的文章連結不存在，直接驗證文章不再出現在首頁文章列表。",
+        "assertion": "await expect(page.getByRole('link', { name: article.title })).toHaveCount(0)",
+        "line": 18
+      },
+      {
+        "class": "P0",
+        "citation": "刪除後該文章不再出現在首頁的文章列表。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在刪除後確認該文章標題不再出現在首頁文章列表中，與驗收要求一致。",
+        "assertion": "await expect(page.getByText(article.title, { exact: true })).toHaveCount(0)",
+        "line": 19
+      }
+    ]
+  },
+  "gen_wall_seconds": 2.9,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

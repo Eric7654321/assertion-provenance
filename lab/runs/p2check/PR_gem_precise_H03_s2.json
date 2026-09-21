@@ -1,0 +1,25 @@
+{
+  "source": "PR_gem_precise_H03_s2.json",
+  "gen": "gem",
+  "arm": "precise",
+  "item": "H03",
+  "seed": 2,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約與 E2E 規格中，標籤分頁的導覽項目為 a.nav-link（例如 `.nav-link:has-text(...)`），從未規定或測試過需存在一個名稱為 `# ${uniqueTag}` 的 button 元素。",
+      "row": 1,
+      "assertion": "await expect(page.getByRole('button', { name: `# ${uniqueTag}` })).toBeVisible()",
+      "line": 30,
+      "p2_candidate": true
+    },
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約中僅規定目前頁面使用 CSS class active（例如 .page-item.active），完全未提及或測試名為 'Page 2 is your current page' 的按鈕或無障礙名稱。",
+      "row": 5,
+      "assertion": "await expect(page.getByRole('button', { name: 'Page 2 is your current page' })).toBeVisible()",
+      "line": 46,
+      "p2_candidate": true
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "source": "PR_gem_terse_H04_s1.json",
+  "gen": "gem",
+  "arm": "terse",
+  "item": "H04",
+  "seed": 1,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約中僅有 .empty-feed-message 需包含 'Your feed is empty'（或一般稱 No articles here），並無任何要求或測試斷言為 'Articles not available.'。",
+      "row": 6,
+      "assertion": "await expect(page.getByText('Articles not available.')).toBeVisible()",
+      "line": 45,
+      "p2_candidate": true
+    }
+  ]
+}

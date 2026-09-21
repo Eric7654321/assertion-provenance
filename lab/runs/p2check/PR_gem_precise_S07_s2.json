@@ -1,0 +1,23 @@
+{
+  "source": "PR_gem_precise_S07_s2.json",
+  "gen": "gem",
+  "arm": "precise",
+  "item": "S07",
+  "seed": 2,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/articles.spec.ts",
+      "line_start": 76,
+      "line_end": 81,
+      "quote": "    // Delete the article\n    await deleteArticle(page);\n\n    // Should be redirected to home\n    await expect(page).toHaveURL('/');",
+      "why": "官方 E2E 測試在刪除文章後明確斷言應重定向至首頁（'/'）。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 0,
+      "assertion": "await expect(page).toHaveURL(`${UI}/#/`)",
+      "line": 17,
+      "p2_candidate": true
+    }
+  ]
+}

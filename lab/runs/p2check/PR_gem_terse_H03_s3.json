@@ -1,0 +1,17 @@
+{
+  "source": "PR_gem_terse_H03_s3.json",
+  "gen": "gem",
+  "arm": "terse",
+  "item": "H03",
+  "seed": 3,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約中前端標籤篩選的路由定義為 /tag/:tag 或 /tag/:tag?page=N，而非以 query 參數 tag=${tag} 形式表示。",
+      "row": 1,
+      "assertion": "await expect(page).toHaveURL(new RegExp(`tag=${tag}`))",
+      "line": 29,
+      "p2_candidate": false
+    }
+  ]
+}

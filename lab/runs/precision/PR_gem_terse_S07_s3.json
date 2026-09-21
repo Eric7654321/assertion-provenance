@@ -1,0 +1,75 @@
+{
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "terse",
+  "item": "S07",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S07\n    Scenario: Author deletes their own article\n      Given the author opens their own article page\n      When the author clicks to delete the article\n      Then the article disappears from the list after deletion\n",
+  "spec": "generated/PR_gem_terse_S07_s3.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此斷言出現在點擊刪除文章之前，用於確認文章頁面載入完成（可見性守衛），非需求層驗收的行為主張。",
+      "assertion": "await expect(page.getByRole('heading', { name: article.title })).toBeVisible()",
+      "line": 13
+    },
+    {
+      "class": "P0",
+      "citation": "刪除後該文章從列表上消失。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出刪除後文章從列表消失，斷言在文章列表頁確認該標題不可見，直接符合需求主張。",
+      "assertion": "await expect(page.getByText(article.title)).not.toBeVisible()",
+      "line": 24
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言出現在點擊刪除文章之前，用於確認文章頁面載入完成（可見性守衛），非需求層驗收的行為主張。",
+        "assertion": "await expect(page.getByRole('heading', { name: article.title })).toBeVisible()",
+        "line": 13
+      },
+      {
+        "class": "P0",
+        "citation": "刪除後該文章從列表上消失。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出刪除後文章從列表消失，斷言在文章列表頁確認該標題不可見，直接符合需求主張。",
+        "assertion": "await expect(page.getByText(article.title)).not.toBeVisible()",
+        "line": 24
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於刪除動作前，驗收要求與 Gherkin 都未主張文章標題在此時可見，僅是確認後續操作的頁面已載入。",
+        "assertion": "await expect(page.getByRole('heading', { name: article.title })).toBeVisible()",
+        "line": 13
+      },
+      {
+        "class": "P0",
+        "citation": "刪除後該文章從列表上消失。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在刪除後確認文章標題於列表不可見，直接對應驗收要求的列表消失主張。",
+        "assertion": "await expect(page.getByText(article.title)).not.toBeVisible()",
+        "line": 24
+      }
+    ]
+  },
+  "gen_wall_seconds": 39.6,
+  "probe_steps": 3,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

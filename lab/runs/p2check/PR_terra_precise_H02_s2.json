@@ -1,0 +1,51 @@
+{
+  "source": "PR_terra_precise_H02_s2.json",
+  "gen": "terra",
+  "arm": "precise",
+  "item": "H02",
+  "seed": 2,
+  "checks": [
+    {
+      "supported": true,
+      "file": "docs/src/content/docs/specifications/frontend/routing.md",
+      "line_start": 14,
+      "line_end": 17,
+      "quote": "- Article page (URL: `/article/article-slug-here` )\n  - Delete article button (only shown to article's author)\n  - Render markdown from server client side\n  - Comments section at bottom of page",
+      "why": "前端路由規範明確規定文章頁（/article/:slug）底部包含留言區塊（Comments section），因此訪客訪問文章頁時先前留下的留言內容應可見。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 2,
+      "assertion": "await expect( page.getByText('Comment written by the article author'), ).toBeVisible()",
+      "line": 28,
+      "p2_candidate": true
+    },
+    {
+      "supported": true,
+      "file": "docs/src/content/docs/specifications/frontend/routing.md",
+      "line_start": 14,
+      "line_end": 15,
+      "quote": "- Article page (URL: `/article/article-slug-here` )\n  - Delete article button (only shown to article's author)",
+      "why": "規格明確規範文章頁的 Delete article button 僅在身分為文章作者時顯示，因此非作者（包含未登入訪客）不得看見該按鈕。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 5,
+      "assertion": "await expect( page.getByRole('button', { name: /delete article/i }), ).not.toBeVisible()",
+      "line": 39,
+      "p2_candidate": false
+    },
+    {
+      "supported": true,
+      "file": "specs/e2e/comments.spec.ts",
+      "line_start": 31,
+      "line_end": 36,
+      "quote": "  test('should add a comment to an article', async ({ page }) => {\n    const commentText = 'This is a test comment from Playwright!';\n    await addComment(page, commentText);\n    // Comment should be visible\n    await expect(page.locator(`.card:not(.comment-form) .card-block:has-text(\"${commentText}\")`)).toBeVisible();\n  });",
+      "why": "E2E 測試明確驗證了在文章發布留言後，該則留言卡片內容在頁面上可見。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 10,
+      "assertion": "await expect(visitorComment).toBeVisible()",
+      "line": 64,
+      "p2_candidate": true
+    }
+  ]
+}

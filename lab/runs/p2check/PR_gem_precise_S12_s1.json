@@ -1,0 +1,17 @@
+{
+  "source": "PR_gem_precise_S12_s1.json",
+  "gen": "gem",
+  "arm": "precise",
+  "item": "S12",
+  "seed": 1,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約中要求分頁當前頁以 CSS class 'active' 表示，並未規定或測試名為 'Page 2 is your current page' 的按鈕或無障礙名稱。",
+      "row": 1,
+      "assertion": "await expect(page.getByRole('button', { name: 'Page 2 is your current page' })).toBeVisible()",
+      "line": 34,
+      "p2_candidate": true
+    }
+  ]
+}

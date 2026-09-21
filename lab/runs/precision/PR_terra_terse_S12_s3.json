@@ -1,0 +1,156 @@
+{
+  "gen": "terra",
+  "gen_model": "gpt-5.6-terra",
+  "arm": "terse",
+  "item": "S12",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S12\n    Scenario: Article list pagination\n      Given the user is on the article list on the home page\n      When the user scrolls to the pagination bar and clicks page 2\n      Then different articles are displayed after changing the page\n",
+  "spec": "generated/PR_terra_terse_S12_s3.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "在點擊換頁動作前確認首頁文章列表已載入完成（10筆），屬於測試步驟的前置準備與守衛斷言。",
+      "assertion": "await expect(articlePreviews).toHaveCount(10)",
+      "line": 22
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "在點選第 2 頁之前確認分頁按鈕可見，屬於操作前的可見性守衛，非需求層的行為主張。",
+      "assertion": "await expect(pageTwo).toBeVisible()",
+      "line": 27
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅主張換頁後看到不一樣的文章，未提及網址需帶有特定 query 參數（offset=10）。",
+      "assertion": "await expect(page).toHaveURL(/[#/]\\/?\\?offset=10/)",
+      "line": 32
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求換頁後看到不一樣的文章，未規範第二頁文章的具體數量必須為 2 篇。",
+      "assertion": "await expect(articlePreviews).toHaveCount(2)",
+      "line": 33
+    },
+    {
+      "class": "P0",
+      "citation": "換頁後看到的是不一樣的文章。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "斷言比對第二頁文章標題與第一頁不同，直接對應驗收要求的「換頁後看到的是不一樣的文章」。",
+      "assertion": "expect(secondPageTitles).not.toEqual(firstPageTitles)",
+      "line": 36
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "在點擊換頁動作前確認首頁文章列表已載入完成（10筆），屬於測試步驟的前置準備與守衛斷言。",
+        "assertion": "await expect(articlePreviews).toHaveCount(10)",
+        "line": 22
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "在點選第 2 頁之前確認分頁按鈕可見，屬於操作前的可見性守衛，非需求層的行為主張。",
+        "assertion": "await expect(pageTwo).toBeVisible()",
+        "line": 27
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅主張換頁後看到不一樣的文章，未提及網址需帶有特定 query 參數（offset=10）。",
+        "assertion": "await expect(page).toHaveURL(/[#/]\\/?\\?offset=10/)",
+        "line": 32
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求換頁後看到不一樣的文章，未規範第二頁文章的具體數量必須為 2 篇。",
+        "assertion": "await expect(articlePreviews).toHaveCount(2)",
+        "line": 33
+      },
+      {
+        "class": "P0",
+        "citation": "換頁後看到的是不一樣的文章。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言比對第二頁文章標題與第一頁不同，直接對應驗收要求的「換頁後看到的是不一樣的文章」。",
+        "assertion": "expect(secondPageTitles).not.toEqual(firstPageTitles)",
+        "line": 36
+      }
+    ],
+    "terra": [
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只要求換到第 2 頁後顯示不同文章，未主張首頁文章預覽數量必須為 10。",
+        "assertion": "await expect(articlePreviews).toHaveCount(10)",
+        "line": 22
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於點擊第 2 頁之前，驗收要求與 Gherkin 都未主張該按鈕在此時可見，僅是確保後續點擊有對象的守衛。",
+        "assertion": "await expect(pageTwo).toBeVisible()",
+        "line": 27
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只主張換頁後顯示不同文章，未主張網址必須包含 offset=10。",
+        "assertion": "await expect(page).toHaveURL(/[#/]\\/?\\?offset=10/)",
+        "line": 32
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只要求換頁後顯示不同文章，未主張第二頁文章預覽數量必須為 2。",
+        "assertion": "await expect(articlePreviews).toHaveCount(2)",
+        "line": 33
+      },
+      {
+        "class": "P0",
+        "citation": "換頁後看到的是不一樣的文章。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言直接驗證換到第 2 頁後文章標題集合與原頁不同，屬於驗收要求的無歧義實作。",
+        "assertion": "expect(secondPageTitles).not.toEqual(firstPageTitles)",
+        "line": 36
+      }
+    ]
+  },
+  "gen_wall_seconds": 3.8,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

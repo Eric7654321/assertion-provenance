@@ -1,0 +1,210 @@
+{
+  "gen": "terra",
+  "gen_model": "gpt-5.6-terra",
+  "arm": "terse",
+  "item": "S02",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Requirements\n\n  @item:S02\n    Scenario: Registration with a duplicate email\n      Given a user completes registration with an unused email\n      And the user logs out\n      When the user attempts to register again with the same email\n      Then the second registration should not succeed\n",
+  "spec": "generated/PR_terra_terse_S02_s1.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此斷言位於前置步驟（以未使用過的 email 完成註冊）中，用於確認完成註冊並跳轉回首頁，以確保後續登出與重複註冊流程有正確的測試前置狀態，非本測試案例要驗證的核心行為主張。",
+      "assertion": "await expect(page).toHaveURL(/#\\/$/)",
+      "line": 15
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此斷言為點擊 settings 連結後確認導向 settings 頁面以執行登出操作的導引/守衛斷言，非需求層的行為主張。",
+      "assertion": "await expect(page).toHaveURL(/#\\/settings/)",
+      "line": 18
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "點擊登出按鈕後確認回到首頁 URL，屬於確保前置登出動作完成的守衛斷言，非需求核心驗收主張。",
+      "assertion": "await expect(page).toHaveURL(/#\\/$/)",
+      "line": 21
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求僅陳述第二次註冊不會成功，斷言直接在 API 層檢查 status >= 400，屬於換觀測管道且規格未直接明定 API 回應碼。",
+      "assertion": "expect(duplicateRegistration.status).toBeGreaterThanOrEqual(400)",
+      "line": 31
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求第二次註冊不會成功，未規範 API 回應結構必須包含 errors 屬性，但此為 RealWorld API 規範標準錯誤格式。",
+      "assertion": "expect(duplicateRegistration.json).toHaveProperty('errors')",
+      "line": 32
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求第二次註冊不會成功，未具體規定失敗時必須停留在註冊頁 URL。",
+      "assertion": "await expect(page).toHaveURL(/#\\/register/)",
+      "line": 40
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅規定「第二次註冊不會成功」，未指定要顯示具體的錯誤訊息「email has already been taken」，屬於規格外的行為斷言。",
+      "assertion": "await expect(page.getByText(/email.*has already been taken/i)).toBeVisible()",
+      "line": 41
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於前置步驟（以未使用過的 email 完成註冊）中，用於確認完成註冊並跳轉回首頁，以確保後續登出與重複註冊流程有正確的測試前置狀態，非本測試案例要驗證的核心行為主張。",
+        "assertion": "await expect(page).toHaveURL(/#\\/$/)",
+        "line": 15
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言為點擊 settings 連結後確認導向 settings 頁面以執行登出操作的導引/守衛斷言，非需求層的行為主張。",
+        "assertion": "await expect(page).toHaveURL(/#\\/settings/)",
+        "line": 18
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "點擊登出按鈕後確認回到首頁 URL，屬於確保前置登出動作完成的守衛斷言，非需求核心驗收主張。",
+        "assertion": "await expect(page).toHaveURL(/#\\/$/)",
+        "line": 21
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求僅陳述第二次註冊不會成功，斷言直接在 API 層檢查 status >= 400，屬於換觀測管道且規格未直接明定 API 回應碼。",
+        "assertion": "expect(duplicateRegistration.status).toBeGreaterThanOrEqual(400)",
+        "line": 31
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求第二次註冊不會成功，未規範 API 回應結構必須包含 errors 屬性，但此為 RealWorld API 規範標準錯誤格式。",
+        "assertion": "expect(duplicateRegistration.json).toHaveProperty('errors')",
+        "line": 32
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求第二次註冊不會成功，未具體規定失敗時必須停留在註冊頁 URL。",
+        "assertion": "await expect(page).toHaveURL(/#\\/register/)",
+        "line": 40
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅規定「第二次註冊不會成功」，未指定要顯示具體的錯誤訊息「email has already been taken」，屬於規格外的行為斷言。",
+        "assertion": "await expect(page.getByText(/email.*has already been taken/i)).toBeVisible()",
+        "line": 41
+      }
+    ],
+    "terra": [
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言主張首次註冊後會導向首頁 URL，但驗收要求與 Gherkin 只主張首次完成註冊，未主張該 URL 導向。",
+        "assertion": "await expect(page).toHaveURL(/#\\/$/)",
+        "line": 15
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言僅確認已點擊 Settings 連結後的導覽狀態，屬於為後續登出操作準備的測試流程守衛，驗收要求與 Gherkin 均未主張此行為。",
+        "assertion": "await expect(page).toHaveURL(/#\\/settings/)",
+        "line": 18
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言在登出後、第二次註冊觸發前僅確認導向首頁以便後續操作，驗收要求與 Gherkin 都未主張登出後 URL。",
+        "assertion": "await expect(page).toHaveURL(/#\\/$/)",
+        "line": 21
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只主張第二次註冊不成功，未主張以 API 回應狀態碼至少 400 作為判定方式。",
+        "assertion": "expect(duplicateRegistration.status).toBeGreaterThanOrEqual(400)",
+        "line": 31
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只主張第二次註冊不成功，未主張失敗回應的 JSON 必須含有 errors 屬性。",
+        "assertion": "expect(duplicateRegistration.json).toHaveProperty('errors')",
+        "line": 32
+      },
+      {
+        "class": "P0",
+        "citation": "第二次註冊不會成功。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "第二次註冊後仍停留在註冊頁可作為註冊未成功的行為表現，但驗收要求未明示此觀測管道。",
+        "assertion": "await expect(page).toHaveURL(/#\\/register/)",
+        "line": 40
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只主張第二次註冊不成功，未主張必須顯示特定「email has already been taken」錯誤訊息。",
+        "assertion": "await expect(page.getByText(/email.*has already been taken/i)).toBeVisible()",
+        "line": 41
+      }
+    ]
+  },
+  "gen_wall_seconds": 5.0,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

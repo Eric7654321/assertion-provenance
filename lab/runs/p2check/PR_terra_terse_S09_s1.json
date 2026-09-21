@@ -1,0 +1,23 @@
+{
+  "source": "PR_terra_terse_S09_s1.json",
+  "gen": "terra",
+  "arm": "terse",
+  "item": "S09",
+  "seed": 1,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/api/hurl/comments.hurl",
+      "line_start": 82,
+      "line_end": 120,
+      "quote": "# Selective deletion: create two comments, delete one, verify the other remains\nPOST {{host}}/api/articles/{{slug}}/comments\nAuthorization: Token {{token}}\n{\n  \"comment\": {\n    \"body\": \"First comment\"\n  }\n}\nHTTP 201\n[Captures]\nfirst_comment_id: jsonpath \"$.comment.id\"\n\nPOST {{host}}/api/articles/{{slug}}/comments\nAuthorization: Token {{token}}\n{\n  \"comment\": {\n    \"body\": \"Second comment\"\n  }\n}\nHTTP 201\n\n# Verify two comments exist\nGET {{host}}/api/articles/{{slug}}/comments\nHTTP 200\n[Asserts]\njsonpath \"$.comments\" count == 2\n\n# Delete the first comment\nDELETE {{host}}/api/articles/{{slug}}/comments/{{first_comment_id}}\nAuthorization: Token {{token}}\nHTTP 204\n\n# Verify only the second comment remains\nGET {{host}}/api/articles/{{slug}}/comments\nHTTP 200\n[Asserts]\njsonpath \"$.comments\" count == 1\njsonpath \"$.comments[0].body\" == \"Second comment\"",
+      "why": "Hurl 測試明確規範並測試了「在存在多則留言時刪除其中一則，另一則留言仍應保留（未被刪除）」的選擇性刪除行為。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 7,
+      "assertion": "await expect(page.getByText('Comment written by User A')).toBeVisible()",
+      "line": 50,
+      "p2_candidate": false
+    }
+  ]
+}

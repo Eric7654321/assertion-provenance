@@ -1,0 +1,17 @@
+{
+  "source": "PR_gem_precise_S12_s3.json",
+  "gen": "gem",
+  "arm": "precise",
+  "item": "S12",
+  "seed": 3,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開材料中分頁元件僅定義了 .pagination、.page-item.active 或 ?page=N，並無任何關於特定無障礙名稱（如 'Page 2 is your current page'）或按鈕文字角色的規範或測試。",
+      "row": 2,
+      "assertion": "await expect(page2CurrentButton).toBeVisible()",
+      "line": 26,
+      "p2_candidate": false
+    }
+  ]
+}

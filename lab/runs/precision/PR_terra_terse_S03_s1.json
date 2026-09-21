@@ -1,0 +1,102 @@
+{
+  "gen": "terra",
+  "gen_model": "gpt-5.6-terra",
+  "arm": "terse",
+  "item": "S03",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Requirements\n\n  @item:S03\n    Scenario: Login with incorrect password\n      Given a user enters a registered email and an incorrect password on the login page\n      When the user submits the form\n      Then the login should not succeed and the page should inform the user\n",
+  "spec": "generated/PR_terra_terse_S03_s1.spec.ts",
+  "rows": [
+    {
+      "class": "P0",
+      "citation": "登入不會成功，畫面會告知。",
+      "p2_candidate": false,
+      "borderline": true,
+      "why": "「登入不會成功」直接蘊含停留在登入頁（URL 仍為 /#/login）而未跳轉至首頁。",
+      "assertion": "await expect(page).toHaveURL(/#\\/login/)",
+      "line": 14
+    },
+    {
+      "class": "P0",
+      "citation": "登入不會成功，畫面會告知。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求已陳述「畫面會告知」，送出錯誤密碼後錯誤訊息元素可見直接對應並操作化此要求。",
+      "assertion": "await expect(page.locator('.error-messages')).toBeVisible()",
+      "line": 15
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求「畫面會告知」，未具體規定錯誤訊息文字為 email or password is invalid，屬於 RealWorld API/Conduit 規範細節。",
+      "assertion": "await expect(page.locator('.error-messages')).toContainText(/email or password is invalid/i)",
+      "line": 16
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P0",
+        "citation": "登入不會成功，畫面會告知。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "「登入不會成功」直接蘊含停留在登入頁（URL 仍為 /#/login）而未跳轉至首頁。",
+        "assertion": "await expect(page).toHaveURL(/#\\/login/)",
+        "line": 14
+      },
+      {
+        "class": "P0",
+        "citation": "登入不會成功，畫面會告知。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求已陳述「畫面會告知」，送出錯誤密碼後錯誤訊息元素可見直接對應並操作化此要求。",
+        "assertion": "await expect(page.locator('.error-messages')).toBeVisible()",
+        "line": 15
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求「畫面會告知」，未具體規定錯誤訊息文字為 email or password is invalid，屬於 RealWorld API/Conduit 規範細節。",
+        "assertion": "await expect(page.locator('.error-messages')).toContainText(/email or password is invalid/i)",
+        "line": 16
+      }
+    ],
+    "terra": [
+      {
+        "class": "P0",
+        "citation": "登入不會成功，畫面會告知。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "送出錯誤密碼後仍停留在登入頁可作為登入未成功的行為表現，雖然驗收要求未明示 URL。",
+        "assertion": "await expect(page).toHaveURL(/#\\/login/)",
+        "line": 14
+      },
+      {
+        "class": "P0",
+        "citation": "登入不會成功，畫面會告知。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "送出錯誤密碼後錯誤訊息區塊可見，是「畫面會告知」的直接行為驗證。",
+        "assertion": "await expect(page.locator('.error-messages')).toBeVisible()",
+        "line": 15
+      },
+      {
+        "class": "P0",
+        "citation": "登入不會成功，畫面會告知。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "錯誤訊息文字是「畫面會告知」的具體呈現，但驗收要求未明示固定文案。",
+        "assertion": "await expect(page.locator('.error-messages')).toContainText(/email or password is invalid/i)",
+        "line": 16
+      }
+    ]
+  },
+  "gen_wall_seconds": 3.0,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

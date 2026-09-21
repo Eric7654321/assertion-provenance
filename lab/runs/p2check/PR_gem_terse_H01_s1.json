@@ -1,0 +1,17 @@
+{
+  "source": "PR_gem_terse_H01_s1.json",
+  "gen": "gem",
+  "arm": "terse",
+  "item": "H01",
+  "seed": 1,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約中僅在編輯頁面載入時檢查 title 輸入框不為空（not.toHaveValue('')）或特定字串，並未規定或斷言編輯文章時 title 欄位必須精確預先填入先前的標題值。",
+      "row": 3,
+      "assertion": "await expect(titleInput).toHaveValue(title1)",
+      "line": 44,
+      "p2_candidate": true
+    }
+  ]
+}

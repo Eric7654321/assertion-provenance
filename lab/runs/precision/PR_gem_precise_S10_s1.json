@@ -1,0 +1,129 @@
+{
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "precise",
+  "item": "S10",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S10\n    Scenario: Favorite an article\n      Given I view an un-favorited article with an initial favorite count of 0\n      When I choose to favorite the article\n      Then the favorite button changes to an un-favorite state\n      And the favorite count changes from 0 to 1\n",
+  "spec": "generated/PR_gem_precise_S10_s1.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此斷言在點擊收藏按鈕之前確認元素可見，規格未要求點擊前的可見性，屬於操作前的可見性守衛。",
+      "assertion": "await expect(favoriteBtn).toBeVisible()",
+      "line": 20
+    },
+    {
+      "class": "P0",
+      "citation": "該文章的初始收藏數為 0。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出該文章初始收藏數為 0，且 Gherkin 的 Given 亦有陳述，點擊前的按鈕包含 (0) 是對該前置狀態的直接驗證。",
+      "assertion": "await expect(favoriteBtn).toContainText('(0)')",
+      "line": 21
+    },
+    {
+      "class": "P0",
+      "citation": "收藏後按鈕切換成取消收藏的狀態，且收藏計數由 0 變成 1。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "點選收藏後驗證取消收藏按鈕（Unfavorite Article）出現並可見，直接對應驗收要求中「收藏後按鈕切換成取消收藏的狀態」。",
+      "assertion": "await expect(unfavoriteBtn).toBeVisible()",
+      "line": 28
+    },
+    {
+      "class": "P0",
+      "citation": "收藏後按鈕切換成取消收藏的狀態，且收藏計數由 0 變成 1。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出收藏計數由 0 變成 1，斷言按鈕文字包含 (1) 為該要求的直接操作化呈現。",
+      "assertion": "await expect(unfavoriteBtn).toContainText('(1)')",
+      "line": 29
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言在點擊收藏按鈕之前確認元素可見，規格未要求點擊前的可見性，屬於操作前的可見性守衛。",
+        "assertion": "await expect(favoriteBtn).toBeVisible()",
+        "line": 20
+      },
+      {
+        "class": "P0",
+        "citation": "該文章的初始收藏數為 0。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出該文章初始收藏數為 0，且 Gherkin 的 Given 亦有陳述，點擊前的按鈕包含 (0) 是對該前置狀態的直接驗證。",
+        "assertion": "await expect(favoriteBtn).toContainText('(0)')",
+        "line": 21
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕切換成取消收藏的狀態，且收藏計數由 0 變成 1。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "點選收藏後驗證取消收藏按鈕（Unfavorite Article）出現並可見，直接對應驗收要求中「收藏後按鈕切換成取消收藏的狀態」。",
+        "assertion": "await expect(unfavoriteBtn).toBeVisible()",
+        "line": 28
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕切換成取消收藏的狀態，且收藏計數由 0 變成 1。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出收藏計數由 0 變成 1，斷言按鈕文字包含 (1) 為該要求的直接操作化呈現。",
+        "assertion": "await expect(unfavoriteBtn).toContainText('(1)')",
+        "line": 29
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此可見性斷言位於點擊收藏之前，且驗收要求與 Gherkin 都未主張按鈕在該時間點可見，僅作為後續點擊的守衛。",
+        "assertion": "await expect(favoriteBtn).toBeVisible()",
+        "line": 20
+      },
+      {
+        "class": "P0",
+        "citation": "該文章的初始收藏數為 0。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在點擊前確認收藏按鈕文字中的計數為 0，直接對應驗收要求明示的初始收藏數。",
+        "assertion": "await expect(favoriteBtn).toContainText('(0)')",
+        "line": 21
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕切換成取消收藏的狀態，且收藏計數由 0 變成 1。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在點選收藏後確認取消收藏按鈕可見，直接驗證按鈕已切換為取消收藏狀態。",
+        "assertion": "await expect(unfavoriteBtn).toBeVisible()",
+        "line": 28
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕切換成取消收藏的狀態，且收藏計數由 0 變成 1。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "點擊收藏後按鈕文字包含「(1)」是在按鈕上驗證收藏計數由 0 變成 1。",
+        "assertion": "await expect(unfavoriteBtn).toContainText('(1)')",
+        "line": 29
+      }
+    ]
+  },
+  "gen_wall_seconds": 49.2,
+  "probe_steps": 5,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

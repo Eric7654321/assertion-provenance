@@ -1,0 +1,51 @@
+{
+  "source": "PR_gem_terse_S02_s3.json",
+  "gen": "gem",
+  "arm": "terse",
+  "item": "S02",
+  "seed": 3,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/error-handling.spec.ts",
+      "line_start": 61,
+      "line_end": 64,
+      "quote": "    await page.click('button[type=\"submit\"]');\n    // Should show error messages\n    await expect(page.locator('.error-messages')).toBeVisible();\n    await expect(page).toHaveURL('/register');",
+      "why": "公開材料中的 E2E 測試明確驗證了註冊失敗（包括 email is already taken）時，頁面應留在註冊頁 URL（/register）不導頁。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 0,
+      "assertion": "await expect(page).toHaveURL(/.*#\\/register/)",
+      "line": 21,
+      "p2_candidate": false
+    },
+    {
+      "supported": true,
+      "file": "specs/e2e/error-handling.spec.ts",
+      "line_start": 50,
+      "line_end": 66,
+      "quote": "  test('should handle 400 on registration with validation errors', async ({ page }) => {\n    await mockApiError(page, '/users', 400, {\n      errors: {\n        email: ['is already taken'],\n        username: ['is too short (minimum is 3 characters)'],\n      },\n    });\n    await page.goto('/register');\n    await page.fill('input[name=\"username\"]', 'ab');\n    await page.fill('input[name=\"email\"]', 'taken@test.com');\n    await page.fill('input[name=\"password\"]', 'password123');\n    await page.click('button[type=\"submit\"]');\n    // Should show error messages\n    await expect(page.locator('.error-messages')).toBeVisible();\n    await expect(page).toHaveURL('/register');\n    await expect(page.locator('input[name=\"email\"]')).toBeVisible();\n  });",
+      "why": "E2E 規格中明確測試註冊時發生 email taken 等驗證錯誤時，頁面上的 .error-messages 必須可見。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 1,
+      "assertion": "await expect(page.locator('.error-messages, [role=\"alert\"]')).toBeVisible()",
+      "line": 22,
+      "p2_candidate": true
+    },
+    {
+      "supported": true,
+      "file": "specs/e2e/error-handling.spec.ts",
+      "line_start": 50,
+      "line_end": 66,
+      "quote": "  test('should handle 400 on registration with validation errors', async ({ page }) => {\n    await mockApiError(page, '/users', 400, {\n      errors: {\n        email: ['is already taken'],\n        username: ['is too short (minimum is 3 characters)'],\n      },\n    });\n    await page.goto('/register');\n    await page.fill('input[name=\"username\"]', 'ab');\n    await page.fill('input[name=\"email\"]', 'taken@test.com');\n    await page.fill('input[name=\"password\"]', 'password123');\n    await page.click('button[type=\"submit\"]');\n    // Should show error messages\n    await expect(page.locator('.error-messages')).toBeVisible();\n    await expect(page).toHaveURL('/register');\n    await expect(page.locator('input[name=\"email\"]')).toBeVisible();\n  });",
+      "why": "E2E 測試驗證了在註冊時若 email 被佔用（'is already taken'），頁面上會顯示 .error-messages 錯誤訊息。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 2,
+      "assertion": "await expect(page.locator('.error-messages, [role=\"alert\"]')).toContainText(/email.*has already been taken|email.*taken|already taken/i)",
+      "line": 23,
+      "p2_candidate": true
+    }
+  ]
+}

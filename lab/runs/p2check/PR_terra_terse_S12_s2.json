@@ -1,0 +1,23 @@
+{
+  "source": "PR_terra_terse_S12_s2.json",
+  "gen": "terra",
+  "arm": "terse",
+  "item": "S12",
+  "seed": 2,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/SELECTORS.md",
+      "line_start": 213,
+      "line_end": 213,
+      "quote": "- **Pagination active**: The current page's `.page-item` has the CSS class `active`.",
+      "why": "SELECTORS.md 明確規定分頁選中時當前頁應帶有 active CSS class。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 2,
+      "assertion": "await expect(pageTwo).toHaveClass(/active/)",
+      "line": 31,
+      "p2_candidate": false
+    }
+  ]
+}

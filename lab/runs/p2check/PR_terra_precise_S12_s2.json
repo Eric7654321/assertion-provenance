@@ -1,0 +1,31 @@
+{
+  "source": "PR_terra_precise_S12_s2.json",
+  "gen": "terra",
+  "arm": "precise",
+  "item": "S12",
+  "seed": 2,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/SELECTORS.md",
+      "line_start": 213,
+      "line_end": 213,
+      "quote": "- **Pagination active**: The current page's `.page-item` has the CSS class `active`.",
+      "why": "契約明確規定當前分頁的 .page-item 元素必須具備 active CSS 類別，支持換到第 2 頁後該頁碼項目成為 active 的斷言。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 1,
+      "assertion": "await expect(page.locator('.pagination .page-item.active')).toHaveText('2')",
+      "line": 32,
+      "p2_candidate": false
+    },
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約中僅測試點擊分頁後切換頁面或特定標籤下的文章數量，並未規定或測試首頁點擊第 2 頁時文章預覽的數量必須剛好為 2。",
+      "row": 2,
+      "assertion": "await expect(articlePreviews).toHaveCount(2)",
+      "line": 33,
+      "p2_candidate": false
+    }
+  ]
+}

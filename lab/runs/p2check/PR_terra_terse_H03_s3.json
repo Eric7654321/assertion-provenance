@@ -1,0 +1,25 @@
+{
+  "source": "PR_terra_terse_H03_s3.json",
+  "gen": "terra",
+  "arm": "terse",
+  "item": "H03",
+  "seed": 3,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "官方契約規範之標籤路由為 `/tag/:tag`（如 specs/e2e/SELECTORS.md 第 148 行與 url-navigation.spec.ts 第 39-50 行），未規範亦未測試以 hash 查詢參數 `#/\\?tag=...` 呈現標籤篩選的 URL 行為。",
+      "row": 1,
+      "assertion": "await expect(page).toHaveURL(new RegExp(`#/\\\\?tag=${encodeURIComponent(tag)}`))",
+      "line": 26,
+      "p2_candidate": true
+    },
+    {
+      "status": "P4 confirmed",
+      "why": "公開材料中並未規定切回 Global Feed 後第 11 篇（index 10）特定文章必須可見（預設每頁筆數可能為 10 或 20，且文章排序亦未保證特定順序可見）。",
+      "row": 17,
+      "assertion": "await expect(page.getByText(articles[10].title)).toBeVisible()",
+      "line": 57,
+      "p2_candidate": false
+    }
+  ]
+}

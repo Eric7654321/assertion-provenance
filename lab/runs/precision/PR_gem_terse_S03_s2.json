@@ -1,0 +1,102 @@
+{
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "terse",
+  "item": "S03",
+  "seed": 2,
+  "feature": "Feature: Conduit Acceptance Requirements\n\n  @item:S03\n    Scenario: Login with incorrect password\n      Given the user is on the login page\n      When the user enters a registered email and an incorrect password and submits\n      Then login should not succeed\n      And the screen should notify the user\n",
+  "spec": "generated/PR_gem_terse_S03_s2.spec.ts",
+  "rows": [
+    {
+      "class": "P0",
+      "citation": "登入不會成功",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "「登入不會成功」直接蘊含使用者仍停留在登入頁（URL 保持在 /#/login 而未跳轉至首頁）。",
+      "assertion": "await expect(page).toHaveURL(`${UI}/#/login`)",
+      "line": 16
+    },
+    {
+      "class": "P0",
+      "citation": "畫面會告知。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出「畫面會告知」，斷言錯誤訊息元素可見為其直接操作化驗證。",
+      "assertion": "await expect(errorMessages).toBeVisible()",
+      "line": 20
+    },
+    {
+      "class": "P0",
+      "citation": "畫面會告知。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求已明確寫出「畫面會告知」，斷言錯誤訊息列表非空是對此告知行為的直接操作化檢驗。",
+      "assertion": "await expect(errorMessages).not.toBeEmpty()",
+      "line": 21
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P0",
+        "citation": "登入不會成功",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "「登入不會成功」直接蘊含使用者仍停留在登入頁（URL 保持在 /#/login 而未跳轉至首頁）。",
+        "assertion": "await expect(page).toHaveURL(`${UI}/#/login`)",
+        "line": 16
+      },
+      {
+        "class": "P0",
+        "citation": "畫面會告知。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出「畫面會告知」，斷言錯誤訊息元素可見為其直接操作化驗證。",
+        "assertion": "await expect(errorMessages).toBeVisible()",
+        "line": 20
+      },
+      {
+        "class": "P0",
+        "citation": "畫面會告知。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求已明確寫出「畫面會告知」，斷言錯誤訊息列表非空是對此告知行為的直接操作化檢驗。",
+        "assertion": "await expect(errorMessages).not.toBeEmpty()",
+        "line": 21
+      }
+    ],
+    "terra": [
+      {
+        "class": "P0",
+        "citation": "登入不會成功，畫面會告知。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "送出錯誤密碼後仍停留在登入頁可作為登入未成功的直接行為表徵，但驗收要求未明示以 URL 作為觀測管道。",
+        "assertion": "await expect(page).toHaveURL(`${UI}/#/login`)",
+        "line": 16
+      },
+      {
+        "class": "P0",
+        "citation": "登入不會成功，畫面會告知。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在送出錯誤密碼後確認錯誤訊息區塊可見，直接對應畫面會告知。",
+        "assertion": "await expect(errorMessages).toBeVisible()",
+        "line": 20
+      },
+      {
+        "class": "P0",
+        "citation": "登入不會成功，畫面會告知。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "錯誤訊息容器非空是畫面告知使用者登入失敗的直接可檢查表現。",
+        "assertion": "await expect(errorMessages).not.toBeEmpty()",
+        "line": 21
+      }
+    ]
+  },
+  "gen_wall_seconds": 33.2,
+  "probe_steps": 5,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

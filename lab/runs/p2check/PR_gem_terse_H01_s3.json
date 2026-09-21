@@ -1,0 +1,23 @@
+{
+  "source": "PR_gem_terse_H01_s3.json",
+  "gen": "gem",
+  "arm": "terse",
+  "item": "H01",
+  "seed": 3,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/articles.spec.ts",
+      "line_start": 246,
+      "line_end": 248,
+      "quote": "    // Wait for the form to be populated\n    const titleInput = page.locator('input[name=\"title\"]');\n    await expect(titleInput).not.toHaveValue('', { timeout: 10000 });",
+      "why": "官方測試在進入文章編輯頁後，明確檢查了標題輸入框（title input）已被填入既有文章標題而非空值。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 3,
+      "assertion": "await expect(page.getByPlaceholder('Article Title')).toHaveValue(originalTitle)",
+      "line": 41,
+      "p2_candidate": true
+    }
+  ]
+}

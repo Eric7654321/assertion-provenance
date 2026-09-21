@@ -1,0 +1,31 @@
+{
+  "source": "PR_terra_terse_H03_s2.json",
+  "gen": "terra",
+  "arm": "terse",
+  "item": "H03",
+  "seed": 2,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約中規範的標籤篩選路由為 `/tag/:tag`，並未提及或測試 hash routing (`#/?tag=` 或 `#/?\\?tag=`) 的 URL 格式。",
+      "row": 1,
+      "assertion": "await expect(page).toHaveURL(new RegExp(`#/?\\\\?tag=${encodeURIComponent(tag)}|#/?tag=${encodeURIComponent(tag)}`))",
+      "line": 27,
+      "p2_candidate": false
+    },
+    {
+      "supported": true,
+      "file": "specs/e2e/url-navigation.spec.ts",
+      "line_start": 227,
+      "line_end": 229,
+      "quote": "    // Click Global Feed and wait for URL to change to root path\n    await page.click('.nav-link:has-text(\"Global Feed\")');\n    await expect(page).toHaveURL('/');",
+      "why": "契約中的測試明確驗證了在標籤分頁（page 2）點擊 Global Feed 切回全部文章列表時，URL 會變更回根路徑 '/'。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 8,
+      "assertion": "await expect(page).toHaveURL(new RegExp(`${UI.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}/#/?$`))",
+      "line": 46,
+      "p2_candidate": true
+    }
+  ]
+}

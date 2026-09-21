@@ -1,0 +1,183 @@
+{
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "terse",
+  "item": "H01",
+  "seed": 2,
+  "feature": "Feature: Conduit Acceptance Requirements\n\n  @item:H01\n    Scenario: Article tagging and editing\n      Given a user is logged in\n      And the user is on the new article page\n      When the user enters a title, body, and adds three tags, and publishes the article\n      Then the article page content should match the entered information\n      When the user selects edit on the article page\n      And the user changes the title to a different string, removes all tags, and submits\n      Then the article page should update accordingly\n",
+  "spec": "generated/PR_gem_terse_H01_s2.spec.ts",
+  "rows": [
+    {
+      "class": "P0",
+      "citation": "文章頁的內容與輸入一致",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出發佈後「文章頁的內容與輸入一致」，驗證標題 h1 與輸入的 originalTitle 一致直接源自此要求。",
+      "assertion": "await expect(page.locator('h1')).toHaveText(originalTitle)",
+      "line": 31
+    },
+    {
+      "class": "P0",
+      "citation": "文章頁的內容與輸入一致",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出發布後「文章頁的內容與輸入一致」，驗證發布的內文可見直接對應此要求。",
+      "assertion": "await expect(page.getByText(originalBody)).toBeVisible()",
+      "line": 32
+    },
+    {
+      "class": "P0",
+      "citation": "文章頁的內容與輸入一致",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "發佈含有三個標籤的文章後，驗收要求明確指出「文章頁的內容與輸入一致」，且 note 特別說明「標籤取三個是為了覆蓋多標籤的顯示」，因此驗證各標籤顯示在文章頁上為 P0。",
+      "assertion": "await expect(page.locator('.tag-list').getByText(tag)).toBeVisible()",
+      "line": 34
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "在點擊編輯後、進行表單修改前確認頁面導航完成（URL 切換至編輯頁），屬於確保後續操作對象備妥的導航/就緒守衛，驗收要求與 Gherkin 皆未對此中間頁面 URL 提出斷言。",
+      "assertion": "await expect(page).toHaveURL(new RegExp(`${UI}/#/editor/`))",
+      "line": 39
+    },
+    {
+      "class": "P0",
+      "citation": "編輯送出後頁面跟著更新。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求已明確指出將標題修改並送出後頁面跟著更新，驗證標題更新為修改後文字直接符合要求。",
+      "assertion": "await expect(page.locator('h1')).toHaveText(updatedTitle)",
+      "line": 54
+    },
+    {
+      "class": "P0",
+      "citation": "把標籤全部移除後送出；編輯送出後頁面跟著更新。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確說明移除所有標籤送出後頁面需更新，斷言原本的標籤不再可見直接被其蘊含。",
+      "assertion": "await expect(page.locator('.tag-list').getByText(tag)).not.toBeVisible()",
+      "line": 56
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P0",
+        "citation": "文章頁的內容與輸入一致",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出發佈後「文章頁的內容與輸入一致」，驗證標題 h1 與輸入的 originalTitle 一致直接源自此要求。",
+        "assertion": "await expect(page.locator('h1')).toHaveText(originalTitle)",
+        "line": 31
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁的內容與輸入一致",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出發布後「文章頁的內容與輸入一致」，驗證發布的內文可見直接對應此要求。",
+        "assertion": "await expect(page.getByText(originalBody)).toBeVisible()",
+        "line": 32
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁的內容與輸入一致",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "發佈含有三個標籤的文章後，驗收要求明確指出「文章頁的內容與輸入一致」，且 note 特別說明「標籤取三個是為了覆蓋多標籤的顯示」，因此驗證各標籤顯示在文章頁上為 P0。",
+        "assertion": "await expect(page.locator('.tag-list').getByText(tag)).toBeVisible()",
+        "line": 34
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "在點擊編輯後、進行表單修改前確認頁面導航完成（URL 切換至編輯頁），屬於確保後續操作對象備妥的導航/就緒守衛，驗收要求與 Gherkin 皆未對此中間頁面 URL 提出斷言。",
+        "assertion": "await expect(page).toHaveURL(new RegExp(`${UI}/#/editor/`))",
+        "line": 39
+      },
+      {
+        "class": "P0",
+        "citation": "編輯送出後頁面跟著更新。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求已明確指出將標題修改並送出後頁面跟著更新，驗證標題更新為修改後文字直接符合要求。",
+        "assertion": "await expect(page.locator('h1')).toHaveText(updatedTitle)",
+        "line": 54
+      },
+      {
+        "class": "P0",
+        "citation": "把標籤全部移除後送出；編輯送出後頁面跟著更新。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確說明移除所有標籤送出後頁面需更新，斷言原本的標籤不再可見直接被其蘊含。",
+        "assertion": "await expect(page.locator('.tag-list').getByText(tag)).not.toBeVisible()",
+        "line": 56
+      }
+    ],
+    "terra": [
+      {
+        "class": "P0",
+        "citation": "文章頁的內容與輸入一致；編輯送出後頁面跟著更新。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "發佈後文章頁 h1 顯示輸入的原始標題，是文章頁內容與輸入一致的直接驗證。",
+        "assertion": "await expect(page.locator('h1')).toHaveText(originalTitle)",
+        "line": 31
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁的內容與輸入一致；編輯送出後頁面跟著更新。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "發佈後文章頁顯示輸入的內文是「內容與輸入一致」的直接驗證。",
+        "assertion": "await expect(page.getByText(originalBody)).toBeVisible()",
+        "line": 32
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁的內容與輸入一致；編輯送出後頁面跟著更新。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "發佈後文章頁顯示所輸入的三個標籤，屬於文章內容與輸入一致的直接驗證。",
+        "assertion": "await expect(page.locator('.tag-list').getByText(tag)).toBeVisible()",
+        "line": 34
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "這是在點選編輯後確認已進入可操作的編輯頁網址，屬於後續填寫動作的導航／可操作性守衛，驗收要求與 Gherkin 均未主張特定 URL。",
+        "assertion": "await expect(page).toHaveURL(new RegExp(`${UI}/#/editor/`))",
+        "line": 39
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁的內容與輸入一致；編輯送出後頁面跟著更新。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在編輯送出後確認文章標題更新為修改後的字串，直接對應頁面跟著更新。",
+        "assertion": "await expect(page.locator('h1')).toHaveText(updatedTitle)",
+        "line": 54
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁的內容與輸入一致；編輯送出後頁面跟著更新。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "編輯時已將標籤全部移除，送出後頁面更新蘊含原有標籤不再顯示。",
+        "assertion": "await expect(page.locator('.tag-list').getByText(tag)).not.toBeVisible()",
+        "line": 56
+      }
+    ]
+  },
+  "gen_wall_seconds": 54.8,
+  "probe_steps": 5,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

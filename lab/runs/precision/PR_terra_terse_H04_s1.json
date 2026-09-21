@@ -1,0 +1,237 @@
+{
+  "gen": "terra",
+  "gen_model": "gpt-5.6-terra",
+  "arm": "terse",
+  "item": "H04",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Requirements\n\n  @item:H04\n    Scenario: Follow and unfollow\n      Given User B opens Author A's profile page and clicks follow\n      When User B goes to the home page and switches to Your Feed\n      Then the button and Your Feed should reflect this state\n      When User B returns to Author A's profile page and clicks unfollow\n      And User B switches to Your Feed again\n      Then the state should return to what it was originally\n",
+  "spec": "generated/PR_terra_terse_H04_s1.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "在點擊追蹤按鈕前驗證目前 URL 是否導航成功，屬於導航後的守衛性斷言而非需求行為主張。",
+      "assertion": "await expect(page).toHaveURL(new RegExp(`#/profile/${author.username}$`))",
+      "line": 19
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "在點擊追蹤按鈕前確認按鈕可見，屬於操作前的可見性守衛。",
+      "assertion": "await expect(followButton).toBeVisible()",
+      "line": 24
+    },
+    {
+      "class": "P0",
+      "citation": "追蹤後按鈕與 Your Feed 反映這個狀態",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "點選追蹤後按鈕轉變為取消追蹤按鈕（Unfollow）直接體現了『按鈕反映這個狀態』的驗收要求。",
+      "assertion": "await expect(unfollowButton).toBeVisible()",
+      "line": 30
+    },
+    {
+      "class": "P0",
+      "citation": "追蹤後按鈕與 Your Feed 反映這個狀態",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求指明追蹤後切換至 Your Feed 需反映此狀態，檢查被追蹤作者的文章可見即為該要求的具體體現。",
+      "assertion": "await expect(page.getByRole('link', { name: article.title })).toBeVisible()",
+      "line": 35
+    },
+    {
+      "class": "P0",
+      "citation": "追蹤後按鈕與 Your Feed 反映這個狀態",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求已陳述追蹤後按鈕需反映狀態，回到個人頁確認取消追蹤按鈕（Unfollow）可見屬於對該狀態之預期驗證。",
+      "assertion": "await expect(unfollowButton).toBeVisible()",
+      "line": 38
+    },
+    {
+      "class": "P0",
+      "citation": "取消追蹤後回到原本的樣子。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "點選取消追蹤後按鈕回到原本未追蹤時的 followButton 狀態，由驗收要求直接蘊含。",
+      "assertion": "await expect(followButton).toBeVisible()",
+      "line": 41
+    },
+    {
+      "class": "P0",
+      "citation": "取消追蹤後回到原本的樣子。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "取消追蹤並切換回 Your Feed 後，列表應回到未追蹤狀態（沒有該作者的文章），此斷言驗證文章不再出現。",
+      "assertion": "await expect(page.getByRole('link', { name: article.title })).toHaveCount(0)",
+      "line": 46
+    },
+    {
+      "class": "P0",
+      "citation": "取消追蹤後回到原本的樣子。",
+      "p2_candidate": false,
+      "borderline": true,
+      "why": "驗收要求指明取消追蹤後 Your Feed 回到原本的樣子（沒有任何追蹤作者的文章時顯示空狀態文字），斷言檢查空狀態文字被此要求蘊含。",
+      "assertion": "await expect(page.getByText('No articles are here... yet.')).toBeVisible()",
+      "line": 47
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "在點擊追蹤按鈕前驗證目前 URL 是否導航成功，屬於導航後的守衛性斷言而非需求行為主張。",
+        "assertion": "await expect(page).toHaveURL(new RegExp(`#/profile/${author.username}$`))",
+        "line": 19
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "在點擊追蹤按鈕前確認按鈕可見，屬於操作前的可見性守衛。",
+        "assertion": "await expect(followButton).toBeVisible()",
+        "line": 24
+      },
+      {
+        "class": "P0",
+        "citation": "追蹤後按鈕與 Your Feed 反映這個狀態",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "點選追蹤後按鈕轉變為取消追蹤按鈕（Unfollow）直接體現了『按鈕反映這個狀態』的驗收要求。",
+        "assertion": "await expect(unfollowButton).toBeVisible()",
+        "line": 30
+      },
+      {
+        "class": "P0",
+        "citation": "追蹤後按鈕與 Your Feed 反映這個狀態",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求指明追蹤後切換至 Your Feed 需反映此狀態，檢查被追蹤作者的文章可見即為該要求的具體體現。",
+        "assertion": "await expect(page.getByRole('link', { name: article.title })).toBeVisible()",
+        "line": 35
+      },
+      {
+        "class": "P0",
+        "citation": "追蹤後按鈕與 Your Feed 反映這個狀態",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求已陳述追蹤後按鈕需反映狀態，回到個人頁確認取消追蹤按鈕（Unfollow）可見屬於對該狀態之預期驗證。",
+        "assertion": "await expect(unfollowButton).toBeVisible()",
+        "line": 38
+      },
+      {
+        "class": "P0",
+        "citation": "取消追蹤後回到原本的樣子。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "點選取消追蹤後按鈕回到原本未追蹤時的 followButton 狀態，由驗收要求直接蘊含。",
+        "assertion": "await expect(followButton).toBeVisible()",
+        "line": 41
+      },
+      {
+        "class": "P0",
+        "citation": "取消追蹤後回到原本的樣子。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "取消追蹤並切換回 Your Feed 後，列表應回到未追蹤狀態（沒有該作者的文章），此斷言驗證文章不再出現。",
+        "assertion": "await expect(page.getByRole('link', { name: article.title })).toHaveCount(0)",
+        "line": 46
+      },
+      {
+        "class": "P0",
+        "citation": "取消追蹤後回到原本的樣子。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "驗收要求指明取消追蹤後 Your Feed 回到原本的樣子（沒有任何追蹤作者的文章時顯示空狀態文字），斷言檢查空狀態文字被此要求蘊含。",
+        "assertion": "await expect(page.getByText('No articles are here... yet.')).toBeVisible()",
+        "line": 47
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "這是在點選追蹤前確認已導航到作者個人頁的測試守衛，並非需求層主張的可見行為結果。",
+        "assertion": "await expect(page).toHaveURL(new RegExp(`#/profile/${author.username}$`))",
+        "line": 19
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此可見性斷言位於點選追蹤之前，驗收要求與 Gherkin 都未主張追蹤前按鈕可見，僅作為後續點擊的操作守衛。",
+        "assertion": "await expect(followButton).toBeVisible()",
+        "line": 24
+      },
+      {
+        "class": "P0",
+        "citation": "追蹤後按鈕與 Your Feed 反映這個狀態；取消追蹤後回到原本的樣子。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "點選追蹤後取消追蹤按鈕可見是按鈕反映已追蹤狀態的直接驗證。",
+        "assertion": "await expect(unfollowButton).toBeVisible()",
+        "line": 30
+      },
+      {
+        "class": "P0",
+        "citation": "追蹤後按鈕與 Your Feed 反映這個狀態；取消追蹤後回到原本的樣子。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "切換到 Your Feed 後文章連結可見是在驗證 Your Feed 反映追蹤狀態，雖未明示文章標題連結但可視為該要求的具體觀測。",
+        "assertion": "await expect(page.getByRole('link', { name: article.title })).toBeVisible()",
+        "line": 35
+      },
+      {
+        "class": "P0",
+        "citation": "追蹤後按鈕與 Your Feed 反映這個狀態；取消追蹤後回到原本的樣子。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "取消追蹤前顯示 unfollow 按鈕是追蹤後按鈕反映追蹤狀態的直接驗證。",
+        "assertion": "await expect(unfollowButton).toBeVisible()",
+        "line": 38
+      },
+      {
+        "class": "P0",
+        "citation": "追蹤後按鈕與 Your Feed 反映這個狀態；取消追蹤後回到原本的樣子。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "取消追蹤後 followButton 可見是按鈕回到原本狀態的直接可觀察表現。",
+        "assertion": "await expect(followButton).toBeVisible()",
+        "line": 41
+      },
+      {
+        "class": "P0",
+        "citation": "追蹤後按鈕與 Your Feed 反映這個狀態；取消追蹤後回到原本的樣子。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "在追蹤後切換到 Your Feed 時確認文章不存在，是對 Your Feed 反映追蹤狀態的一種具體觀測，但需求未明示文章列表的精確呈現方式。",
+        "assertion": "await expect(page.getByRole('link', { name: article.title })).toHaveCount(0)",
+        "line": 46
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言主張切換到 Your Feed 後會顯示特定空狀態文字，驗收要求與 Gherkin 只要求 Your Feed 反映追蹤狀態，未主張該文字可見。",
+        "assertion": "await expect(page.getByText('No articles are here... yet.')).toBeVisible()",
+        "line": 47
+      }
+    ]
+  },
+  "gen_wall_seconds": 4.1,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

@@ -1,0 +1,17 @@
+{
+  "source": "PR_gem_terse_S12_s3.json",
+  "gen": "gem",
+  "arm": "terse",
+  "item": "S12",
+  "seed": 3,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約與 E2E 規格中僅約定使用 .page-item.active 樣式類表示分頁啟動狀態，未要求或測試 aria-current='page' 屬性。",
+      "row": 2,
+      "assertion": "await expect(page2Button).toHaveAttribute('aria-current', 'page').catch(async () => { // 若沒有 aria-current，確保第 1 頁與第 2 頁文章內容有所變更 })",
+      "line": 23,
+      "p2_candidate": false
+    }
+  ]
+}

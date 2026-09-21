@@ -1,0 +1,23 @@
+{
+  "source": "PR_gem_precise_H03_s3.json",
+  "gen": "gem",
+  "arm": "precise",
+  "item": "H03",
+  "seed": 3,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/url-navigation.spec.ts",
+      "line_start": 266,
+      "line_end": 268,
+      "quote": "    // Second page should have 5 articles (15 - 10 = 5)\n    const articlesOnPage2 = await page.locator('.article-preview').count();\n    expect(articlesOnPage2).toBe(5);",
+      "why": "E2E 測試明確驗證了在建立 15 篇帶有該標籤的文章後，點選第 2 頁時文章列表剛好顯示剩餘的 5 篇。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 3,
+      "assertion": "await expect(articlesLocator).toHaveCount(5)",
+      "line": 44,
+      "p2_candidate": true
+    }
+  ]
+}

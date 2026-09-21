@@ -1,0 +1,45 @@
+{
+  "source": "PR_gem_precise_H02_s2.json",
+  "gen": "gem",
+  "arm": "precise",
+  "item": "H02",
+  "seed": 2,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開材料中雖有說明文章頁包含留言區以及未登入不能留言，但未規定或測試未登入訪客瀏覽文章頁時必須驗證既有留言內容可見。",
+      "row": 2,
+      "assertion": "await expect(page.getByText(authorCommentBody)).toBeVisible()",
+      "line": 25,
+      "p2_candidate": true
+    },
+    {
+      "supported": true,
+      "file": "specs/e2e/comments.spec.ts",
+      "line_start": 102,
+      "line_end": 113,
+      "quote": "  test('should require login to post comment', async ({ page, browser }) => {\n    // Create a new context without authentication (not sharing cookies with page)\n    const context2 = await browser.newContext();\n    const page2 = await context2.newPage();\n    // Visit the article and wait for navigation\n    await page2.goto(page.url(), { waitUntil: 'load' });\n    // Wait for Angular to complete auth check - either comment form OR sign in link appears\n    await page2.waitForSelector('textarea[placeholder=\"Write a comment...\"], a[href=\"/login\"]', { timeout: 10000 });\n    // Should see sign in/sign up links instead of comment form\n    await expect(page2.locator('a[href=\"/login\"]')).toBeVisible();\n    await expect(page2.locator('textarea[placeholder=\"Write a comment...\"]')).not.toBeVisible();\n    await context2.close();\n  });",
+      "why": "E2E 測試在未登入訪客造訪文章頁時，明確斷言畫面應顯示導向登入的 Sign in 連結而非留言表單。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 5,
+      "assertion": "await expect(page.getByRole('link', { name: 'Sign in' })).toBeVisible()",
+      "line": 29,
+      "p2_candidate": true
+    },
+    {
+      "supported": true,
+      "file": "specs/e2e/comments.spec.ts",
+      "line_start": 31,
+      "line_end": 36,
+      "quote": "  test('should add a comment to an article', async ({ page }) => {\n    const commentText = 'This is a test comment from Playwright!';\n    await addComment(page, commentText);\n    // Comment should be visible\n    await expect(page.locator(`.card:not(.comment-form) .card-block:has-text(\"${commentText}\")`)).toBeVisible();\n  });",
+      "why": "E2E 測試明確驗證了在文章頁面新增留言後，該留言內容在頁面上必須為可見（toBeVisible）。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 9,
+      "assertion": "await expect(page.getByText(readerCommentBody)).toBeVisible()",
+      "line": 47,
+      "p2_candidate": false
+    }
+  ]
+}

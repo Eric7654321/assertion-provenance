@@ -1,0 +1,129 @@
+{
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "precise",
+  "item": "S12",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S12\n    Scenario: Article list pagination\n      Given a user views the article list on the home page and scrolls to the pagination controls\n      When the user selects page 2\n      Then the subsequent articles are displayed\n",
+  "spec": "generated/PR_gem_precise_S12_s3.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "在點選第 2 頁操作之前確認分頁列元素可見，屬於操作前的可見性守衛。",
+      "assertion": "await expect(pagination).toBeVisible()",
+      "line": 11
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "在觸發換頁動作之前檢查第 1 頁按鈕是否可見，為操作前的可見性守衛，非需求層的行為主張。",
+      "assertion": "await expect(page1Button).toBeVisible()",
+      "line": 14
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅主張換頁後『顯示的是接續的文章』，未提及分頁按鈕自身選中狀態的可見性。",
+      "assertion": "await expect(page2CurrentButton).toBeVisible()",
+      "line": 26
+    },
+    {
+      "class": "P0",
+      "citation": "顯示的是接續的文章。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求指明換頁後顯示接續的文章，斷言第 2 頁的第一篇文章不等於第 1 頁的第一篇是其直接且合理的無歧義操作化驗證。",
+      "assertion": "await expect(page.locator('.article-preview h1').first()).not.toHaveText(firstArticleOnPage1)",
+      "line": 29
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "在點選第 2 頁操作之前確認分頁列元素可見，屬於操作前的可見性守衛。",
+        "assertion": "await expect(pagination).toBeVisible()",
+        "line": 11
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "在觸發換頁動作之前檢查第 1 頁按鈕是否可見，為操作前的可見性守衛，非需求層的行為主張。",
+        "assertion": "await expect(page1Button).toBeVisible()",
+        "line": 14
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅主張換頁後『顯示的是接續的文章』，未提及分頁按鈕自身選中狀態的可見性。",
+        "assertion": "await expect(page2CurrentButton).toBeVisible()",
+        "line": 26
+      },
+      {
+        "class": "P0",
+        "citation": "顯示的是接續的文章。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求指明換頁後顯示接續的文章，斷言第 2 頁的第一篇文章不等於第 1 頁的第一篇是其直接且合理的無歧義操作化驗證。",
+        "assertion": "await expect(page.locator('.article-preview h1').first()).not.toHaveText(firstArticleOnPage1)",
+        "line": 29
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於選擇第 2 頁之前，僅確認後續操作所需的分頁控制項存在可見；驗收要求與 Gherkin 都未主張該時間點的可見性。",
+        "assertion": "await expect(pagination).toBeVisible()",
+        "line": 11
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於選擇第 2 頁之前，僅確認目前第 1 頁按鈕可見以備後續測試操作；驗收要求與 Gherkin 均未主張該按鈕在此時可見。",
+        "assertion": "await expect(page1Button).toBeVisible()",
+        "line": 14
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只主張接續文章顯示，未主張第 2 頁按鈕在點選後以「目前頁面」狀態可見。",
+        "assertion": "await expect(page2CurrentButton).toBeVisible()",
+        "line": 26
+      },
+      {
+        "class": "P0",
+        "citation": "顯示的是接續的文章。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言首頁第一篇文章標題不再等於第 1 頁首篇，直接驗證切到第 2 頁後顯示接續文章。",
+        "assertion": "await expect(page.locator('.article-preview h1').first()).not.toHaveText(firstArticleOnPage1)",
+        "line": 29
+      }
+    ]
+  },
+  "gen_wall_seconds": 28.2,
+  "probe_steps": 3,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

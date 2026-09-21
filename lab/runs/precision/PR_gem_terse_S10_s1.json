@@ -1,0 +1,75 @@
+{
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "terse",
+  "item": "S10",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Requirements\n\n  @item:S10\n    Scenario: Favorite an article\n      Given an article has an initial favorite count of 0 and has not been favorited\n      When the user opens the article and clicks favorite\n      Then the button and the count should reflect this action\n",
+  "spec": "generated/PR_gem_terse_S10_s1.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此斷言出現在點擊收藏操作之前，用來確保按鈕存在可互動，屬於非需求層行為主張的可見性守衛。",
+      "assertion": "await expect(favoriteBtn).toBeVisible()",
+      "line": 17
+    },
+    {
+      "class": "P0",
+      "citation": "收藏後按鈕與計數反映這次操作。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求已註明初始收藏數為0且收藏後按鈕與計數需反映操作，斷言在點擊後驗證包含計數 1 的收藏按鈕可見性，屬驗收要求的直接操作化蘊含。",
+      "assertion": "await expect(favoritedBtn).toBeVisible()",
+      "line": 22
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言出現在點擊收藏操作之前，用來確保按鈕存在可互動，屬於非需求層行為主張的可見性守衛。",
+        "assertion": "await expect(favoriteBtn).toBeVisible()",
+        "line": 17
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕與計數反映這次操作。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求已註明初始收藏數為0且收藏後按鈕與計數需反映操作，斷言在點擊後驗證包含計數 1 的收藏按鈕可見性，屬驗收要求的直接操作化蘊含。",
+        "assertion": "await expect(favoritedBtn).toBeVisible()",
+        "line": 22
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於點擊收藏之前，且需求與 Gherkin 都未主張收藏前按鈕可見性，僅是確保後續點擊有對象的守衛。",
+        "assertion": "await expect(favoriteBtn).toBeVisible()",
+        "line": 17
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕與計數反映這次操作。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於收藏動作後，驗證收藏後按鈕可見，屬於按鈕反映該操作的行為主張。",
+        "assertion": "await expect(favoritedBtn).toBeVisible()",
+        "line": 22
+      }
+    ]
+  },
+  "gen_wall_seconds": 61.7,
+  "probe_steps": 6,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

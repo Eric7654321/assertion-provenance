@@ -1,0 +1,23 @@
+{
+  "source": "PR_terra_precise_H02_s1.json",
+  "gen": "terra",
+  "arm": "precise",
+  "item": "H02",
+  "seed": 1,
+  "checks": [
+    {
+      "supported": true,
+      "file": "docs/src/content/docs/specifications/frontend/routing.md",
+      "line_start": 14,
+      "line_end": 18,
+      "quote": "- Article page (URL: `/article/article-slug-here` )\n  - Delete article button (only shown to article's author)\n  - Render markdown from server client side\n  - Comments section at bottom of page\n  - Delete comment button (only shown to comment's author)",
+      "why": "規格明確規範文章頁（Article page）包含留言區塊（Comments section at bottom of page），訪客進入文章頁可看見已存在的留言。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 2,
+      "assertion": "await expect(page.getByText(authorCommentBody)).toBeVisible()",
+      "line": 31,
+      "p2_candidate": false
+    }
+  ]
+}

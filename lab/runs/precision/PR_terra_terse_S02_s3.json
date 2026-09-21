@@ -1,0 +1,75 @@
+{
+  "gen": "terra",
+  "gen_model": "gpt-5.6-terra",
+  "arm": "terse",
+  "item": "S02",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S02\n    Scenario: Registration with duplicate email\n      Given a user completes registration with an unused email\n      And the user logs out\n      When the user registers again with the same email\n      Then the second registration is not successful\n",
+  "spec": "generated/PR_terra_terse_S02_s3.spec.ts",
+  "rows": [
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅說明「第二次註冊不會成功」，未具體要求留在原註冊頁面的 URL，屬可由 Web 規範推導的實作細節。",
+      "assertion": "await expect(page).toHaveURL(/#\\/register/)",
+      "line": 15
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅規定「第二次註冊不會成功」，未指定需出現特定錯誤訊息文字（如 email taken）。",
+      "assertion": "await expect(page.locator('.error-messages')).toContainText(/email.*already|email.*taken/i)",
+      "line": 16
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅說明「第二次註冊不會成功」，未具體要求留在原註冊頁面的 URL，屬可由 Web 規範推導的實作細節。",
+        "assertion": "await expect(page).toHaveURL(/#\\/register/)",
+        "line": 15
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅規定「第二次註冊不會成功」，未指定需出現特定錯誤訊息文字（如 email taken）。",
+        "assertion": "await expect(page.locator('.error-messages')).toContainText(/email.*already|email.*taken/i)",
+        "line": 16
+      }
+    ],
+    "terra": [
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只主張第二次註冊不成功，未主張失敗後必須停留在 #/register 路由。",
+        "assertion": "await expect(page).toHaveURL(/#\\/register/)",
+        "line": 15
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只主張第二次註冊不成功，未主張必須顯示特定 email 已存在／已被使用的錯誤訊息。",
+        "assertion": "await expect(page.locator('.error-messages')).toContainText(/email.*already|email.*taken/i)",
+        "line": 16
+      }
+    ]
+  },
+  "gen_wall_seconds": 2.9,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

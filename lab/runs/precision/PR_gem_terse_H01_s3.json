@@ -1,0 +1,183 @@
+{
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "terse",
+  "item": "H01",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H01\n    Scenario: Article tagging and editing\n      Given a logged-in user is on the new article page\n      When the user fills in the title and body, adds three tags, and publishes the article\n      Then the article page content matches the input\n      When the user clicks edit on the article page\n      And the user changes the title to another string, removes all tags, and submits\n      Then the article page is updated accordingly\n",
+  "spec": "generated/PR_gem_terse_H01_s3.spec.ts",
+  "rows": [
+    {
+      "class": "P0",
+      "citation": "文章頁的內容與輸入一致",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出文章頁內容需與輸入一致，斷言發佈後文章標題等於輸入的原標題是其直接操作化。",
+      "assertion": "await expect(page.getByRole('heading', { level: 1 })).toHaveText(originalTitle)",
+      "line": 31
+    },
+    {
+      "class": "P0",
+      "citation": "文章頁的內容與輸入一致",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出發布後文章頁內容與輸入一致，斷言內文可見直接落實該要求。",
+      "assertion": "await expect(page.getByText(originalBody)).toBeVisible()",
+      "line": 32
+    },
+    {
+      "class": "P0",
+      "citation": "文章頁的內容與輸入一致",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求指明文章頁內容與輸入一致且備註覆蓋多標籤顯示，斷言發佈後各標籤可見直接對應此要求。",
+      "assertion": "await expect(page.getByRole('listitem').filter({ hasText: tag })).toBeVisible()",
+      "line": 34
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求點選編輯並修改送出，未要求檢查編輯頁面載入時輸入框是否帶有原始標題。",
+      "assertion": "await expect(page.getByPlaceholder('Article Title')).toHaveValue(originalTitle)",
+      "line": 41
+    },
+    {
+      "class": "P0",
+      "citation": "編輯送出後頁面跟著更新。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求已註明修改標題並送出後頁面跟著更新，斷言標題 h1 顯示更新後的字串直接符合此要求。",
+      "assertion": "await expect(page.getByRole('heading', { level: 1 })).toHaveText(updatedTitle)",
+      "line": 55
+    },
+    {
+      "class": "P0",
+      "citation": "將標題改成另一個字串，並把標籤全部移除後送出\n--- expect ---\n文章頁的內容與輸入一致；編輯送出後頁面跟著更新。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求已明確指出移除全部標籤後送出，頁面更新後應不再存在原本的標籤，斷言驗證標籤數量為 0 是該要求的直接蘊含。",
+      "assertion": "await expect(page.locator('.tag-list').getByText(tag)).toHaveCount(0)",
+      "line": 57
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P0",
+        "citation": "文章頁的內容與輸入一致",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出文章頁內容需與輸入一致，斷言發佈後文章標題等於輸入的原標題是其直接操作化。",
+        "assertion": "await expect(page.getByRole('heading', { level: 1 })).toHaveText(originalTitle)",
+        "line": 31
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁的內容與輸入一致",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出發布後文章頁內容與輸入一致，斷言內文可見直接落實該要求。",
+        "assertion": "await expect(page.getByText(originalBody)).toBeVisible()",
+        "line": 32
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁的內容與輸入一致",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求指明文章頁內容與輸入一致且備註覆蓋多標籤顯示，斷言發佈後各標籤可見直接對應此要求。",
+        "assertion": "await expect(page.getByRole('listitem').filter({ hasText: tag })).toBeVisible()",
+        "line": 34
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求點選編輯並修改送出，未要求檢查編輯頁面載入時輸入框是否帶有原始標題。",
+        "assertion": "await expect(page.getByPlaceholder('Article Title')).toHaveValue(originalTitle)",
+        "line": 41
+      },
+      {
+        "class": "P0",
+        "citation": "編輯送出後頁面跟著更新。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求已註明修改標題並送出後頁面跟著更新，斷言標題 h1 顯示更新後的字串直接符合此要求。",
+        "assertion": "await expect(page.getByRole('heading', { level: 1 })).toHaveText(updatedTitle)",
+        "line": 55
+      },
+      {
+        "class": "P0",
+        "citation": "將標題改成另一個字串，並把標籤全部移除後送出\n--- expect ---\n文章頁的內容與輸入一致；編輯送出後頁面跟著更新。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求已明確指出移除全部標籤後送出，頁面更新後應不再存在原本的標籤，斷言驗證標籤數量為 0 是該要求的直接蘊含。",
+        "assertion": "await expect(page.locator('.tag-list').getByText(tag)).toHaveCount(0)",
+        "line": 57
+      }
+    ],
+    "terra": [
+      {
+        "class": "P0",
+        "citation": "文章頁的內容與輸入一致；編輯送出後頁面跟著更新。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "發佈後文章頁的一級標題顯示輸入的 originalTitle 是「文章頁的內容與輸入一致」的直接具體化。",
+        "assertion": "await expect(page.getByRole('heading', { level: 1 })).toHaveText(originalTitle)",
+        "line": 31
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁的內容與輸入一致；編輯送出後頁面跟著更新。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "發佈後文章頁顯示原始內文是「文章頁的內容與輸入一致」的直接驗證。",
+        "assertion": "await expect(page.getByText(originalBody)).toBeVisible()",
+        "line": 32
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁的內容與輸入一致；編輯送出後頁面跟著更新。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "發佈後文章頁顯示所輸入的各標籤，是「文章頁的內容與輸入一致」的直接具體化。",
+        "assertion": "await expect(page.getByRole('listitem').filter({ hasText: tag })).toBeVisible()",
+        "line": 34
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於編輯動作之前，用於確認標題輸入框已載入可供後續填寫的原標題，驗收要求與 Gherkin 均未主張該時間點的輸入框值。",
+        "assertion": "await expect(page.getByPlaceholder('Article Title')).toHaveValue(originalTitle)",
+        "line": 41
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁的內容與輸入一致；編輯送出後頁面跟著更新。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "編輯送出後文章頁更新，且標題已改為另一個字串，蘊含頁面主標題應顯示更新後標題。",
+        "assertion": "await expect(page.getByRole('heading', { level: 1 })).toHaveText(updatedTitle)",
+        "line": 55
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁的內容與輸入一致；編輯送出後頁面跟著更新。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "編輯時已將標籤全部移除並送出，文章頁更新後不再顯示原標籤是該結果的無歧義組成。",
+        "assertion": "await expect(page.locator('.tag-list').getByText(tag)).toHaveCount(0)",
+        "line": 57
+      }
+    ]
+  },
+  "gen_wall_seconds": 71.1,
+  "probe_steps": 5,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

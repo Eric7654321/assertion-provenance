@@ -1,0 +1,65 @@
+{
+  "source": "PR_terra_terse_S02_s1.json",
+  "gen": "terra",
+  "arm": "terse",
+  "item": "S02",
+  "seed": 1,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/api/hurl/errors_auth.hurl",
+      "line_start": 66,
+      "line_end": 77,
+      "quote": "# Register duplicate email\nPOST {{host}}/api/users\n{\n  \"user\": {\n    \"username\": \"ea_dup2_{{uid}}\",\n    \"email\": \"ea_dup_{{uid}}@test.com\",\n    \"password\": \"password123\"\n  }\n}\nHTTP 409\n[Asserts]\njsonpath \"$.errors.email[0]\" == \"has already been taken\"",
+      "why": "規格測試明確要求使用已註冊的 duplicate email 再次註冊時，API 必須回應 409 錯誤狀態碼。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 3,
+      "assertion": "expect(duplicateRegistration.status).toBeGreaterThanOrEqual(400)",
+      "line": 31,
+      "p2_candidate": true
+    },
+    {
+      "supported": true,
+      "file": "specs/api/hurl/errors_auth.hurl",
+      "line_start": 66,
+      "line_end": 77,
+      "quote": "# Register duplicate email\nPOST {{host}}/api/users\n{\n  \"user\": {\n    \"username\": \"ea_dup2_{{uid}}\",\n    \"email\": \"ea_dup_{{uid}}@test.com\",\n    \"password\": \"password123\"\n  }\n}\nHTTP 409\n[Asserts]\njsonpath \"$.errors.email[0]\" == \"has already been taken\"",
+      "why": "官方測試明確測驗了重複 email 註冊 API 應回傳 HTTP 409 且包含 errors 欄位。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 4,
+      "assertion": "expect(duplicateRegistration.json).toHaveProperty('errors')",
+      "line": 32,
+      "p2_candidate": true
+    },
+    {
+      "supported": true,
+      "file": "specs/e2e/error-handling.spec.ts",
+      "line_start": 60,
+      "line_end": 65,
+      "quote": "    await page.fill('input[name=\"password\"]', 'password123');\n    await page.click('button[type=\"submit\"]');\n    // Should show error messages\n    await expect(page.locator('.error-messages')).toBeVisible();\n    await expect(page).toHaveURL('/register');",
+      "why": "測試明確驗證當註冊遇到驗證錯誤（包含 email 被佔用）時，頁面停留在註冊頁 URL（/register）而不會成功跳轉。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 5,
+      "assertion": "await expect(page).toHaveURL(/#\\/register/)",
+      "line": 40,
+      "p2_candidate": true
+    },
+    {
+      "supported": true,
+      "file": "specs/e2e/error-handling.spec.ts",
+      "line_start": 50,
+      "line_end": 66,
+      "quote": "  test('should handle 400 on registration with validation errors', async ({ page }) => {\n    await mockApiError(page, '/users', 400, {\n      errors: {\n        email: ['is already taken'],\n        username: ['is too short (minimum is 3 characters)'],\n      },\n    });\n    await page.goto('/register');\n    await page.fill('input[name=\"username\"]', 'ab');\n    await page.fill('input[name=\"email\"]', 'taken@test.com');\n    await page.fill('input[name=\"password\"]', 'password123');\n    await page.click('button[type=\"submit\"]');\n    // Should show error messages\n    await expect(page.locator('.error-messages')).toBeVisible();\n    await expect(page).toHaveURL('/register');\n    await expect(page.locator('input[name=\"email\"]')).toBeVisible();\n  });",
+      "why": "公開契約的 E2E 測試僅驗證註冊時若 email 被佔用會顯示 .error-messages 區塊，並未明確要求前端畫面上必須出現文字「email has already been taken」。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 6,
+      "assertion": "await expect(page.getByText(/email.*has already been taken/i)).toBeVisible()",
+      "line": 41,
+      "p2_candidate": true
+    }
+  ]
+}

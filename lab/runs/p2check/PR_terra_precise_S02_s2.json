@@ -1,0 +1,23 @@
+{
+  "source": "PR_terra_precise_S02_s2.json",
+  "gen": "terra",
+  "arm": "precise",
+  "item": "S02",
+  "seed": 2,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/error-handling.spec.ts",
+      "line_start": 63,
+      "line_end": 65,
+      "quote": "    await expect(page.locator('.error-messages')).toBeVisible();\n    await expect(page).toHaveURL('/register');\n    await expect(page.locator('input[name=\"email\"]')).toBeVisible();",
+      "why": "官方 E2E 測試在註冊發生驗證錯誤（包含 email 被佔用）時，明確斷言頁面 URL 應維持在註冊頁（/register）。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 2,
+      "assertion": "await expect(page).toHaveURL(/#\\/register$/)",
+      "line": 19,
+      "p2_candidate": true
+    }
+  ]
+}

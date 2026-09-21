@@ -1,0 +1,129 @@
+{
+  "gen": "terra",
+  "gen_model": "gpt-5.6-terra",
+  "arm": "terse",
+  "item": "S10",
+  "seed": 2,
+  "feature": "Feature: Conduit Acceptance Requirements\n\n  @item:S10\n    Scenario: Favorite an article\n      Given an article with an initial favorite count of 0 is opened and not yet favorited\n      When the user clicks favorite\n      Then the button and count should reflect the action\n",
+  "spec": "generated/PR_terra_terse_S10_s2.spec.ts",
+  "rows": [
+    {
+      "class": "P0",
+      "citation": "該文章的初始收藏數為 0。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求的備註明確寫明「該文章的初始收藏數為 0」，此斷言在點擊前驗證收藏數為 0，直接對應驗收要求的前置狀態描述。",
+      "assertion": "await expect(favoriteButton).toContainText('0')",
+      "line": 13
+    },
+    {
+      "class": "P0",
+      "citation": "1. 開啟一篇尚未被收藏的文章",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出開啟尚未被收藏的文章，斷言按鈕在操作前不具備 active 狀態是由前置條件所蘊含的初始狀態檢查。",
+      "assertion": "await expect(favoriteButton).not.toHaveClass(/active/)",
+      "line": 14
+    },
+    {
+      "class": "P0",
+      "citation": "收藏後按鈕與計數反映這次操作。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求已指定初始收藏數為 0，收藏後計數反映操作即蘊含計數變為 1。",
+      "assertion": "await expect(favoriteButton).toContainText('1')",
+      "line": 18
+    },
+    {
+      "class": "P0",
+      "citation": "收藏後按鈕與計數反映這次操作。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出收藏後按鈕需反映操作，斷言按鈕獲得 active 樣式類別為此驗收條件的具體操作化驗證。",
+      "assertion": "await expect(favoriteButton).toHaveClass(/active/)",
+      "line": 19
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P0",
+        "citation": "該文章的初始收藏數為 0。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求的備註明確寫明「該文章的初始收藏數為 0」，此斷言在點擊前驗證收藏數為 0，直接對應驗收要求的前置狀態描述。",
+        "assertion": "await expect(favoriteButton).toContainText('0')",
+        "line": 13
+      },
+      {
+        "class": "P0",
+        "citation": "1. 開啟一篇尚未被收藏的文章",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出開啟尚未被收藏的文章，斷言按鈕在操作前不具備 active 狀態是由前置條件所蘊含的初始狀態檢查。",
+        "assertion": "await expect(favoriteButton).not.toHaveClass(/active/)",
+        "line": 14
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕與計數反映這次操作。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求已指定初始收藏數為 0，收藏後計數反映操作即蘊含計數變為 1。",
+        "assertion": "await expect(favoriteButton).toContainText('1')",
+        "line": 18
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕與計數反映這次操作。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出收藏後按鈕需反映操作，斷言按鈕獲得 active 樣式類別為此驗收條件的具體操作化驗證。",
+        "assertion": "await expect(favoriteButton).toHaveClass(/active/)",
+        "line": 19
+      }
+    ],
+    "terra": [
+      {
+        "class": "P0",
+        "citation": "該文章的初始收藏數為 0。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在點選收藏前確認按鈕文字為 0，直接對應驗收要求明示的初始收藏數。",
+        "assertion": "await expect(favoriteButton).toContainText('0')",
+        "line": 13
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於點擊收藏前，驗收要求與 Gherkin 都只主張收藏後按鈕反映操作，未主張此前按鈕是否帶有 active 類別，因此是操作前的可見狀態守衛。",
+        "assertion": "await expect(favoriteButton).not.toHaveClass(/active/)",
+        "line": 14
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕與計數反映這次操作。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明示初始收藏數為 0，且收藏後計數反映這次操作，因此點擊後按鈕文字為 1 被蘊含。",
+        "assertion": "await expect(favoriteButton).toContainText('1')",
+        "line": 18
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕與計數反映這次操作。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "點擊收藏後按鈕具有 active 類別是按鈕反映收藏操作的具體可檢查表現。",
+        "assertion": "await expect(favoriteButton).toHaveClass(/active/)",
+        "line": 19
+      }
+    ]
+  },
+  "gen_wall_seconds": 3.1,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

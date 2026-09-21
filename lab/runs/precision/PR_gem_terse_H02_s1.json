@@ -1,0 +1,561 @@
+{
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "terse",
+  "item": "H02",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Requirements\n\n  @item:H02\n    Scenario: Article page visibility and permissions\n      Given an author creates an article and leaves a comment under it\n      When an unauthenticated visitor opens the article page\n      Then what the visitor sees and the actions they can perform should differ based on their role\n      When another logged-in user who is not the author opens the same page\n      And this user leaves their own comment on the page\n      Then what this user sees and the actions they can perform should differ based on their role\n",
+  "spec": "generated/PR_gem_terse_H02_s1.spec.ts",
+  "rows": [
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅抽象提及不同身分看到的東西不一樣，未明確主張訪客應看到文章標題。",
+      "assertion": "await expect(page.getByRole('heading', { name: article.title })).toBeVisible()",
+      "line": 25
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅抽象提及「不同身分在同一頁看到的東西不一樣」，未具體要求訪客必須看到 article.body，屬於 RealWorld 規格常識下的測試實作。",
+      "assertion": "await expect(page.getByText(article.body)).toBeVisible()",
+      "line": 26
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求僅概括提及『不同身分在同一頁看到的東西不一樣』，未明確指明訪客必須能看見作者的留言，故屬需求與 Gherkin 皆未具體支持的行為主張。",
+      "assertion": "await expect(page.getByText(authorCommentText)).toBeVisible()",
+      "line": 27
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅抽象提及不同身分看到和可做的操作不一樣，未明確列出訪客不可看到 Delete Article 按鈕，但此為 RealWorld 規格之權限行為。",
+      "assertion": "await expect(page.getByRole('button', { name: /Delete Article/i })).toHaveCount(0)",
+      "line": 30
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅抽象陳述『不同身分看到的東西和可做的操作不一樣』，未具體指定訪客不得看到 Edit Article 連結，但符合 Conduit 規格。",
+      "assertion": "await expect(page.getByRole('link', { name: /Edit Article/i })).toHaveCount(0)",
+      "line": 31
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅抽象提及『不同身分看到與可操作的不一樣』，未明確規範未登入訪客不能看到寫留言輸入框，但這符合 Conduit 公開規格。",
+      "assertion": "await expect(page.getByPlaceholder('Write a comment...')).toHaveCount(0)",
+      "line": 32
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅抽象提及不同身分可做的操作不一樣，未具體規定未登入訪客看不到 'Post Comment' 按鈕，但此行為可由 Conduit 公開規格導出。",
+      "assertion": "await expect(page.getByRole('button', { name: 'Post Comment' })).toHaveCount(0)",
+      "line": 33
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅抽象提及不同身分看到的東西不同，未具體要求未登入訪客必須看見 Sign in 連結。",
+      "assertion": "await expect(page.getByRole('link', { name: 'Sign in' })).toBeVisible()",
+      "line": 34
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅抽象提及不同身分看到和可做的操作不同，未具體提及訪客不能看到留言刪除按鈕（mod-options）。",
+      "assertion": "await expect(page.locator('.mod-options')).toHaveCount(0)",
+      "line": 37
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅抽象提及『不同身分在同一頁看到的東西不一樣』，並未明確要求讀者開啟頁面時必須看到文章標題，但此為文章頁公開契約之基本行為。",
+      "assertion": "await expect(page.getByRole('heading', { name: article.title })).toBeVisible()",
+      "line": 45
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求僅概括提及『不同身分在同一頁看到的東西不一樣』，未具體規範讀者是否應看見作者留言，且 Gherkin 亦未具體化。",
+      "assertion": "await expect(page.getByText(authorCommentText)).toBeVisible()",
+      "line": 46
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅抽象提及『不同身分看到與可做的操作不一樣』，未具體明訂非作者不能看到 Delete Article 按鈕，但此符合 Conduit 官方規範。",
+      "assertion": "await expect(page.getByRole('button', { name: /Delete Article/i })).toHaveCount(0)",
+      "line": 49
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅抽象提及『看到與可做的操作不一樣』，未具體指明非作者不能看到 Edit Article 連結，但符合 Conduit 官方規格故為 P2 候選。",
+      "assertion": "await expect(page.getByRole('link', { name: /Edit Article/i })).toHaveCount(0)",
+      "line": 50
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅抽象描述『看到的東西與可做的操作不一樣』，未具體規範非作者讀者應看到 Follow 按鈕。",
+      "assertion": "await expect(page.getByRole('button', { name: /Follow/i }).first()).toBeVisible()",
+      "line": 53
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅抽象提及『不同身分看到與可做的操作不一樣』，未具體指明登入讀者需看到 Favorite 按鈕，但此符合 Conduit 官方規格。",
+      "assertion": "await expect(page.getByRole('button', { name: /Favorite/i }).first()).toBeVisible()",
+      "line": 54
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅抽象描述「不同身分看到與可操作的不同」，未具體規範非作者不得看到作者留言的刪除按鈕，屬於未在文件中明寫的具體行為主張。",
+      "assertion": "await expect(authorCard.locator('i.ion-trash-a, button.btn-outline-danger, .mod-options')).toHaveCount(0)",
+      "line": 59
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此可見性斷言位於輸入並送出留言的操作前，驗收要求與 Gherkin 均未特別提及留言輸入框可見性，屬確保後續操作有對象的守衛斷言。",
+      "assertion": "await expect(page.getByPlaceholder('Write a comment...')).toBeVisible()",
+      "line": 63
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅抽象陳述不同身分看得到與可操作的不一樣，未明確要求留言送出後該留言必須在畫面上可見。",
+      "assertion": "await expect(page.getByText(readerCommentText)).toBeVisible()",
+      "line": 69
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅抽象提及『不同身分看到與可做的操作不一樣』，未具體指明該使用者能看見自己留言的刪除按鈕，屬於未被規格具體化的行為主張。",
+      "assertion": "await expect(readerCard.locator('i.ion-trash-a, .mod-options')).toBeVisible()",
+      "line": 73
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅抽象描述『不同身分看到與可操作的不同』，並未具體寫出讀者不能刪除作者的留言按鈕，但此為 RealWorld 規範中留言刪除權限的公開契約。",
+      "assertion": "await expect(authorCard.locator('i.ion-trash-a, .mod-options')).toHaveCount(0)",
+      "line": 76
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅抽象提及不同身分看到的東西不一樣，未明確主張訪客應看到文章標題。",
+        "assertion": "await expect(page.getByRole('heading', { name: article.title })).toBeVisible()",
+        "line": 25
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅抽象提及「不同身分在同一頁看到的東西不一樣」，未具體要求訪客必須看到 article.body，屬於 RealWorld 規格常識下的測試實作。",
+        "assertion": "await expect(page.getByText(article.body)).toBeVisible()",
+        "line": 26
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求僅概括提及『不同身分在同一頁看到的東西不一樣』，未明確指明訪客必須能看見作者的留言，故屬需求與 Gherkin 皆未具體支持的行為主張。",
+        "assertion": "await expect(page.getByText(authorCommentText)).toBeVisible()",
+        "line": 27
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅抽象提及不同身分看到和可做的操作不一樣，未明確列出訪客不可看到 Delete Article 按鈕，但此為 RealWorld 規格之權限行為。",
+        "assertion": "await expect(page.getByRole('button', { name: /Delete Article/i })).toHaveCount(0)",
+        "line": 30
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅抽象陳述『不同身分看到的東西和可做的操作不一樣』，未具體指定訪客不得看到 Edit Article 連結，但符合 Conduit 規格。",
+        "assertion": "await expect(page.getByRole('link', { name: /Edit Article/i })).toHaveCount(0)",
+        "line": 31
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅抽象提及『不同身分看到與可操作的不一樣』，未明確規範未登入訪客不能看到寫留言輸入框，但這符合 Conduit 公開規格。",
+        "assertion": "await expect(page.getByPlaceholder('Write a comment...')).toHaveCount(0)",
+        "line": 32
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅抽象提及不同身分可做的操作不一樣，未具體規定未登入訪客看不到 'Post Comment' 按鈕，但此行為可由 Conduit 公開規格導出。",
+        "assertion": "await expect(page.getByRole('button', { name: 'Post Comment' })).toHaveCount(0)",
+        "line": 33
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅抽象提及不同身分看到的東西不同，未具體要求未登入訪客必須看見 Sign in 連結。",
+        "assertion": "await expect(page.getByRole('link', { name: 'Sign in' })).toBeVisible()",
+        "line": 34
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅抽象提及不同身分看到和可做的操作不同，未具體提及訪客不能看到留言刪除按鈕（mod-options）。",
+        "assertion": "await expect(page.locator('.mod-options')).toHaveCount(0)",
+        "line": 37
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅抽象提及『不同身分在同一頁看到的東西不一樣』，並未明確要求讀者開啟頁面時必須看到文章標題，但此為文章頁公開契約之基本行為。",
+        "assertion": "await expect(page.getByRole('heading', { name: article.title })).toBeVisible()",
+        "line": 45
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求僅概括提及『不同身分在同一頁看到的東西不一樣』，未具體規範讀者是否應看見作者留言，且 Gherkin 亦未具體化。",
+        "assertion": "await expect(page.getByText(authorCommentText)).toBeVisible()",
+        "line": 46
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅抽象提及『不同身分看到與可做的操作不一樣』，未具體明訂非作者不能看到 Delete Article 按鈕，但此符合 Conduit 官方規範。",
+        "assertion": "await expect(page.getByRole('button', { name: /Delete Article/i })).toHaveCount(0)",
+        "line": 49
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅抽象提及『看到與可做的操作不一樣』，未具體指明非作者不能看到 Edit Article 連結，但符合 Conduit 官方規格故為 P2 候選。",
+        "assertion": "await expect(page.getByRole('link', { name: /Edit Article/i })).toHaveCount(0)",
+        "line": 50
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅抽象描述『看到的東西與可做的操作不一樣』，未具體規範非作者讀者應看到 Follow 按鈕。",
+        "assertion": "await expect(page.getByRole('button', { name: /Follow/i }).first()).toBeVisible()",
+        "line": 53
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅抽象提及『不同身分看到與可做的操作不一樣』，未具體指明登入讀者需看到 Favorite 按鈕，但此符合 Conduit 官方規格。",
+        "assertion": "await expect(page.getByRole('button', { name: /Favorite/i }).first()).toBeVisible()",
+        "line": 54
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅抽象描述「不同身分看到與可操作的不同」，未具體規範非作者不得看到作者留言的刪除按鈕，屬於未在文件中明寫的具體行為主張。",
+        "assertion": "await expect(authorCard.locator('i.ion-trash-a, button.btn-outline-danger, .mod-options')).toHaveCount(0)",
+        "line": 59
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此可見性斷言位於輸入並送出留言的操作前，驗收要求與 Gherkin 均未特別提及留言輸入框可見性，屬確保後續操作有對象的守衛斷言。",
+        "assertion": "await expect(page.getByPlaceholder('Write a comment...')).toBeVisible()",
+        "line": 63
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅抽象陳述不同身分看得到與可操作的不一樣，未明確要求留言送出後該留言必須在畫面上可見。",
+        "assertion": "await expect(page.getByText(readerCommentText)).toBeVisible()",
+        "line": 69
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅抽象提及『不同身分看到與可做的操作不一樣』，未具體指明該使用者能看見自己留言的刪除按鈕，屬於未被規格具體化的行為主張。",
+        "assertion": "await expect(readerCard.locator('i.ion-trash-a, .mod-options')).toBeVisible()",
+        "line": 73
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅抽象描述『不同身分看到與可操作的不同』，並未具體寫出讀者不能刪除作者的留言按鈕，但此為 RealWorld 規範中留言刪除權限的公開契約。",
+        "assertion": "await expect(authorCard.locator('i.ion-trash-a, .mod-options')).toHaveCount(0)",
+        "line": 76
+      }
+    ],
+    "terra": [
+      {
+        "class": "P0",
+        "citation": "不同身分在同一頁看到的東西不一樣，可做的操作也不一樣。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "訪客開啟文章頁後文章標題可見屬於要求所述畫面可見內容的具體化，但原文未明列標題。",
+        "assertion": "await expect(page.getByRole('heading', { name: article.title })).toBeVisible()",
+        "line": 25
+      },
+      {
+        "class": "P0",
+        "citation": "不同身分在同一頁看到的東西不一樣，可做的操作也不一樣。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "訪客開啟文章頁後可看見文章本文屬於驗收要求所述畫面可見內容的行為主張。",
+        "assertion": "await expect(page.getByText(article.body)).toBeVisible()",
+        "line": 26
+      },
+      {
+        "class": "P0",
+        "citation": "不同身分在同一頁看到的東西不一樣，可做的操作也不一樣。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "訪客開啟文章頁後可看見作者留言屬於畫面可見內容的角色差異主張，雖未明列留言但應從已建立留言及頁面可見性要求推定。",
+        "assertion": "await expect(page.getByText(authorCommentText)).toBeVisible()",
+        "line": 27
+      },
+      {
+        "class": "P0",
+        "citation": "不同身分在同一頁看到的東西不一樣，可做的操作也不一樣。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "未登入訪客不應具備刪除文章這項作者操作，屬於要求所述不同身分可做操作不同的具體化。",
+        "assertion": "await expect(page.getByRole('button', { name: /Delete Article/i })).toHaveCount(0)",
+        "line": 30
+      },
+      {
+        "class": "P0",
+        "citation": "不同身分在同一頁看到的東西不一樣，可做的操作也不一樣。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "未登入訪客看不到「Edit Article」連結是不同身分可見內容與可做操作不同的具體畫面行為。",
+        "assertion": "await expect(page.getByRole('link', { name: /Edit Article/i })).toHaveCount(0)",
+        "line": 31
+      },
+      {
+        "class": "P0",
+        "citation": "不同身分在同一頁看到的東西不一樣，可做的操作也不一樣。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "未登入訪客看不到留言輸入框是畫面可見性與可操作性因身分不同而異的具體主張。",
+        "assertion": "await expect(page.getByPlaceholder('Write a comment...')).toHaveCount(0)",
+        "line": 32
+      },
+      {
+        "class": "P0",
+        "citation": "不同身分在同一頁看到的東西不一樣，可做的操作也不一樣。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "未登入訪客看不到並無法使用「Post Comment」按鈕屬於畫面可見性與可操作性隨身分不同的主張。",
+        "assertion": "await expect(page.getByRole('button', { name: 'Post Comment' })).toHaveCount(0)",
+        "line": 33
+      },
+      {
+        "class": "P0",
+        "citation": "不同身分在同一頁看到的東西不一樣，可做的操作也不一樣。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "未登入訪客可見「Sign in」連結是身分差異下畫面可見內容的具體行為主張。",
+        "assertion": "await expect(page.getByRole('link', { name: 'Sign in' })).toBeVisible()",
+        "line": 34
+      },
+      {
+        "class": "P0",
+        "citation": "不同身分在同一頁看到的東西不一樣，可做的操作也不一樣。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "訪客看不到留言刪除選項屬於同頁不同身分可見內容與可操作項目不同的畫面行為主張。",
+        "assertion": "await expect(page.locator('.mod-options')).toHaveCount(0)",
+        "line": 37
+      },
+      {
+        "class": "P0",
+        "citation": "不同身分在同一頁看到的東西不一樣，可做的操作也不一樣。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "已登入非作者開啟文章頁後可看見文章標題屬於該頁面可見內容的行為主張，且驗收要求概括支持。",
+        "assertion": "await expect(page.getByRole('heading', { name: article.title })).toBeVisible()",
+        "line": 45
+      },
+      {
+        "class": "P0",
+        "citation": "不同身分在同一頁看到的東西不一樣，可做的操作也不一樣。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "斷言檢查非作者登入使用者在文章頁可看見作者留言，屬於不同身分可見內容的畫面行為主張。",
+        "assertion": "await expect(page.getByText(authorCommentText)).toBeVisible()",
+        "line": 46
+      },
+      {
+        "class": "P0",
+        "citation": "不同身分在同一頁看到的東西不一樣，可做的操作也不一樣。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "非作者讀者看不到刪除文章按鈕是身分不同導致可做操作不同的畫面層行為主張。",
+        "assertion": "await expect(page.getByRole('button', { name: /Delete Article/i })).toHaveCount(0)",
+        "line": 49
+      },
+      {
+        "class": "P0",
+        "citation": "不同身分在同一頁看到的東西不一樣，可做的操作也不一樣。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "非作者讀者看不到「Edit Article」連結是不同身分可做操作不同的具體畫面行為。",
+        "assertion": "await expect(page.getByRole('link', { name: /Edit Article/i })).toHaveCount(0)",
+        "line": 50
+      },
+      {
+        "class": "P0",
+        "citation": "不同身分在同一頁看到的東西不一樣，可做的操作也不一樣。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "非作者登入使用者可見 Follow 按鈕屬於不同身分可見內容與可操作項目的具體化。",
+        "assertion": "await expect(page.getByRole('button', { name: /Follow/i }).first()).toBeVisible()",
+        "line": 53
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於後續互動前，驗收要求與 Gherkin 都未主張 Favorite 按鈕在此時間點可見，僅作為操作對象存在性的守衛。",
+        "assertion": "await expect(page.getByRole('button', { name: /Favorite/i }).first()).toBeVisible()",
+        "line": 54
+      },
+      {
+        "class": "P0",
+        "citation": "不同身分在同一頁看到的東西不一樣，可做的操作也不一樣。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "非作者讀者在作者留言卡上看不到刪除控制項，是不同身分可做操作不同的畫面層具體化。",
+        "assertion": "await expect(authorCard.locator('i.ion-trash-a, button.btn-outline-danger, .mod-options')).toHaveCount(0)",
+        "line": 59
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於留言動作之前，且驗收要求與 Gherkin 都未主張留言輸入框在此時間點可見，僅作為後續填寫操作的可見性守衛。",
+        "assertion": "await expect(page.getByPlaceholder('Write a comment...')).toBeVisible()",
+        "line": 63
+      },
+      {
+        "class": "P0",
+        "citation": "不同身分在同一頁看到的東西不一樣，可做的操作也不一樣。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "讀者留言後該留言在頁面可見屬於已登入非作者可見內容與可進行留言操作後結果的畫面行為主張。",
+        "assertion": "await expect(page.getByText(readerCommentText)).toBeVisible()",
+        "line": 69
+      },
+      {
+        "class": "P0",
+        "citation": "不同身分在同一頁看到的東西不一樣，可做的操作也不一樣。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "斷言非作者已登入使用者可看見刪除自己留言的操作入口，屬於其可做操作隨身分不同而異的畫面行為主張。",
+        "assertion": "await expect(readerCard.locator('i.ion-trash-a, .mod-options')).toBeVisible()",
+        "line": 73
+      },
+      {
+        "class": "P0",
+        "citation": "不同身分在同一頁看到的東西不一樣，可做的操作也不一樣。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "斷言非作者讀者看不到作者留言的刪除操作，屬於不同身分可做操作不同的畫面層行為主張。",
+        "assertion": "await expect(authorCard.locator('i.ion-trash-a, .mod-options')).toHaveCount(0)",
+        "line": 76
+      }
+    ]
+  },
+  "gen_wall_seconds": 67.3,
+  "probe_steps": 5,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

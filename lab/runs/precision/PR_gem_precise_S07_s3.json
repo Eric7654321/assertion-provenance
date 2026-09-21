@@ -1,0 +1,75 @@
+{
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "precise",
+  "item": "S07",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S07\n    Scenario: Author deletes own article\n      Given an author opens their own article page\n      When the author deletes the article\n      Then the article no longer appears in the article list on the home page\n",
+  "spec": "generated/PR_gem_precise_S07_s3.spec.ts",
+  "rows": [
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求刪除後文章不再出現在首頁列表中，並未要求頁面需自動導向首頁 URL（屬於實作契約/行為主張）。",
+      "assertion": "await expect(page).toHaveURL(`${UI}/#/`)",
+      "line": 17
+    },
+    {
+      "class": "P0",
+      "citation": "刪除後該文章不再出現在首頁的文章列表。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "斷言在刪除文章並回到首頁後，檢查文章標題不可見，直接對應驗收要求中文章不再出現在首頁列表的主張。",
+      "assertion": "await expect(page.getByRole('heading', { name: article.title })).not.toBeVisible()",
+      "line": 19
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求刪除後文章不再出現在首頁列表中，並未要求頁面需自動導向首頁 URL（屬於實作契約/行為主張）。",
+        "assertion": "await expect(page).toHaveURL(`${UI}/#/`)",
+        "line": 17
+      },
+      {
+        "class": "P0",
+        "citation": "刪除後該文章不再出現在首頁的文章列表。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在刪除文章並回到首頁後，檢查文章標題不可見，直接對應驗收要求中文章不再出現在首頁列表的主張。",
+        "assertion": "await expect(page.getByRole('heading', { name: article.title })).not.toBeVisible()",
+        "line": 19
+      }
+    ],
+    "terra": [
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只主張文章不再出現在首頁列表，未主張刪除後必須導向首頁 URL。",
+        "assertion": "await expect(page).toHaveURL(`${UI}/#/`)",
+        "line": 17
+      },
+      {
+        "class": "P0",
+        "citation": "刪除後該文章不再出現在首頁的文章列表。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在刪除後確認該文章標題不再可見，對應首頁文章列表中不再出現該文章。",
+        "assertion": "await expect(page.getByRole('heading', { name: article.title })).not.toBeVisible()",
+        "line": 19
+      }
+    ]
+  },
+  "gen_wall_seconds": 27.0,
+  "probe_steps": 3,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

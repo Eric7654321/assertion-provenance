@@ -1,0 +1,75 @@
+{
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "precise",
+  "item": "S03",
+  "seed": 2,
+  "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:S03\n    Scenario: Login with incorrect password\n      Given a user is on the login page\n      When the user enters a registered email and an incorrect password, and submits\n      Then the user should remain on the login page\n      And an error message should be displayed\n",
+  "spec": "generated/PR_gem_precise_S03_s2.spec.ts",
+  "rows": [
+    {
+      "class": "P0",
+      "citation": "停留在登入頁並顯示錯誤訊息。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出送出後應「停留在登入頁」，斷言檢查 URL 留在登入頁符合此要求。",
+      "assertion": "await expect(page).toHaveURL(`${UI}/#/login`)",
+      "line": 16
+    },
+    {
+      "class": "P0",
+      "citation": "停留在登入頁並顯示錯誤訊息。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出應「顯示錯誤訊息」，該斷言直接驗證錯誤訊息的可見性。",
+      "assertion": "await expect(errorMessage).toBeVisible()",
+      "line": 20
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P0",
+        "citation": "停留在登入頁並顯示錯誤訊息。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出送出後應「停留在登入頁」，斷言檢查 URL 留在登入頁符合此要求。",
+        "assertion": "await expect(page).toHaveURL(`${UI}/#/login`)",
+        "line": 16
+      },
+      {
+        "class": "P0",
+        "citation": "停留在登入頁並顯示錯誤訊息。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出應「顯示錯誤訊息」，該斷言直接驗證錯誤訊息的可見性。",
+        "assertion": "await expect(errorMessage).toBeVisible()",
+        "line": 20
+      }
+    ],
+    "terra": [
+      {
+        "class": "P0",
+        "citation": "停留在登入頁並顯示錯誤訊息。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "送出錯誤密碼後仍停留在登入頁，URL 為登入頁路由是對該要求的直接可檢查改寫。",
+        "assertion": "await expect(page).toHaveURL(`${UI}/#/login`)",
+        "line": 16
+      },
+      {
+        "class": "P0",
+        "citation": "停留在登入頁並顯示錯誤訊息。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在送出錯誤密碼後確認錯誤訊息可見，直接對應驗收要求。",
+        "assertion": "await expect(errorMessage).toBeVisible()",
+        "line": 20
+      }
+    ]
+  },
+  "gen_wall_seconds": 25.1,
+  "probe_steps": 3,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

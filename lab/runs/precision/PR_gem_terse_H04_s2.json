@@ -1,0 +1,264 @@
+{
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "terse",
+  "item": "H04",
+  "seed": 2,
+  "feature": "Feature: Conduit Acceptance Requirements\n\n  @item:H04\n    Scenario: Follow and unfollow\n      Given user B opens author A's profile page and clicks follow\n      When user B returns to the home page and switches to Your Feed\n      Then the follow button and Your Feed should reflect the followed state\n      When user B returns to author A's profile page and clicks unfollow\n      And switches to Your Feed again\n      Then the follow button and Your Feed should revert to their original state\n",
+  "spec": "generated/PR_gem_terse_H04_s2.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此斷言在點擊追蹤按鈕之前確認該按鈕可見，屬於操作前的可見性守衛。",
+      "assertion": "await expect(followButton).toBeVisible()",
+      "line": 23
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此斷言出現在點選追蹤之前，用於確認按鈕初始文字狀態，屬於操作前的守衛性檢查，驗收要求與 Gherkin 皆未對點擊前的按鈕文字做出行為主張。",
+      "assertion": "await expect(followButton).toContainText('Follow')",
+      "line": 24
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "在點選追蹤動作前確認按鈕不含 Unfollow 字樣，屬於操作前的初始狀態檢查與守衛，驗收要求並未對點擊前的按鈕負向文字作行為主張。",
+      "assertion": "await expect(followButton).not.toContainText('Unfollow')",
+      "line": 25
+    },
+    {
+      "class": "P0",
+      "citation": "追蹤後按鈕與 Your Feed 反映這個狀態",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "點擊追蹤後按鈕變為可見的 Unfollow 按鈕，直接對應驗收要求中「追蹤後按鈕反映這個狀態」。",
+      "assertion": "await expect(unfollowButton).toBeVisible()",
+      "line": 31
+    },
+    {
+      "class": "P0",
+      "citation": "追蹤後按鈕與 Your Feed 反映這個狀態；取消追蹤後回到原本的樣子。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求指明追蹤後 Your Feed 反映追蹤狀態，於 Your Feed 中看見被追蹤作者的文章是該狀態之操作化蘊含。",
+      "assertion": "await expect(page.getByText(article.title)).toBeVisible()",
+      "line": 39
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "在點擊取消追蹤動作前確認 unfollowButton 可見，屬於操作前的可見性守衛。",
+      "assertion": "await expect(unfollowButton).toBeVisible()",
+      "line": 43
+    },
+    {
+      "class": "P0",
+      "citation": "取消追蹤後回到原本的樣子。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求指明取消追蹤後按鈕回到原本的樣子，原本的狀態即為可見的 Follow 按鈕。",
+      "assertion": "await expect(followButton).toBeVisible()",
+      "line": 47
+    },
+    {
+      "class": "P0",
+      "citation": "取消追蹤後回到原本的樣子。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出取消追蹤後按鈕需回到原本樣子，斷言按鈕不再包含 Unfollow 字樣直接體現此狀態復原。",
+      "assertion": "await expect(followButton).not.toContainText('Unfollow')",
+      "line": 48
+    },
+    {
+      "class": "P0",
+      "citation": "取消追蹤後回到原本的樣子。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求指明取消追蹤後 Your Feed 回到原本的樣子，在未追蹤狀態下 Your Feed 不應包含作者 A 的文章，故看不到該文章被直接蘊含。",
+      "assertion": "await expect(page.getByText(article.title)).not.toBeVisible()",
+      "line": 55
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言在點擊追蹤按鈕之前確認該按鈕可見，屬於操作前的可見性守衛。",
+        "assertion": "await expect(followButton).toBeVisible()",
+        "line": 23
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言出現在點選追蹤之前，用於確認按鈕初始文字狀態，屬於操作前的守衛性檢查，驗收要求與 Gherkin 皆未對點擊前的按鈕文字做出行為主張。",
+        "assertion": "await expect(followButton).toContainText('Follow')",
+        "line": 24
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "在點選追蹤動作前確認按鈕不含 Unfollow 字樣，屬於操作前的初始狀態檢查與守衛，驗收要求並未對點擊前的按鈕負向文字作行為主張。",
+        "assertion": "await expect(followButton).not.toContainText('Unfollow')",
+        "line": 25
+      },
+      {
+        "class": "P0",
+        "citation": "追蹤後按鈕與 Your Feed 反映這個狀態",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "點擊追蹤後按鈕變為可見的 Unfollow 按鈕，直接對應驗收要求中「追蹤後按鈕反映這個狀態」。",
+        "assertion": "await expect(unfollowButton).toBeVisible()",
+        "line": 31
+      },
+      {
+        "class": "P0",
+        "citation": "追蹤後按鈕與 Your Feed 反映這個狀態；取消追蹤後回到原本的樣子。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求指明追蹤後 Your Feed 反映追蹤狀態，於 Your Feed 中看見被追蹤作者的文章是該狀態之操作化蘊含。",
+        "assertion": "await expect(page.getByText(article.title)).toBeVisible()",
+        "line": 39
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "在點擊取消追蹤動作前確認 unfollowButton 可見，屬於操作前的可見性守衛。",
+        "assertion": "await expect(unfollowButton).toBeVisible()",
+        "line": 43
+      },
+      {
+        "class": "P0",
+        "citation": "取消追蹤後回到原本的樣子。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求指明取消追蹤後按鈕回到原本的樣子，原本的狀態即為可見的 Follow 按鈕。",
+        "assertion": "await expect(followButton).toBeVisible()",
+        "line": 47
+      },
+      {
+        "class": "P0",
+        "citation": "取消追蹤後回到原本的樣子。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出取消追蹤後按鈕需回到原本樣子，斷言按鈕不再包含 Unfollow 字樣直接體現此狀態復原。",
+        "assertion": "await expect(followButton).not.toContainText('Unfollow')",
+        "line": 48
+      },
+      {
+        "class": "P0",
+        "citation": "取消追蹤後回到原本的樣子。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求指明取消追蹤後 Your Feed 回到原本的樣子，在未追蹤狀態下 Your Feed 不應包含作者 A 的文章，故看不到該文章被直接蘊含。",
+        "assertion": "await expect(page.getByText(article.title)).not.toBeVisible()",
+        "line": 55
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於點擊追蹤前，驗收要求與 Gherkin 都未主張該時點按鈕可見，僅是確保後續點擊有對象的守衛。",
+        "assertion": "await expect(followButton).toBeVisible()",
+        "line": 23
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於點擊追蹤前，驗收要求與 Gherkin 均未主張按鈕在此前的文字狀態，屬於操作前的元素狀態守衛。",
+        "assertion": "await expect(followButton).toContainText('Follow')",
+        "line": 24
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於點擊追蹤前，且驗收要求與 Gherkin 都未主張該時點按鈕不得顯示 Unfollow，屬於操作前的狀態守衛。",
+        "assertion": "await expect(followButton).not.toContainText('Unfollow')",
+        "line": 25
+      },
+      {
+        "class": "P0",
+        "citation": "追蹤後按鈕與 Your Feed 反映這個狀態；取消追蹤後回到原本的樣子。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "點選追蹤後按鈕顯示 Unfollow 是按鈕反映已追蹤狀態的直接驗證。",
+        "assertion": "await expect(unfollowButton).toBeVisible()",
+        "line": 31
+      },
+      {
+        "class": "P0",
+        "citation": "追蹤後按鈕與 Your Feed 反映這個狀態；取消追蹤後回到原本的樣子。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "在切換到 Your Feed 後文章標題可見，是 Your Feed 反映已追蹤狀態的直接 UI 驗證。",
+        "assertion": "await expect(page.getByText(article.title)).toBeVisible()",
+        "line": 39
+      },
+      {
+        "class": "P0",
+        "citation": "追蹤後按鈕與 Your Feed 反映這個狀態；取消追蹤後回到原本的樣子。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "取消追蹤前按鈕可見為「追蹤後按鈕反映這個狀態」的直接可觀測表現，且該斷言位於取消動作之前。",
+        "assertion": "await expect(unfollowButton).toBeVisible()",
+        "line": 43
+      },
+      {
+        "class": "P0",
+        "citation": "追蹤後按鈕與 Your Feed 反映這個狀態；取消追蹤後回到原本的樣子。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "取消追蹤後按鈕回到原本狀態，蘊含原本可見的 followButton 會再次可見。",
+        "assertion": "await expect(followButton).toBeVisible()",
+        "line": 47
+      },
+      {
+        "class": "P0",
+        "citation": "取消追蹤後回到原本的樣子。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "取消追蹤後追蹤按鈕不再顯示「Unfollow」是按鈕回復原始狀態的直接表現。",
+        "assertion": "await expect(followButton).not.toContainText('Unfollow')",
+        "line": 48
+      },
+      {
+        "class": "P0",
+        "citation": "追蹤後按鈕與 Your Feed 反映這個狀態；取消追蹤後回到原本的樣子。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "取消追蹤後再次切換 Your Feed 時，作者 A 的文章不可見是 Your Feed 回到原本狀態的具體可觀測表現。",
+        "assertion": "await expect(page.getByText(article.title)).not.toBeVisible()",
+        "line": 55
+      }
+    ]
+  },
+  "gen_wall_seconds": 66.7,
+  "probe_steps": 6,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

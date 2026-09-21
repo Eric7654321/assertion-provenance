@@ -1,0 +1,23 @@
+{
+  "source": "PR_terra_precise_H02_s3.json",
+  "gen": "terra",
+  "arm": "precise",
+  "item": "H02",
+  "seed": 3,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/comments.spec.ts",
+      "line_start": 102,
+      "line_end": 113,
+      "quote": "  test('should require login to post comment', async ({ page, browser }) => {\n    // Create a new context without authentication (not sharing cookies with page)\n    const context2 = await browser.newContext();\n    const page2 = await context2.newPage();\n    // Visit the article and wait for navigation\n    await page2.goto(page.url(), { waitUntil: 'load' });\n    // Wait for Angular to complete auth check - either comment form OR sign in link appears\n    await page2.waitForSelector('textarea[placeholder=\"Write a comment...\"], a[href=\"/login\"]', { timeout: 10000 });\n    // Should see sign in/sign up links instead of comment form\n    await expect(page2.locator('a[href=\"/login\"]')).toBeVisible();\n    await expect(page2.locator('textarea[placeholder=\"Write a comment...\"]')).not.toBeVisible();\n    await context2.close();\n  });",
+      "why": "公開測試中訪客訪問文章頁只驗證未登入連結與沒有留言框，未對既有留言內容的能見度做斷言。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 2,
+      "assertion": "await expect(page.getByText(authorCommentBody)).toBeVisible()",
+      "line": 29,
+      "p2_candidate": false
+    }
+  ]
+}

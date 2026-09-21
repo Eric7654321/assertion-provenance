@@ -1,0 +1,156 @@
+{
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "terse",
+  "item": "S09",
+  "seed": 2,
+  "feature": "Feature: Conduit Acceptance Requirements\n\n  @item:S09\n    Scenario: Visibility of comment deletion\n      Given user A posts a comment on an article\n      When user B opens the same article and posts their own comment\n      Then deleting a comment should only be possible for one's own comment\n",
+  "spec": "generated/PR_gem_terse_S09_s2.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此斷言位於輸入留言動作之前，確認輸入框可見以確保後續操作有對象，屬可見性守衛。",
+      "assertion": "await expect(commentInput).toBeVisible()",
+      "line": 24
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此斷言為確認留言卡片已渲染的可見性守衛，旨在確保後續檢查刪除按鈕前目標留言存在，非驗收核心主張。",
+      "assertion": "await expect(cardA).toBeVisible()",
+      "line": 34
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此斷言位於步驟中留言發布後的等待/前置準備階段，用以確認留言卡片就緒以供後續檢查刪除按鈕，非要求所規範的核心行為斷言。",
+      "assertion": "await expect(cardB).toBeVisible()",
+      "line": 35
+    },
+    {
+      "class": "P0",
+      "citation": "留言的刪除只有自己的留言做得到。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求規定自己的留言具備刪除能力，此斷言操作化驗證了自己（使用者 B）的留言上有刪除按鈕可見。",
+      "assertion": "await expect(deleteButtonInB.first()).toBeVisible()",
+      "line": 41
+    },
+    {
+      "class": "P0",
+      "citation": "留言的刪除只有自己的留言做得到。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求指出留言刪除只有自己的留言做得到，在當前使用者 B 視角下對使用者 A 的留言不應有刪除按鈕，直接蘊含此斷言。",
+      "assertion": "await expect(deleteButtonInA).toHaveCount(0)",
+      "line": 45
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於輸入留言動作之前，確認輸入框可見以確保後續操作有對象，屬可見性守衛。",
+        "assertion": "await expect(commentInput).toBeVisible()",
+        "line": 24
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言為確認留言卡片已渲染的可見性守衛，旨在確保後續檢查刪除按鈕前目標留言存在，非驗收核心主張。",
+        "assertion": "await expect(cardA).toBeVisible()",
+        "line": 34
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於步驟中留言發布後的等待/前置準備階段，用以確認留言卡片就緒以供後續檢查刪除按鈕，非要求所規範的核心行為斷言。",
+        "assertion": "await expect(cardB).toBeVisible()",
+        "line": 35
+      },
+      {
+        "class": "P0",
+        "citation": "留言的刪除只有自己的留言做得到。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求規定自己的留言具備刪除能力，此斷言操作化驗證了自己（使用者 B）的留言上有刪除按鈕可見。",
+        "assertion": "await expect(deleteButtonInB.first()).toBeVisible()",
+        "line": 41
+      },
+      {
+        "class": "P0",
+        "citation": "留言的刪除只有自己的留言做得到。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求指出留言刪除只有自己的留言做得到，在當前使用者 B 視角下對使用者 A 的留言不應有刪除按鈕，直接蘊含此斷言。",
+        "assertion": "await expect(deleteButtonInA).toHaveCount(0)",
+        "line": 45
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於使用者 B 發表留言的觸發動作之前，且驗收要求與 Gherkin 都未主張留言輸入框在此時可見，屬於操作前的可見性守衛。",
+        "assertion": "await expect(commentInput).toBeVisible()",
+        "line": 24
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於刪除權限檢查之前，僅確認留言卡片已出現以便後續定位與操作；需求與 Gherkin 均未主張此時間點的可見性。",
+        "assertion": "await expect(cardA).toBeVisible()",
+        "line": 34
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言在後續檢查刪除控制項之前僅確認使用者 B 的留言卡片存在，驗收要求與 Gherkin 均未主張該時間點的可見性。",
+        "assertion": "await expect(cardB).toBeVisible()",
+        "line": 35
+      },
+      {
+        "class": "P0",
+        "citation": "Then deleting a comment should only be possible for one's own comment",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "使用者 B 自己留言上的刪除按鈕可見，是「只有自己的留言可刪除」在介面上的直接行為表現。",
+        "assertion": "await expect(deleteButtonInB.first()).toBeVisible()",
+        "line": 41
+      },
+      {
+        "class": "P0",
+        "citation": "留言的刪除只有自己的留言做得到。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "使用者 B 對使用者 A 的留言沒有刪除按鈕，是「只有自己的留言做得到」的直接可觀測實現。",
+        "assertion": "await expect(deleteButtonInA).toHaveCount(0)",
+        "line": 45
+      }
+    ]
+  },
+  "gen_wall_seconds": 50.9,
+  "probe_steps": 3,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

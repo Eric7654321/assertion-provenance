@@ -1,0 +1,25 @@
+{
+  "source": "PR_terra_precise_S12_s1.json",
+  "gen": "terra",
+  "arm": "precise",
+  "item": "S12",
+  "seed": 1,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "契約（SELECTORS.md 及 url-navigation.spec.ts）明確規定 active 樣式類別是套用在分頁項目包裝元素 .page-item 上，而非直接套用在 pageTwo 連結本身。",
+      "row": 2,
+      "assertion": "await expect(pageTwo).toHaveClass(/active/)",
+      "line": 31,
+      "p2_candidate": false
+    },
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約中僅有一般分頁機制或特定測試資料集的分頁數量驗證，並未規定或測試點選第 2 頁時文章數量必須恰好為 2 篇。",
+      "row": 3,
+      "assertion": "await expect(articlePreviews).toHaveCount(2)",
+      "line": 32,
+      "p2_candidate": false
+    }
+  ]
+}

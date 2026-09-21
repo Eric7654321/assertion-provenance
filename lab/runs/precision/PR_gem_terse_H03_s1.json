@@ -1,0 +1,210 @@
+{
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "terse",
+  "item": "H03",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Requirements\n\n  @item:H03\n    Scenario: Tag filtering pagination\n      Given there are 15 articles under a specific tag\n      When the user filters by that tag on the home page\n      And the user clicks page 2 in the pagination bar\n      Then the pagination behavior should match the configuration, showing subsequent articles and updating the URL\n      When the user opens a new page and directly enters the URL with page=2\n      Then the pagination behavior should match the configuration, showing subsequent articles\n      When the user switches back to the all articles list\n      Then the pagination behavior should match the configuration\n",
+  "spec": "generated/PR_gem_terse_H03_s1.spec.ts",
+  "rows": [
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "點選標籤篩選後確認該標籤按鈕維持可見，驗收要求與 Gherkin 均未提及標籤選取狀態或標籤按鈕的可見性。",
+      "assertion": "await expect(page.getByRole('button', { name: uniqueTag, exact: true })).toBeVisible()",
+      "line": 23
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 均未明確斷言篩選後第一頁分頁按鈕的當前選中可見狀態（Page 1 is your current page）。",
+      "assertion": "await expect(page.getByRole('button', { name: 'Page 1 is your current page' })).toBeVisible()",
+      "line": 24
+    },
+    {
+      "class": "P0",
+      "citation": "換頁後看得到後續的文章，網址跟著變。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出換頁後「網址跟著變」，而步驟中是以該標籤篩選並切換至第 2 頁，斷言 URL 同時包含該 tag 與 page=2 是該要求的直接操作化驗證。",
+      "assertion": "await expect(page).toHaveURL(new RegExp(`tag=${uniqueTag}.*page=2|page=2.*tag=${uniqueTag}`))",
+      "line": 30
+    },
+    {
+      "class": "P0",
+      "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+      "p2_candidate": false,
+      "borderline": true,
+      "why": "驗收要求提及「分頁行為符合設定」，點選第 2 頁後當前分頁按鈕處於 active/current 狀態屬於分頁常規行為的操作化。",
+      "assertion": "await expect(page.getByRole('button', { name: 'Page 2 is your current page' })).toBeVisible()",
+      "line": 31
+    },
+    {
+      "class": "P0",
+      "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+      "p2_candidate": false,
+      "borderline": true,
+      "why": "驗收要求指示直接輸入帶 page=2 網址後分頁行為符合設定，斷言當前分頁按鈕為第 2 頁屬於該預期行為的操作化驗證。",
+      "assertion": "await expect(page2.getByRole('button', { name: 'Page 2 is your current page' })).toBeVisible()",
+      "line": 40
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求分頁行為符合設定，未提及 Global Feed 分頁標籤需呈現 active 狀態。",
+      "assertion": "await expect(page.getByRole('button', { name: 'Global Feed' })).toHaveClass(/active/)",
+      "line": 47
+    },
+    {
+      "class": "P0",
+      "citation": "分頁行為符合設定",
+      "p2_candidate": false,
+      "borderline": true,
+      "why": "切回全部文章列表後分頁行為符合設定，包含重設回第一頁為當前頁面，屬於驗收要求的合理操作化。",
+      "assertion": "await expect(page.getByRole('button', { name: 'Page 1 is your current page' })).toBeVisible()",
+      "line": 48
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "點選標籤篩選後確認該標籤按鈕維持可見，驗收要求與 Gherkin 均未提及標籤選取狀態或標籤按鈕的可見性。",
+        "assertion": "await expect(page.getByRole('button', { name: uniqueTag, exact: true })).toBeVisible()",
+        "line": 23
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 均未明確斷言篩選後第一頁分頁按鈕的當前選中可見狀態（Page 1 is your current page）。",
+        "assertion": "await expect(page.getByRole('button', { name: 'Page 1 is your current page' })).toBeVisible()",
+        "line": 24
+      },
+      {
+        "class": "P0",
+        "citation": "換頁後看得到後續的文章，網址跟著變。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出換頁後「網址跟著變」，而步驟中是以該標籤篩選並切換至第 2 頁，斷言 URL 同時包含該 tag 與 page=2 是該要求的直接操作化驗證。",
+        "assertion": "await expect(page).toHaveURL(new RegExp(`tag=${uniqueTag}.*page=2|page=2.*tag=${uniqueTag}`))",
+        "line": 30
+      },
+      {
+        "class": "P0",
+        "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "驗收要求提及「分頁行為符合設定」，點選第 2 頁後當前分頁按鈕處於 active/current 狀態屬於分頁常規行為的操作化。",
+        "assertion": "await expect(page.getByRole('button', { name: 'Page 2 is your current page' })).toBeVisible()",
+        "line": 31
+      },
+      {
+        "class": "P0",
+        "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "驗收要求指示直接輸入帶 page=2 網址後分頁行為符合設定，斷言當前分頁按鈕為第 2 頁屬於該預期行為的操作化驗證。",
+        "assertion": "await expect(page2.getByRole('button', { name: 'Page 2 is your current page' })).toBeVisible()",
+        "line": 40
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求分頁行為符合設定，未提及 Global Feed 分頁標籤需呈現 active 狀態。",
+        "assertion": "await expect(page.getByRole('button', { name: 'Global Feed' })).toHaveClass(/active/)",
+        "line": 47
+      },
+      {
+        "class": "P0",
+        "citation": "分頁行為符合設定",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "切回全部文章列表後分頁行為符合設定，包含重設回第一頁為當前頁面，屬於驗收要求的合理操作化。",
+        "assertion": "await expect(page.getByRole('button', { name: 'Page 1 is your current page' })).toBeVisible()",
+        "line": 48
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言僅在已點擊標籤後確認同一標籤按鈕可見，驗收要求與 Gherkin 均未主張該元素在此時間點的可見性，且它是後續驗證的介面守衛而非需求行為。",
+        "assertion": "await expect(page.getByRole('button', { name: uniqueTag, exact: true })).toBeVisible()",
+        "line": 23
+      },
+      {
+        "class": "P0",
+        "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "篩選後第 1 頁為目前頁是分頁行為符合設定的合理蘊含，但驗收文字未明說其可見性。",
+        "assertion": "await expect(page.getByRole('button', { name: 'Page 1 is your current page' })).toBeVisible()",
+        "line": 24
+      },
+      {
+        "class": "P0",
+        "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "點選第 2 頁後網址包含該標籤與 page=2，是「網址跟著變」在既定標籤篩選與第 2 頁操作下的具體且無歧義驗證。",
+        "assertion": "await expect(page).toHaveURL(new RegExp(`tag=${uniqueTag}.*page=2|page=2.*tag=${uniqueTag}`))",
+        "line": 30
+      },
+      {
+        "class": "P0",
+        "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "點選第 2 頁後第 2 頁按鈕標示為目前頁面是分頁行為符合設定的可觀測改寫。",
+        "assertion": "await expect(page.getByRole('button', { name: 'Page 2 is your current page' })).toBeVisible()",
+        "line": 31
+      },
+      {
+        "class": "P0",
+        "citation": "Then the pagination behavior should match the configuration, showing subsequent articles",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "直接以 page=2 網址開啟後，第 2 頁為目前頁面的可見狀態可視為分頁行為符合設定的具體呈現。",
+        "assertion": "await expect(page2.getByRole('button', { name: 'Page 2 is your current page' })).toBeVisible()",
+        "line": 40
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只要求切回全部文章列表後分頁行為符合設定，未主張「Global Feed」按鈕必須具有 active class。",
+        "assertion": "await expect(page.getByRole('button', { name: 'Global Feed' })).toHaveClass(/active/)",
+        "line": 47
+      },
+      {
+        "class": "P0",
+        "citation": "Then the pagination behavior should match the configuration",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "切回全部文章列表後第 1 頁為目前頁面的可見狀態可視為分頁行為符合設定的具體表現。",
+        "assertion": "await expect(page.getByRole('button', { name: 'Page 1 is your current page' })).toBeVisible()",
+        "line": 48
+      }
+    ]
+  },
+  "gen_wall_seconds": 45.4,
+  "probe_steps": 3,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

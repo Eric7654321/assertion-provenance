@@ -1,0 +1,39 @@
+{
+  "source": "PR_gem_terse_H03_s1.json",
+  "gen": "gem",
+  "arm": "terse",
+  "item": "H03",
+  "seed": 1,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約中要求標籤分頁以鏈結/導覽（.nav-link 或 a）呈現，而非特定名為 tag 的 button 元素可見性斷言。",
+      "row": 0,
+      "assertion": "await expect(page.getByRole('button', { name: uniqueTag, exact: true })).toBeVisible()",
+      "line": 23,
+      "p2_candidate": false
+    },
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約中要求的分頁按鈕格式為 .page-item.active 配合 .page-link 或包含數字文本，從未規範或測試 'Page 1 is your current page' 的 accessible name 或 aria-label。",
+      "row": 1,
+      "assertion": "await expect(page.getByRole('button', { name: 'Page 1 is your current page' })).toBeVisible()",
+      "line": 24,
+      "p2_candidate": true
+    },
+    {
+      "supported": true,
+      "file": "specs/e2e/url-navigation.spec.ts",
+      "line_start": 84,
+      "line_end": 88,
+      "quote": "    // Click Global Feed\n    await page.click('.nav-link:has-text(\"Global Feed\")');\n    // Should navigate to /\n    await expect(page).toHaveURL('/');\n    await expect(page.locator('.nav-link:has-text(\"Global Feed\")')).toHaveClass(/active/);",
+      "why": "契約中明確測試了點擊 Global Feed 後，該分頁連結應帶有 active class。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 5,
+      "assertion": "await expect(page.getByRole('button', { name: 'Global Feed' })).toHaveClass(/active/)",
+      "line": 47,
+      "p2_candidate": true
+    }
+  ]
+}

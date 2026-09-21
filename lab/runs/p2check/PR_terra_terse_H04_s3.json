@@ -1,0 +1,37 @@
+{
+  "source": "PR_terra_terse_H04_s3.json",
+  "gen": "terra",
+  "arm": "terse",
+  "item": "H04",
+  "seed": 3,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/url-navigation.spec.ts",
+      "line_start": 71,
+      "line_end": 75,
+      "quote": "    // Click Your Feed\n    await page.click('.nav-link:has-text(\"Your Feed\")');\n    // Should navigate to /?feed=following\n    await expect(page).toHaveURL('/?feed=following');\n    await expect(page.locator('.nav-link:has-text(\"Your Feed\")')).toHaveClass(/active/);",
+      "why": "公開的 E2E 測試明確斷言點擊「Your Feed」後該連結必須具有 active class。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 3,
+      "assertion": "await expect(page.getByRole('link', { name: 'Your Feed' })).toHaveClass( /active/, )",
+      "line": 31,
+      "p2_candidate": false
+    },
+    {
+      "supported": true,
+      "file": "specs/e2e/url-navigation.spec.ts",
+      "line_start": 71,
+      "line_end": 75,
+      "quote": "    // Click Your Feed\n    await page.click('.nav-link:has-text(\"Your Feed\")');\n    // Should navigate to /?feed=following\n    await expect(page).toHaveURL('/?feed=following');\n    await expect(page.locator('.nav-link:has-text(\"Your Feed\")')).toHaveClass(/active/);",
+      "why": "契約規格中明確測試了在點擊「Your Feed」分頁連結後，該分頁連結應具有 active class。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 7,
+      "assertion": "await expect(page.getByRole('link', { name: 'Your Feed' })).toHaveClass( /active/, )",
+      "line": 56,
+      "p2_candidate": false
+    }
+  ]
+}

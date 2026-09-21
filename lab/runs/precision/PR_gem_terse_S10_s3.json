@@ -1,0 +1,75 @@
+{
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "terse",
+  "item": "S10",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S10\n    Scenario: Favorite article\n      Given an article has an initial favorite count of 0 and has not been favorited\n      When the user opens the article and clicks to favorite it\n      Then the button and the count reflect this action\n",
+  "spec": "generated/PR_gem_terse_S10_s3.spec.ts",
+  "rows": [
+    {
+      "class": "P0",
+      "citation": "該文章的初始收藏數為 0。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求在前置條件中明確指出該文章初始收藏數為 0，此斷言於點選收藏前驗證初始計數為 0，直接由要求蘊含。",
+      "assertion": "await expect(favoriteButton).toContainText('Favorite ( 0 )')",
+      "line": 17
+    },
+    {
+      "class": "P0",
+      "citation": "收藏後按鈕與計數反映這次操作。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求指定初始收藏數為 0 且收藏後按鈕與計數反映這次操作，因此點擊後按鈕文字變為包含計數 1 屬於被蘊含的斷言。",
+      "assertion": "await expect(favoriteButton).toContainText('Favorite ( 1 )')",
+      "line": 22
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P0",
+        "citation": "該文章的初始收藏數為 0。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求在前置條件中明確指出該文章初始收藏數為 0，此斷言於點選收藏前驗證初始計數為 0，直接由要求蘊含。",
+        "assertion": "await expect(favoriteButton).toContainText('Favorite ( 0 )')",
+        "line": 17
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕與計數反映這次操作。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求指定初始收藏數為 0 且收藏後按鈕與計數反映這次操作，因此點擊後按鈕文字變為包含計數 1 屬於被蘊含的斷言。",
+        "assertion": "await expect(favoriteButton).toContainText('Favorite ( 1 )')",
+        "line": 22
+      }
+    ],
+    "terra": [
+      {
+        "class": "P0",
+        "citation": "該文章的初始收藏數為 0。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在收藏前確認按鈕顯示初始收藏數 0，直接對應驗收要求明示的初始收藏數。",
+        "assertion": "await expect(favoriteButton).toContainText('Favorite ( 0 )')",
+        "line": 17
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕與計數反映這次操作。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求已給定初始收藏數為 0，收藏後計數反映此次操作，因此按鈕文字中的計數為 1 被蘊含。",
+        "assertion": "await expect(favoriteButton).toContainText('Favorite ( 1 )')",
+        "line": 22
+      }
+    ]
+  },
+  "gen_wall_seconds": 56.2,
+  "probe_steps": 6,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

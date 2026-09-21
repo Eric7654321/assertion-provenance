@@ -1,0 +1,45 @@
+{
+  "source": "PR_gem_terse_S02_s2.json",
+  "gen": "gem",
+  "arm": "terse",
+  "item": "S02",
+  "seed": 2,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開材料中定義的路由為 '/register' 而非包含 hash 的 '/#/register'，且未規範註冊失敗時必須保持在特定 URL 模式。",
+      "row": 0,
+      "assertion": "await expect(page).toHaveURL(/#\\/register/)",
+      "line": 21,
+      "p2_candidate": true
+    },
+    {
+      "supported": true,
+      "file": "specs/e2e/error-handling.spec.ts",
+      "line_start": 50,
+      "line_end": 66,
+      "quote": "  test('should handle 400 on registration with validation errors', async ({ page }) => {\n    await mockApiError(page, '/users', 400, {\n      errors: {\n        email: ['is already taken'],\n        username: ['is too short (minimum is 3 characters)'],\n      },\n    });\n    await page.goto('/register');\n    await page.fill('input[name=\"username\"]', 'ab');\n    await page.fill('input[name=\"email\"]', 'taken@test.com');\n    await page.fill('input[name=\"password\"]', 'password123');\n    await page.click('button[type=\"submit\"]');\n    // Should show error messages\n    await expect(page.locator('.error-messages')).toBeVisible();\n    await expect(page).toHaveURL('/register');\n    await expect(page.locator('input[name=\"email\"]')).toBeVisible();\n  });",
+      "why": "契約中的 E2E 測試明確驗證在註冊失敗（包含 email 已經被使用）時，頁面上必須出現 .error-messages 錯誤訊息。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 1,
+      "assertion": "await expect(page.locator('.error-messages')).toBeVisible()",
+      "line": 22,
+      "p2_candidate": true
+    },
+    {
+      "supported": true,
+      "file": "specs/e2e/error-handling.spec.ts",
+      "line_start": 50,
+      "line_end": 66,
+      "quote": "  test('should handle 400 on registration with validation errors', async ({ page }) => {\n    await mockApiError(page, '/users', 400, {\n      errors: {\n        email: ['is already taken'],\n        username: ['is too short (minimum is 3 characters)'],\n      },\n    });\n    await page.goto('/register');\n    await page.fill('input[name=\"username\"]', 'ab');\n    await page.fill('input[name=\"email\"]', 'taken@test.com');\n    await page.fill('input[name=\"password\"]', 'password123');\n    await page.click('button[type=\"submit\"]');\n    // Should show error messages\n    await expect(page.locator('.error-messages')).toBeVisible();\n    await expect(page).toHaveURL('/register');\n    await expect(page.locator('input[name=\"email\"]')).toBeVisible();\n  });",
+      "why": "公開 E2E 規格中註冊失敗時的測試與範本（包含 template 中的 That email is already taken）明確規範了在註冊頁提交重複/錯誤 email 時 .error-messages 應顯示相關錯誤訊息，但未強制規定前端 .error-messages 必須包含 /email/i 字樣。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 2,
+      "assertion": "await expect(page.locator('.error-messages')).toContainText(/email/i)",
+      "line": 23,
+      "p2_candidate": true
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "source": "PR_gem_precise_S09_s3.json",
+  "gen": "gem",
+  "arm": "precise",
+  "item": "S09",
+  "seed": 3,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/comments.spec.ts",
+      "line_start": 31,
+      "line_end": 36,
+      "quote": "  test('should add a comment to an article', async ({ page }) => {\n    const commentText = 'This is a test comment from Playwright!';\n    await addComment(page, commentText);\n    // Comment should be visible\n    await expect(page.locator(`.card:not(.comment-form) .card-block:has-text(\"${commentText}\")`)).toBeVisible();\n  });",
+      "why": "官方 E2E 測試明確要求使用者新增留言後，該留言卡片內容在文章頁面中必須可見。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 1,
+      "assertion": "await expect(cardB).toBeVisible()",
+      "line": 29,
+      "p2_candidate": false
+    }
+  ]
+}

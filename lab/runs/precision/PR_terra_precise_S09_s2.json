@@ -1,0 +1,183 @@
+{
+  "gen": "terra",
+  "gen_model": "gpt-5.6-terra",
+  "arm": "precise",
+  "item": "S09",
+  "seed": 2,
+  "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:S09\n    Scenario: Comment deletion control visibility\n      Given user A leaves a comment on an article\n      When user B opens the same article and leaves their own comment\n      Then user B should not see the delete control for user A's comment\n      And user B should see the delete control for their own comment\n",
+  "spec": "generated/PR_terra_precise_S09_s2.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此斷言位於使用者 A 發表留言後，用以確認留言已成功送出與渲染（測試前置資料準備完成），非驗收要求主要檢驗的行為主張。",
+      "assertion": "await expect(page.getByText(commentA)).toBeVisible()",
+      "line": 17
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求只關注刪除控制項的可見性，此處確認A的留言卡片可見是為了後續檢查其子元素刪除按鈕不存在的守衛/前置斷言。",
+      "assertion": "await expect(userAComment).toBeVisible()",
+      "line": 29
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求只關注留言刪除控制項的可見性，檢查留言本體存在只是後續檢查控制項的守衛斷言。",
+      "assertion": "await expect(userBComment).toBeVisible()",
+      "line": 30
+    },
+    {
+      "class": "P0",
+      "citation": "B 看不到 A 那則留言的刪除控制項，只看得到自己那則的。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "斷言 userAComment 內無按鈕，直接對應驗收要求中「B 看不到 A 那則留言的刪除控制項」的主張。",
+      "assertion": "await expect(userAComment.locator('button')).toHaveCount(0)",
+      "line": 32
+    },
+    {
+      "class": "P0",
+      "citation": "只看得到自己那則的。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出 B 看得到自己留言的刪除控制項，斷言其留言內的按鈕數量為 1 係此行為主張的操作化。",
+      "assertion": "await expect(userBComment.locator('button')).toHaveCount(1)",
+      "line": 33
+    },
+    {
+      "class": "P0",
+      "citation": "只看得到自己那則的。",
+      "p2_candidate": false,
+      "borderline": true,
+      "why": "驗收要求主張 B 看得到自己留言的刪除控制項，斷言該按鈕為刪除控制項（aria-label 包含 delete）屬於此主張的操作化驗證。",
+      "assertion": "await expect(userBComment.locator('button')).toHaveAttribute('aria-label', /delete/i)",
+      "line": 34
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於使用者 A 發表留言後，用以確認留言已成功送出與渲染（測試前置資料準備完成），非驗收要求主要檢驗的行為主張。",
+        "assertion": "await expect(page.getByText(commentA)).toBeVisible()",
+        "line": 17
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求只關注刪除控制項的可見性，此處確認A的留言卡片可見是為了後續檢查其子元素刪除按鈕不存在的守衛/前置斷言。",
+        "assertion": "await expect(userAComment).toBeVisible()",
+        "line": 29
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求只關注留言刪除控制項的可見性，檢查留言本體存在只是後續檢查控制項的守衛斷言。",
+        "assertion": "await expect(userBComment).toBeVisible()",
+        "line": 30
+      },
+      {
+        "class": "P0",
+        "citation": "B 看不到 A 那則留言的刪除控制項，只看得到自己那則的。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言 userAComment 內無按鈕，直接對應驗收要求中「B 看不到 A 那則留言的刪除控制項」的主張。",
+        "assertion": "await expect(userAComment.locator('button')).toHaveCount(0)",
+        "line": 32
+      },
+      {
+        "class": "P0",
+        "citation": "只看得到自己那則的。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出 B 看得到自己留言的刪除控制項，斷言其留言內的按鈕數量為 1 係此行為主張的操作化。",
+        "assertion": "await expect(userBComment.locator('button')).toHaveCount(1)",
+        "line": 33
+      },
+      {
+        "class": "P0",
+        "citation": "只看得到自己那則的。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "驗收要求主張 B 看得到自己留言的刪除控制項，斷言該按鈕為刪除控制項（aria-label 包含 delete）屬於此主張的操作化驗證。",
+        "assertion": "await expect(userBComment.locator('button')).toHaveAttribute('aria-label', /delete/i)",
+        "line": 34
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於後續以使用者 B 開啟同篇文章之前，僅確認使用者 A 的留言已建立並可作為後續操作對象，驗收要求與 Gherkin 均未主張此時的可見性。",
+        "assertion": "await expect(page.getByText(commentA)).toBeVisible()",
+        "line": 17
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言僅在後續檢查刪除控制項前確認 A 的留言元素存在；需求與 Gherkin 都未主張該留言在此時間點的可見性。",
+        "assertion": "await expect(userAComment).toBeVisible()",
+        "line": 29
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言僅在後續檢查刪除控制項前確認 B 的留言卡片存在；驗收要求與 Gherkin 都未主張該留言卡片本身在此時間點的可見性。",
+        "assertion": "await expect(userBComment).toBeVisible()",
+        "line": 30
+      },
+      {
+        "class": "P0",
+        "citation": "B 看不到 A 那則留言的刪除控制項，只看得到自己那則的。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言確認 B 對 A 的留言沒有任何按鈕，對應於看不到 A 留言的刪除控制項。",
+        "assertion": "await expect(userAComment.locator('button')).toHaveCount(0)",
+        "line": 32
+      },
+      {
+        "class": "P0",
+        "citation": "B 看不到 A 那則留言的刪除控制項，只看得到自己那則的。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言確認 B 自己留言中有一個刪除按鈕，對應驗收要求中「只看得到自己那則的」刪除控制項。",
+        "assertion": "await expect(userBComment.locator('button')).toHaveCount(1)",
+        "line": 33
+      },
+      {
+        "class": "P0",
+        "citation": "B 看不到 A 那則留言的刪除控制項，只看得到自己那則的。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言確認 B 自己留言上的按鈕是刪除控制項，屬於「只看得到自己那則的」刪除控制項之無歧義具體化。",
+        "assertion": "await expect(userBComment.locator('button')).toHaveAttribute('aria-label', /delete/i)",
+        "line": 34
+      }
+    ]
+  },
+  "gen_wall_seconds": 4.6,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

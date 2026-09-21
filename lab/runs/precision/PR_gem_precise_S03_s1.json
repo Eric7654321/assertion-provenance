@@ -1,0 +1,102 @@
+{
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "precise",
+  "item": "S03",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S03\n    Scenario: Login with incorrect password\n      Given I am on the login page\n      When I submit a registered email with an incorrect password\n      Then I remain on the login page\n      And an error message is displayed\n",
+  "spec": "generated/PR_gem_precise_S03_s1.spec.ts",
+  "rows": [
+    {
+      "class": "P0",
+      "citation": "停留在登入頁",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出送出後應「停留在登入頁」，斷言網址維持在登入頁為其直接操作化驗證。",
+      "assertion": "await expect(page).toHaveURL(`${UI}/#/login`)",
+      "line": 18
+    },
+    {
+      "class": "P0",
+      "citation": "停留在登入頁並顯示錯誤訊息。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出動作後需「顯示錯誤訊息」，該可見性斷言直接驗證此行為主張。",
+      "assertion": "await expect(errorMessage).toBeVisible()",
+      "line": 22
+    },
+    {
+      "class": "P0",
+      "citation": "停留在登入頁並顯示錯誤訊息。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求已明確要求顯示錯誤訊息，斷言錯誤訊息元素不為空直接對應該要求中訊息內容的存在。",
+      "assertion": "await expect(errorMessage).not.toBeEmpty()",
+      "line": 23
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P0",
+        "citation": "停留在登入頁",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出送出後應「停留在登入頁」，斷言網址維持在登入頁為其直接操作化驗證。",
+        "assertion": "await expect(page).toHaveURL(`${UI}/#/login`)",
+        "line": 18
+      },
+      {
+        "class": "P0",
+        "citation": "停留在登入頁並顯示錯誤訊息。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出動作後需「顯示錯誤訊息」，該可見性斷言直接驗證此行為主張。",
+        "assertion": "await expect(errorMessage).toBeVisible()",
+        "line": 22
+      },
+      {
+        "class": "P0",
+        "citation": "停留在登入頁並顯示錯誤訊息。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求已明確要求顯示錯誤訊息，斷言錯誤訊息元素不為空直接對應該要求中訊息內容的存在。",
+        "assertion": "await expect(errorMessage).not.toBeEmpty()",
+        "line": 23
+      }
+    ],
+    "terra": [
+      {
+        "class": "P0",
+        "citation": "停留在登入頁並顯示錯誤訊息。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "送出錯誤密碼後 URL 仍為登入頁是「停留在登入頁」的直接可檢查改寫。",
+        "assertion": "await expect(page).toHaveURL(`${UI}/#/login`)",
+        "line": 18
+      },
+      {
+        "class": "P0",
+        "citation": "停留在登入頁並顯示錯誤訊息。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言直接驗證驗收要求所述送出錯誤密碼後會顯示錯誤訊息。",
+        "assertion": "await expect(errorMessage).toBeVisible()",
+        "line": 22
+      },
+      {
+        "class": "P0",
+        "citation": "停留在登入頁並顯示錯誤訊息。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "錯誤訊息被要求顯示，斷言其非空是對該顯示內容的直接可檢查改寫。",
+        "assertion": "await expect(errorMessage).not.toBeEmpty()",
+        "line": 23
+      }
+    ]
+  },
+  "gen_wall_seconds": 27.4,
+  "probe_steps": 3,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

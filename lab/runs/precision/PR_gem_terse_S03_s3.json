@@ -1,0 +1,102 @@
+{
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "terse",
+  "item": "S03",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S03\n    Scenario: Login with incorrect password\n      Given the user is on the login page\n      When the user enters a registered email and an incorrect password, and submits\n      Then the login is not successful and the screen notifies the user\n",
+  "spec": "generated/PR_gem_terse_S03_s3.spec.ts",
+  "rows": [
+    {
+      "class": "P0",
+      "citation": "登入不會成功，畫面會告知。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求已明確說明「畫面會告知」，斷言錯誤訊息元素可見（toBeVisible）直接對應該行為要求。",
+      "assertion": "await expect(errorMessages).toBeVisible()",
+      "line": 18
+    },
+    {
+      "class": "P0",
+      "citation": "畫面會告知。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求已指明送出後「畫面會告知」，斷言錯誤訊息列表非空（包含內容）為該行為主張的操作化。",
+      "assertion": "await expect(errorMessages).not.toBeEmpty()",
+      "line": 19
+    },
+    {
+      "class": "P0",
+      "citation": "登入不會成功",
+      "p2_candidate": false,
+      "borderline": true,
+      "why": "驗收要求指明「登入不會成功」，登入失敗時留在原登入頁面（未跳轉）為此結果之無歧義改寫與基本體現。",
+      "assertion": "expect(page.url()).toContain('#/login')",
+      "line": 22
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P0",
+        "citation": "登入不會成功，畫面會告知。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求已明確說明「畫面會告知」，斷言錯誤訊息元素可見（toBeVisible）直接對應該行為要求。",
+        "assertion": "await expect(errorMessages).toBeVisible()",
+        "line": 18
+      },
+      {
+        "class": "P0",
+        "citation": "畫面會告知。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求已指明送出後「畫面會告知」，斷言錯誤訊息列表非空（包含內容）為該行為主張的操作化。",
+        "assertion": "await expect(errorMessages).not.toBeEmpty()",
+        "line": 19
+      },
+      {
+        "class": "P0",
+        "citation": "登入不會成功",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "驗收要求指明「登入不會成功」，登入失敗時留在原登入頁面（未跳轉）為此結果之無歧義改寫與基本體現。",
+        "assertion": "expect(page.url()).toContain('#/login')",
+        "line": 22
+      }
+    ],
+    "terra": [
+      {
+        "class": "P0",
+        "citation": "登入不會成功，畫面會告知。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "送出錯誤密碼後錯誤訊息區塊可見，是「畫面會告知」的直接可觀測表現。",
+        "assertion": "await expect(errorMessages).toBeVisible()",
+        "line": 18
+      },
+      {
+        "class": "P0",
+        "citation": "登入不會成功，畫面會告知。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "錯誤訊息容器非空是畫面告知使用者登入失敗的直接可檢查表現。",
+        "assertion": "await expect(errorMessages).not.toBeEmpty()",
+        "line": 19
+      },
+      {
+        "class": "P0",
+        "citation": "登入不會成功，畫面會告知。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "登入不成功可合理蘊含使用者仍停留在登入頁，但驗收要求未明示以 URL 雜湊作為觀測方式。",
+        "assertion": "expect(page.url()).toContain('#/login')",
+        "line": 22
+      }
+    ]
+  },
+  "gen_wall_seconds": 35.3,
+  "probe_steps": 5,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

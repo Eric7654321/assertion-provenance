@@ -1,0 +1,75 @@
+{
+  "gen": "terra",
+  "gen_model": "gpt-5.6-terra",
+  "arm": "terse",
+  "item": "H01",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Requirements\n\n  @item:H01\n    Scenario: Article tagging and editing\n      Given a user is logged in\n      And the user goes to the new article page\n      When the user fills in the title and body, adds three tags, and publishes the article\n      Then the article page content should match the entered information\n      When the user clicks edit on the article page\n      And the user changes the title to a different string, removes all tags, and submits\n      Then the article page should update accordingly\n",
+  "spec": "generated/PR_terra_terse_H01_s1.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "導航至新增文章頁後的 URL 確認屬於確保頁面載入完成的導航守衛，驗收要求與 Gherkin 均未將 URL 本身列為驗收主張。",
+      "assertion": "await expect(page).toHaveURL(/#\\/editor$/)",
+      "line": 15
+    },
+    {
+      "class": "P0",
+      "citation": "在該文章頁點選編輯",
+      "p2_candidate": false,
+      "borderline": true,
+      "why": "驗收要求步驟陳述發佈後進入「該文章頁」，斷言導向文章頁 URL 符合發佈後停留在文章頁的預期",
+      "assertion": "await expect(page).toHaveURL(/#\\/article\\//); await expect(page.getByRole('heading', { name: originalTitle })).toBeVisible(); await expect(page.locator('.article-content')).toContainText(body); for (const tag of tags) { await expect(page.getByText(tag, { exact: true })).toBeVisible(); } await page.getByRole('link', { name: 'Edit Article' }).click(); await expect(page).toHaveURL(/#\\/editor\\//); await page.getByPlaceholder('Article Title').fill(updatedTitle); const tagInputs = page.getByPlaceholder('Enter tags'); const removeTagButtons = page.locator('.tag-list button'); while (await removeTagButtons.count()) { await removeTagButtons.first().click(); } await expect(tagInputs).toBeVisible(); await page.getByRole('button', { name: 'Publish Article' }).click(); await expect(page).toHaveURL(/#\\/article\\//); await expect(page.getByRole('heading', { name: updatedTitle })).toBeVisible(); await expect(page.locator('.article-content')).toContainText(body); for (const tag of tags) { await expect(page.getByText(tag, { exact: true })).not.toBeVisible(); } }); });",
+      "line": 28
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "導航至新增文章頁後的 URL 確認屬於確保頁面載入完成的導航守衛，驗收要求與 Gherkin 均未將 URL 本身列為驗收主張。",
+        "assertion": "await expect(page).toHaveURL(/#\\/editor$/)",
+        "line": 15
+      },
+      {
+        "class": "P0",
+        "citation": "在該文章頁點選編輯",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "驗收要求步驟陳述發佈後進入「該文章頁」，斷言導向文章頁 URL 符合發佈後停留在文章頁的預期",
+        "assertion": "await expect(page).toHaveURL(/#\\/article\\//); await expect(page.getByRole('heading', { name: originalTitle })).toBeVisible(); await expect(page.locator('.article-content')).toContainText(body); for (const tag of tags) { await expect(page.getByText(tag, { exact: true })).toBeVisible(); } await page.getByRole('link', { name: 'Edit Article' }).click(); await expect(page).toHaveURL(/#\\/editor\\//); await page.getByPlaceholder('Article Title').fill(updatedTitle); const tagInputs = page.getByPlaceholder('Enter tags'); const removeTagButtons = page.locator('.tag-list button'); while (await removeTagButtons.count()) { await removeTagButtons.first().click(); } await expect(tagInputs).toBeVisible(); await page.getByRole('button', { name: 'Publish Article' }).click(); await expect(page).toHaveURL(/#\\/article\\//); await expect(page.getByRole('heading', { name: updatedTitle })).toBeVisible(); await expect(page.locator('.article-content')).toContainText(body); for (const tag of tags) { await expect(page.getByText(tag, { exact: true })).not.toBeVisible(); } }); });",
+        "line": 28
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於導向新增文章頁後、填寫與發佈動作前，僅確認測試已到達可操作頁面；需求與 Gherkin 均未主張此時 URL 格式。",
+        "assertion": "await expect(page).toHaveURL(/#\\/editor$/)",
+        "line": 15
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求只主張發佈後文章頁內容與輸入一致，未主張必須以特定 URL 雜湊路徑（#/article/）呈現。",
+        "assertion": "await expect(page).toHaveURL(/#\\/article\\//); await expect(page.getByRole('heading', { name: originalTitle })).toBeVisible(); await expect(page.locator('.article-content')).toContainText(body); for (const tag of tags) { await expect(page.getByText(tag, { exact: true })).toBeVisible(); } await page.getByRole('link', { name: 'Edit Article' }).click(); await expect(page).toHaveURL(/#\\/editor\\//); await page.getByPlaceholder('Article Title').fill(updatedTitle); const tagInputs = page.getByPlaceholder('Enter tags'); const removeTagButtons = page.locator('.tag-list button'); while (await removeTagButtons.count()) { await removeTagButtons.first().click(); } await expect(tagInputs).toBeVisible(); await page.getByRole('button', { name: 'Publish Article' }).click(); await expect(page).toHaveURL(/#\\/article\\//); await expect(page.getByRole('heading', { name: updatedTitle })).toBeVisible(); await expect(page.locator('.article-content')).toContainText(body); for (const tag of tags) { await expect(page.getByText(tag, { exact: true })).not.toBeVisible(); } }); });",
+        "line": 28
+      }
+    ]
+  },
+  "gen_wall_seconds": 6.1,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

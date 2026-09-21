@@ -1,0 +1,48 @@
+{
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "terse",
+  "item": "S07",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Requirements\n\n  @item:S07\n    Scenario: Author deletes their own article\n      Given an author opens their own article page\n      When the author clicks delete article\n      Then the article should disappear from the list\n",
+  "spec": "generated/PR_gem_terse_S07_s1.spec.ts",
+  "rows": [
+    {
+      "class": "P0",
+      "citation": "刪除後該文章從列表上消失。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "斷言文章標題不可見直接對應驗收要求中刪除後該文章從列表上消失的預期結果。",
+      "assertion": "await expect(page.getByRole('heading', { name: article.title })).not.toBeVisible()",
+      "line": 18
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P0",
+        "citation": "刪除後該文章從列表上消失。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言文章標題不可見直接對應驗收要求中刪除後該文章從列表上消失的預期結果。",
+        "assertion": "await expect(page.getByRole('heading', { name: article.title })).not.toBeVisible()",
+        "line": 18
+      }
+    ],
+    "terra": [
+      {
+        "class": "P0",
+        "citation": "刪除後該文章從列表上消失。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在刪除後的列表頁確認該文章標題不可見，直接對應文章從列表消失。",
+        "assertion": "await expect(page.getByRole('heading', { name: article.title })).not.toBeVisible()",
+        "line": 18
+      }
+    ]
+  },
+  "gen_wall_seconds": 39.5,
+  "probe_steps": 3,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

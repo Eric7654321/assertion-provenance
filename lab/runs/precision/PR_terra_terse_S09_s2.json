@@ -1,0 +1,237 @@
+{
+  "gen": "terra",
+  "gen_model": "gpt-5.6-terra",
+  "arm": "terse",
+  "item": "S09",
+  "seed": 2,
+  "feature": "Feature: Conduit Acceptance Requirements\n\n  @item:S09\n    Scenario: Visibility of comment deletion\n      Given user A posts a comment on an article\n      When user B opens the same article and posts their own comment\n      Then deleting a comment should only be possible for one's own comment\n",
+  "spec": "generated/PR_terra_terse_S09_s2.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "這是測試前置步驟（使用者 A 建立留言）成功與否的測試資料備妥檢查，非需求驗收目標。",
+      "assertion": "expect(commentA.status).toBe(200)",
+      "line": 22
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此斷言位於填寫留言操作之前，用來確保輸入框已渲染可供互動，屬於操作前的可見性守衛。",
+      "assertion": "await expect(commentInput).toBeVisible()",
+      "line": 28
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此斷言位於發布留言後，用以確認留言已成功呈現以作為後續驗證刪除按鈕權限的前置狀態，非驗收預期成果。",
+      "assertion": "await expect(page.getByText('Comment written by user B')).toBeVisible()",
+      "line": 33
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "確認使用者 A 的留言已渲染在畫面上，作為後續定位該留言卡片以檢查刪除按鈕權限的前置守衛。",
+      "assertion": "await expect(page.getByText('Comment written by user A')).toBeVisible()",
+      "line": 34
+    },
+    {
+      "class": "P0",
+      "citation": "留言的刪除只有自己的留言做得到。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明定只有自己的留言能刪除，使用者 B 檢視使用者 A 的留言不應有刪除按鈕，此斷言直接體現該驗收要求。",
+      "assertion": "await expect(userAComment.getByRole('button')).toHaveCount(0)",
+      "line": 44
+    },
+    {
+      "class": "P0",
+      "citation": "留言的刪除只有自己的留言做得到。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求指明只有自己的留言做得到刪除，對使用者 B 自身的留言斷言存在 1 個刪除按鈕為該要求的直接具體化。",
+      "assertion": "await expect(userBComment.getByRole('button')).toHaveCount(1)",
+      "line": 45
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅規定「留言的刪除只有自己的留言做得到」（指刪除按鈕/權限的可見性與可行性），並未要求實際執行刪除動作後驗證留言消失。",
+      "assertion": "await expect(page.getByText('Comment written by user B')).toHaveCount(0)",
+      "line": 49
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅規範「留言的刪除只有自己的留言做得到」，並未要求驗證刪除使用者 B 的留言後使用者 A 的留言仍可見。",
+      "assertion": "await expect(page.getByText('Comment written by user A')).toBeVisible()",
+      "line": 50
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "這是測試前置步驟（使用者 A 建立留言）成功與否的測試資料備妥檢查，非需求驗收目標。",
+        "assertion": "expect(commentA.status).toBe(200)",
+        "line": 22
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於填寫留言操作之前，用來確保輸入框已渲染可供互動，屬於操作前的可見性守衛。",
+        "assertion": "await expect(commentInput).toBeVisible()",
+        "line": 28
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於發布留言後，用以確認留言已成功呈現以作為後續驗證刪除按鈕權限的前置狀態，非驗收預期成果。",
+        "assertion": "await expect(page.getByText('Comment written by user B')).toBeVisible()",
+        "line": 33
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "確認使用者 A 的留言已渲染在畫面上，作為後續定位該留言卡片以檢查刪除按鈕權限的前置守衛。",
+        "assertion": "await expect(page.getByText('Comment written by user A')).toBeVisible()",
+        "line": 34
+      },
+      {
+        "class": "P0",
+        "citation": "留言的刪除只有自己的留言做得到。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明定只有自己的留言能刪除，使用者 B 檢視使用者 A 的留言不應有刪除按鈕，此斷言直接體現該驗收要求。",
+        "assertion": "await expect(userAComment.getByRole('button')).toHaveCount(0)",
+        "line": 44
+      },
+      {
+        "class": "P0",
+        "citation": "留言的刪除只有自己的留言做得到。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求指明只有自己的留言做得到刪除，對使用者 B 自身的留言斷言存在 1 個刪除按鈕為該要求的直接具體化。",
+        "assertion": "await expect(userBComment.getByRole('button')).toHaveCount(1)",
+        "line": 45
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅規定「留言的刪除只有自己的留言做得到」（指刪除按鈕/權限的可見性與可行性），並未要求實際執行刪除動作後驗證留言消失。",
+        "assertion": "await expect(page.getByText('Comment written by user B')).toHaveCount(0)",
+        "line": 49
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅規範「留言的刪除只有自己的留言做得到」，並未要求驗證刪除使用者 B 的留言後使用者 A 的留言仍可見。",
+        "assertion": "await expect(page.getByText('Comment written by user A')).toBeVisible()",
+        "line": 50
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "這是在確認使用者 A 留言的測試前置資料建立成功，並非驗收要求中的刪除可見性行為主張。",
+        "assertion": "expect(commentA.status).toBe(200)",
+        "line": 22
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於使用者 B 發表留言前，僅確認輸入框可操作；驗收要求與 Gherkin 都未主張該時間點輸入框的可見性。",
+        "assertion": "await expect(commentInput).toBeVisible()",
+        "line": 28
+      },
+      {
+        "class": "P0",
+        "citation": "2. 以使用者 B 開啟同一篇文章並留下自己的留言",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "使用者 B 已留下自己的留言，該留言文字在頁面可見是此步驟的直接結果。",
+        "assertion": "await expect(page.getByText('Comment written by user B')).toBeVisible()",
+        "line": 33
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言僅在後續定位 user A 留言並檢查刪除權限前確認測試資料存在；驗收要求與 Gherkin 都未主張此時留言文字的可見性。",
+        "assertion": "await expect(page.getByText('Comment written by user A')).toBeVisible()",
+        "line": 34
+      },
+      {
+        "class": "P0",
+        "citation": "留言的刪除只有自己的留言做得到。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言使用者 B 對使用者 A 的留言沒有刪除按鈕，直接驗證只能刪除自己的留言。",
+        "assertion": "await expect(userAComment.getByRole('button')).toHaveCount(0)",
+        "line": 44
+      },
+      {
+        "class": "P0",
+        "citation": "留言的刪除只有自己的留言做得到。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "使用者 B 對自己的留言具有刪除能力，按鈕存在是該能力在介面上的直接可檢查表現。",
+        "assertion": "await expect(userBComment.getByRole('button')).toHaveCount(1)",
+        "line": 45
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "需求與 Gherkin 只主張使用者只能刪除自己的留言，未主張刪除後必須以頁面文字計數為 0 的方式驗證留言消失。",
+        "assertion": "await expect(page.getByText('Comment written by user B')).toHaveCount(0)",
+        "line": 49
+      },
+      {
+        "class": "P0",
+        "citation": "留言的刪除只有自己的留言做得到。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "刪除使用者 B 自己的留言後，使用者 A 的留言仍可見是「只能刪除自己的留言」所蘊含的結果。",
+        "assertion": "await expect(page.getByText('Comment written by user A')).toBeVisible()",
+        "line": 50
+      }
+    ]
+  },
+  "gen_wall_seconds": 4.7,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

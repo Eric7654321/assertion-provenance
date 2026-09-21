@@ -1,0 +1,37 @@
+{
+  "source": "PR_terra_terse_S02_s3.json",
+  "gen": "terra",
+  "arm": "terse",
+  "item": "S02",
+  "seed": 3,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/error-handling.spec.ts",
+      "line_start": 62,
+      "line_end": 66,
+      "quote": "    // Should show error messages\n    await expect(page.locator('.error-messages')).toBeVisible();\n    await expect(page).toHaveURL('/register');\n    await expect(page.locator('input[name=\"email\"]')).toBeVisible();\n  });",
+      "why": "E2E 錯誤處理測試明確驗證註冊時發生驗證錯誤（包含 email 被佔用）後，頁面應維持停留在 /register 路由。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 0,
+      "assertion": "await expect(page).toHaveURL(/#\\/register/)",
+      "line": 15,
+      "p2_candidate": true
+    },
+    {
+      "supported": true,
+      "file": "specs/e2e/error-handling.spec.ts",
+      "line_start": 50,
+      "line_end": 64,
+      "quote": "  test('should handle 400 on registration with validation errors', async ({ page }) => {\n    await mockApiError(page, '/users', 400, {\n      errors: {\n        email: ['is already taken'],\n        username: ['is too short (minimum is 3 characters)'],\n      },\n    });\n    await page.goto('/register');\n    await page.fill('input[name=\"username\"]', 'ab');\n    await page.fill('input[name=\"email\"]', 'taken@test.com');\n    await page.fill('input[name=\"password\"]', 'password123');\n    await page.click('button[type=\"submit\"]');\n    // Should show error messages\n    await expect(page.locator('.error-messages')).toBeVisible();",
+      "why": "E2E 測試驗證了在註冊頁面提交已被佔用的 email 時，頁面上的 .error-messages 必須顯示對應的錯誤訊息。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 1,
+      "assertion": "await expect(page.locator('.error-messages')).toContainText(/email.*already|email.*taken/i)",
+      "line": 16,
+      "p2_candidate": true
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "source": "PR_gem_precise_S02_s1.json",
+  "gen": "gem",
+  "arm": "precise",
+  "item": "S02",
+  "seed": 1,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約中僅在 API 測試與範本中定義後端回傳 409 與 error-messages 容器，並未規定前端畫面錯誤訊息的具體文字必須為 'email has already been taken'。",
+      "row": 1,
+      "assertion": "await expect(errorMessage).toContainText('email has already been taken')",
+      "line": 19,
+      "p2_candidate": true
+    }
+  ]
+}

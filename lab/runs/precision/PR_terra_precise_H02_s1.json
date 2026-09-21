@@ -1,0 +1,372 @@
+{
+  "gen": "terra",
+  "gen_model": "gpt-5.6-terra",
+  "arm": "precise",
+  "item": "H02",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H02\n    Scenario: Article page visibility and permissions\n      Given an author creates an article and posts a comment on it\n      When an unauthenticated guest views the article page\n      Then the guest can view the article but cannot post comments\n      When another logged-in user who is not the author views the same article page\n      Then this user does not see controls to edit or delete the article\n      When this user posts their own comment on the article\n      Then delete controls for comments only appear to the respective authors of those comments\n",
+  "spec": "generated/PR_terra_precise_H02_s1.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "這是測試前置步驟中確認作者留言 API 成功備妥資料的守衛斷言，非需求層驗證。",
+      "assertion": "expect(authorCommentResponse.status).toBe(200)",
+      "line": 26
+    },
+    {
+      "class": "P0",
+      "citation": "訪客看得到文章但不能留言",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出訪客看得到文章，斷言標題可見直接支持此行為主張。",
+      "assertion": "await expect(page.getByRole('heading', { name: article.title })).toBeVisible()",
+      "line": 30
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求訪客看得到文章且不能留言，未要求或斷言訪客視角下作者留言本文本身的可見性。",
+      "assertion": "await expect(page.getByText(authorCommentBody)).toBeVisible()",
+      "line": 31
+    },
+    {
+      "class": "P0",
+      "citation": "訪客看得到文章但不能留言",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確規範訪客不能留言，在前端畫面上不提供留言輸入框（Write a comment...）為該要求的直接具體化檢查。",
+      "assertion": "await expect(page.getByPlaceholder('Write a comment...')).toHaveCount(0)",
+      "line": 32
+    },
+    {
+      "class": "P0",
+      "citation": "訪客看得到文章但不能留言",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出訪客不能留言，在純前端 UI 驗收下不顯示「Post Comment」按鈕為其直接操作化驗證。",
+      "assertion": "await expect(page.getByRole('button', { name: /post comment/i })).toHaveCount(0)",
+      "line": 33
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此處為非作者使用者開啟文章頁後確認頁面已載入／有文章標題的可見性守衛，驗收要求與 Gherkin 針對非作者僅主張看不到編輯與刪除控制項。",
+      "assertion": "await expect(page.getByRole('heading', { name: article.title })).toBeVisible()",
+      "line": 38
+    },
+    {
+      "class": "P0",
+      "citation": "非作者看不到編輯與刪除文章的控制項",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確寫出非作者看不到編輯文章的控制項，斷言以toHaveCount(0)驗證該控制項不存在。",
+      "assertion": "await expect(page.getByRole('link', { name: /edit article/i })).toHaveCount(0)",
+      "line": 39
+    },
+    {
+      "class": "P0",
+      "citation": "非作者看不到編輯與刪除文章的控制項",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出非作者看不到刪除文章的控制項，斷言 delete article 按鈕數量為 0 直接對應此要求。",
+      "assertion": "await expect(page.getByRole('button', { name: /delete article/i })).toHaveCount(0)",
+      "line": 40
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "在非作者填寫留言操作前確認輸入框可見，屬於操作前的可見性守衛，非需求驗收目標。",
+      "assertion": "await expect(commentInput).toBeVisible()",
+      "line": 43
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此斷言為定位作者留言卡片的可見性確認／守衛，用以確保後續檢查其刪除按鈕計數的對象存在，非需求規格中明確要求的行為主張。",
+      "assertion": "await expect(authorComment).toBeVisible()",
+      "line": 50
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此可見性斷言是為了確認留言已渲染以便檢查後續刪除控制項的守衛斷言，驗收要求與 Gherkin 均未將該留言本身的可見性列為驗收主張。",
+      "assertion": "await expect(otherComment).toBeVisible()",
+      "line": 51
+    },
+    {
+      "class": "P0",
+      "citation": "留言的刪除控制項只對該留言的作者出現。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出留言刪除控制項只對該留言作者出現，因此非作者的使用者看原作者留言時不應有刪除按鈕（count 為 0）。",
+      "assertion": "await expect(authorComment.getByRole('button')).toHaveCount(0)",
+      "line": 53
+    },
+    {
+      "class": "P0",
+      "citation": "留言的刪除控制項只對該留言的作者出現。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出留言的刪除控制項只對該留言的作者出現，當前使用者是 otherComment 的作者，因此該留言應有 1 個控制項按鈕。",
+      "assertion": "await expect(otherComment.getByRole('button')).toHaveCount(1)",
+      "line": 54
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "這是測試前置步驟中確認作者留言 API 成功備妥資料的守衛斷言，非需求層驗證。",
+        "assertion": "expect(authorCommentResponse.status).toBe(200)",
+        "line": 26
+      },
+      {
+        "class": "P0",
+        "citation": "訪客看得到文章但不能留言",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出訪客看得到文章，斷言標題可見直接支持此行為主張。",
+        "assertion": "await expect(page.getByRole('heading', { name: article.title })).toBeVisible()",
+        "line": 30
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求訪客看得到文章且不能留言，未要求或斷言訪客視角下作者留言本文本身的可見性。",
+        "assertion": "await expect(page.getByText(authorCommentBody)).toBeVisible()",
+        "line": 31
+      },
+      {
+        "class": "P0",
+        "citation": "訪客看得到文章但不能留言",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確規範訪客不能留言，在前端畫面上不提供留言輸入框（Write a comment...）為該要求的直接具體化檢查。",
+        "assertion": "await expect(page.getByPlaceholder('Write a comment...')).toHaveCount(0)",
+        "line": 32
+      },
+      {
+        "class": "P0",
+        "citation": "訪客看得到文章但不能留言",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出訪客不能留言，在純前端 UI 驗收下不顯示「Post Comment」按鈕為其直接操作化驗證。",
+        "assertion": "await expect(page.getByRole('button', { name: /post comment/i })).toHaveCount(0)",
+        "line": 33
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此處為非作者使用者開啟文章頁後確認頁面已載入／有文章標題的可見性守衛，驗收要求與 Gherkin 針對非作者僅主張看不到編輯與刪除控制項。",
+        "assertion": "await expect(page.getByRole('heading', { name: article.title })).toBeVisible()",
+        "line": 38
+      },
+      {
+        "class": "P0",
+        "citation": "非作者看不到編輯與刪除文章的控制項",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確寫出非作者看不到編輯文章的控制項，斷言以toHaveCount(0)驗證該控制項不存在。",
+        "assertion": "await expect(page.getByRole('link', { name: /edit article/i })).toHaveCount(0)",
+        "line": 39
+      },
+      {
+        "class": "P0",
+        "citation": "非作者看不到編輯與刪除文章的控制項",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出非作者看不到刪除文章的控制項，斷言 delete article 按鈕數量為 0 直接對應此要求。",
+        "assertion": "await expect(page.getByRole('button', { name: /delete article/i })).toHaveCount(0)",
+        "line": 40
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "在非作者填寫留言操作前確認輸入框可見，屬於操作前的可見性守衛，非需求驗收目標。",
+        "assertion": "await expect(commentInput).toBeVisible()",
+        "line": 43
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言為定位作者留言卡片的可見性確認／守衛，用以確保後續檢查其刪除按鈕計數的對象存在，非需求規格中明確要求的行為主張。",
+        "assertion": "await expect(authorComment).toBeVisible()",
+        "line": 50
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此可見性斷言是為了確認留言已渲染以便檢查後續刪除控制項的守衛斷言，驗收要求與 Gherkin 均未將該留言本身的可見性列為驗收主張。",
+        "assertion": "await expect(otherComment).toBeVisible()",
+        "line": 51
+      },
+      {
+        "class": "P0",
+        "citation": "留言的刪除控制項只對該留言的作者出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出留言刪除控制項只對該留言作者出現，因此非作者的使用者看原作者留言時不應有刪除按鈕（count 為 0）。",
+        "assertion": "await expect(authorComment.getByRole('button')).toHaveCount(0)",
+        "line": 53
+      },
+      {
+        "class": "P0",
+        "citation": "留言的刪除控制項只對該留言的作者出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出留言的刪除控制項只對該留言的作者出現，當前使用者是 otherComment 的作者，因此該留言應有 1 個控制項按鈕。",
+        "assertion": "await expect(otherComment.getByRole('button')).toHaveCount(1)",
+        "line": 54
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "這是在後續頁面驗證前確認建立測試留言的 API 動作成功，屬於測試資料備妥的守衛，且驗收要求明示不含 API 層權限。",
+        "assertion": "expect(authorCommentResponse.status).toBe(200)",
+        "line": 26
+      },
+      {
+        "class": "P0",
+        "citation": "訪客看得到文章但不能留言；非作者看不到編輯與刪除文章的控制項；留言的刪除控制項只對該留言的作者出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "訪客開啟文章頁後文章標題可見，是「訪客看得到文章」的直接畫面驗證。",
+        "assertion": "await expect(page.getByRole('heading', { name: article.title })).toBeVisible()",
+        "line": 30
+      },
+      {
+        "class": "P0",
+        "citation": "訪客看得到文章但不能留言；非作者看不到編輯與刪除文章的控制項；留言的刪除控制項只對該留言的作者出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "作者留言是文章頁內容的一部分，訪客看得到文章的要求涵蓋其可見性。",
+        "assertion": "await expect(page.getByText(authorCommentBody)).toBeVisible()",
+        "line": 31
+      },
+      {
+        "class": "P0",
+        "citation": "訪客看得到文章但不能留言；非作者看不到編輯與刪除文章的控制項；留言的刪除控制項只對該留言的作者出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "訪客留言輸入框不存在是「訪客不能留言」在畫面層的直接驗證。",
+        "assertion": "await expect(page.getByPlaceholder('Write a comment...')).toHaveCount(0)",
+        "line": 32
+      },
+      {
+        "class": "P0",
+        "citation": "訪客看得到文章但不能留言；非作者看不到編輯與刪除文章的控制項；留言的刪除控制項只對該留言的作者出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "訪客頁面不存在「Post Comment」按鈕是「不能留言」的直接畫面層行為驗證。",
+        "assertion": "await expect(page.getByRole('button', { name: /post comment/i })).toHaveCount(0)",
+        "line": 33
+      },
+      {
+        "class": "P0",
+        "citation": "訪客看得到文章但不能留言；非作者看不到編輯與刪除文章的控制項；留言的刪除控制項只對該留言的作者出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "非作者開啟同一文章頁時文章仍可見，標題可見是「看得到文章」的直接畫面驗證。",
+        "assertion": "await expect(page.getByRole('heading', { name: article.title })).toBeVisible()",
+        "line": 38
+      },
+      {
+        "class": "P0",
+        "citation": "非作者看不到編輯與刪除文章的控制項；",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在非作者登入並開啟文章頁後確認看不到 Edit Article 控制項，直接符合驗收要求。",
+        "assertion": "await expect(page.getByRole('link', { name: /edit article/i })).toHaveCount(0)",
+        "line": 39
+      },
+      {
+        "class": "P0",
+        "citation": "非作者看不到編輯與刪除文章的控制項；",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言確認非作者在文章頁看不到刪除文章控制項，與驗收要求直接一致。",
+        "assertion": "await expect(page.getByRole('button', { name: /delete article/i })).toHaveCount(0)",
+        "line": 40
+      },
+      {
+        "class": "P0",
+        "citation": "訪客看得到文章但不能留言；非作者看不到編輯與刪除文章的控制項；留言的刪除控制項只對該留言的作者出現。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "非作者能在頁面留下自己的留言蘊含留言輸入欄在發表動作前可供使用，雖然原文未明示其可見性。",
+        "assertion": "await expect(commentInput).toBeVisible()",
+        "line": 43
+      },
+      {
+        "class": "P0",
+        "citation": "留言的刪除控制項只對該留言的作者出現。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "要驗證作者留言沒有刪除控制項，該留言在此時可見是被此留言層級權限主張所蘊含的前提。",
+        "assertion": "await expect(authorComment).toBeVisible()",
+        "line": 50
+      },
+      {
+        "class": "P0",
+        "citation": "Then delete controls for comments only appear to the respective authors of those comments",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "在驗證留言刪除控制項只對各自作者出現時，兩則留言存在並可見是該情境的隱含前提。",
+        "assertion": "await expect(otherComment).toBeVisible()",
+        "line": 51
+      },
+      {
+        "class": "P0",
+        "citation": "留言的刪除控制項只對該留言的作者出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "作者留言的刪除按鈕對目前這位非作者使用者不應出現，與驗收要求直接一致。",
+        "assertion": "await expect(authorComment.getByRole('button')).toHaveCount(0)",
+        "line": 53
+      },
+      {
+        "class": "P0",
+        "citation": "留言的刪除控制項只對該留言的作者出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言確認另一位使用者自己留言上的刪除按鈕出現，正是留言刪除控制項只對各自作者出現的具體表現。",
+        "assertion": "await expect(otherComment.getByRole('button')).toHaveCount(1)",
+        "line": 54
+      }
+    ]
+  },
+  "gen_wall_seconds": 6.1,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

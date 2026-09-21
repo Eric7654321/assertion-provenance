@@ -1,0 +1,129 @@
+{
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "precise",
+  "item": "H01",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H01\n    Scenario: Article tags and editing\n      Given a logged-in user is on the new article page\n      When the user publishes an article with a title, body, and three tags\n      Then the article page displays content matching the input\n      When the user edits the article from the article page\n      And changes the title to another string, removes all tags, and submits\n      Then the article page displays the updated title\n      And no tags appear on the article page\n",
+  "spec": "generated/PR_gem_precise_H01_s3.spec.ts",
+  "rows": [
+    {
+      "class": "P0",
+      "citation": "文章頁顯示的內容與輸入一致",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出文章發布後，文章頁顯示的內容需與輸入一致，包含文章標題。",
+      "assertion": "await expect(page.getByRole('heading', { level: 1 })).toHaveText(initialTitle)",
+      "line": 32
+    },
+    {
+      "class": "P0",
+      "citation": "文章頁顯示的內容與輸入一致",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出文章發佈後「文章頁顯示的內容與輸入一致」，驗證內文可見屬於此要求的直接斷言。",
+      "assertion": "await expect(page.getByText(initialBody)).toBeVisible()",
+      "line": 33
+    },
+    {
+      "class": "P0",
+      "citation": "文章頁顯示的內容與輸入一致",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出發佈後「文章頁顯示的內容與輸入一致」，包含先前加入的三個標籤。",
+      "assertion": "await expect(page.locator('.tag-list').getByText(tag)).toBeVisible()",
+      "line": 35
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "點選編輯後確認跳轉至編輯頁網址，屬於後續填寫與提交操作前的導航守衛，驗收要求與 Gherkin 皆未對此 URL 作出斷言。",
+      "assertion": "await expect(page).toHaveURL(/#\\/editor\\//); // And changes the title to another string, removes all tags, and submits const updatedTitle = `Updated Article Title ${timestamp}`; const titleInput = page.getByPlaceholder('Article Title'); await expect(titleInput).toHaveValue(initialTitle); await titleInput.fill(updatedTitle); // Remove all tags (clicking the remove icon on each tag badge) const removeTagIcons = page.locator('.tag-default i'); while ((await removeTagIcons.count()) > 0) { await removeTagIcons.first().click(); } await page.getByRole('button', { name: 'Publish Article' }).click(); // Then the article page displays the updated title await expect(page.getByRole('heading', { level: 1 })).toHaveText(updatedTitle); // And no tags appear on the article page await expect(page.locator('.tag-list li')).toHaveCount(0); })",
+      "line": 40
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P0",
+        "citation": "文章頁顯示的內容與輸入一致",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出文章發布後，文章頁顯示的內容需與輸入一致，包含文章標題。",
+        "assertion": "await expect(page.getByRole('heading', { level: 1 })).toHaveText(initialTitle)",
+        "line": 32
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁顯示的內容與輸入一致",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出文章發佈後「文章頁顯示的內容與輸入一致」，驗證內文可見屬於此要求的直接斷言。",
+        "assertion": "await expect(page.getByText(initialBody)).toBeVisible()",
+        "line": 33
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁顯示的內容與輸入一致",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出發佈後「文章頁顯示的內容與輸入一致」，包含先前加入的三個標籤。",
+        "assertion": "await expect(page.locator('.tag-list').getByText(tag)).toBeVisible()",
+        "line": 35
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "點選編輯後確認跳轉至編輯頁網址，屬於後續填寫與提交操作前的導航守衛，驗收要求與 Gherkin 皆未對此 URL 作出斷言。",
+        "assertion": "await expect(page).toHaveURL(/#\\/editor\\//); // And changes the title to another string, removes all tags, and submits const updatedTitle = `Updated Article Title ${timestamp}`; const titleInput = page.getByPlaceholder('Article Title'); await expect(titleInput).toHaveValue(initialTitle); await titleInput.fill(updatedTitle); // Remove all tags (clicking the remove icon on each tag badge) const removeTagIcons = page.locator('.tag-default i'); while ((await removeTagIcons.count()) > 0) { await removeTagIcons.first().click(); } await page.getByRole('button', { name: 'Publish Article' }).click(); // Then the article page displays the updated title await expect(page.getByRole('heading', { level: 1 })).toHaveText(updatedTitle); // And no tags appear on the article page await expect(page.locator('.tag-list li')).toHaveCount(0); })",
+        "line": 40
+      }
+    ],
+    "terra": [
+      {
+        "class": "P0",
+        "citation": "文章頁顯示的內容與輸入一致；",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "發佈後文章頁的 h1 標題等於輸入的 initialTitle，是「內容與輸入一致」的直接具體化。",
+        "assertion": "await expect(page.getByRole('heading', { level: 1 })).toHaveText(initialTitle)",
+        "line": 32
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁顯示的內容與輸入一致；編輯送出後標題更新，標籤不再出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "內文是輸入內容的一部分，發佈後文章頁可見 initialBody 是「內容與輸入一致」的直接驗證。",
+        "assertion": "await expect(page.getByText(initialBody)).toBeVisible()",
+        "line": 33
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁顯示的內容與輸入一致；編輯送出後標題更新，標籤不再出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "發佈時輸入的三個標籤屬於內容，文章頁逐一顯示它們是「內容與輸入一致」的直接驗證。",
+        "assertion": "await expect(page.locator('.tag-list').getByText(tag)).toBeVisible()",
+        "line": 35
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此 URL 斷言位於點選編輯後、填寫與送出前，僅確認已進入可操作的編輯頁面，驗收要求與 Gherkin 均未主張編輯頁的 URL 格式。",
+        "assertion": "await expect(page).toHaveURL(/#\\/editor\\//); // And changes the title to another string, removes all tags, and submits const updatedTitle = `Updated Article Title ${timestamp}`; const titleInput = page.getByPlaceholder('Article Title'); await expect(titleInput).toHaveValue(initialTitle); await titleInput.fill(updatedTitle); // Remove all tags (clicking the remove icon on each tag badge) const removeTagIcons = page.locator('.tag-default i'); while ((await removeTagIcons.count()) > 0) { await removeTagIcons.first().click(); } await page.getByRole('button', { name: 'Publish Article' }).click(); // Then the article page displays the updated title await expect(page.getByRole('heading', { level: 1 })).toHaveText(updatedTitle); // And no tags appear on the article page await expect(page.locator('.tag-list li')).toHaveCount(0); })",
+        "line": 40
+      }
+    ]
+  },
+  "gen_wall_seconds": 62.0,
+  "probe_steps": 5,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

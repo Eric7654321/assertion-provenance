@@ -1,0 +1,51 @@
+{
+  "source": "PR_gem_terse_H03_s2.json",
+  "gen": "gem",
+  "arm": "terse",
+  "item": "H03",
+  "seed": 2,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/url-navigation.spec.ts",
+      "line_start": 133,
+      "line_end": 134,
+      "quote": "    // Page 2 should be active\n    await expect(page.locator('.pagination .page-item:has(.page-link:has-text(\"2\"))')).toHaveClass(/active/);",
+      "why": "公開契約的 E2E 測試在切換至標籤分頁第 2 頁時，明確驗證了第 2 頁按鈕/項目處於當前作用（active/current）狀態並可見。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 3,
+      "assertion": "await expect(currentPage2Btn).toBeVisible()",
+      "line": 35,
+      "p2_candidate": true
+    },
+    {
+      "supported": true,
+      "file": "specs/e2e/url-navigation.spec.ts",
+      "line_start": 150,
+      "line_end": 154,
+      "quote": "    // Go directly to page 2 of the tag\n    await page.goto(`/tag/${uniqueTag}?page=2`);\n    await page.waitForSelector('.article-preview', { timeout: 2000 });\n    // Page 2 should be active\n    await expect(page.locator('.pagination .page-item:has(.page-link:has-text(\"2\"))')).toHaveClass(/active/);",
+      "why": "契約中明確測試直接導向標籤的第 2 頁網址（/tag/:tag?page=2）後，分頁元件上的第 2 頁按鈕/項目處於當前作用中狀態。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 5,
+      "assertion": "await expect(newPagePagination.getByRole('button', { name: /Page 2 is your current page|2/ })).toBeVisible()",
+      "line": 48,
+      "p2_candidate": false
+    },
+    {
+      "supported": true,
+      "file": "specs/e2e/url-navigation.spec.ts",
+      "line_start": 84,
+      "line_end": 88,
+      "quote": "    // Click Global Feed\n    await page.click('.nav-link:has-text(\"Global Feed\")');\n    // Should navigate to /\n    await expect(page).toHaveURL('/');\n    await expect(page.locator('.nav-link:has-text(\"Global Feed\")')).toHaveClass(/active/);",
+      "why": "E2E 規格明確測試了點擊 Global Feed 頁籤切換後，Global Feed 連結/按鈕必須帶有 active class。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 7,
+      "assertion": "await expect(newPage.getByRole('button', { name: 'Global Feed' })).toHaveClass(/active/)",
+      "line": 57,
+      "p2_candidate": true
+    }
+  ]
+}

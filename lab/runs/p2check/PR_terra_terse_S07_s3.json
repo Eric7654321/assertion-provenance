@@ -1,0 +1,23 @@
+{
+  "source": "PR_terra_terse_S07_s3.json",
+  "gen": "terra",
+  "arm": "terse",
+  "item": "S07",
+  "seed": 3,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/articles.spec.ts",
+      "line_start": 79,
+      "line_end": 81,
+      "quote": "    // Should be redirected to home\n    await expect(page).toHaveURL('/');",
+      "why": "官方 E2E 測試在刪除文章後明確斷言使用者應被重新導向回首頁（/）。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 1,
+      "assertion": "await expect(page).toHaveURL(new RegExp(`${UI.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}/#/?$`))",
+      "line": 16,
+      "p2_candidate": true
+    }
+  ]
+}

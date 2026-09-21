@@ -1,0 +1,102 @@
+{
+  "gen": "terra",
+  "gen_model": "gpt-5.6-terra",
+  "arm": "terse",
+  "item": "S02",
+  "seed": 2,
+  "feature": "Feature: Conduit Acceptance Requirements\n\n  @item:S02\n    Scenario: Registration with duplicate email\n      Given a user completes registration with an unused email\n      And the user logs out\n      When the user registers again with the same email\n      Then the second registration should not succeed\n",
+  "spec": "generated/PR_terra_terse_S02_s2.spec.ts",
+  "rows": [
+    {
+      "class": "P0",
+      "citation": "第二次註冊不會成功。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確主張第二次註冊不會成功，在 API 測試中斷言回傳 4xx 錯誤狀態碼是此失敗主張的直接對應。",
+      "assertion": "expect(response.status).toBeGreaterThanOrEqual(400)",
+      "line": 16
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求第二次註冊不會成功，未指定 API 回應狀態碼必須小於 500（屬 4xx 用戶端錯誤契約）。",
+      "assertion": "expect(response.status).toBeLessThan(500)",
+      "line": 17
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求第二次註冊不會成功，未規範 API 需回傳 errors 屬性，但此為 RealWorld Conduit API 規範常見的錯誤回應格式。",
+      "assertion": "expect(response.json).toHaveProperty('errors')",
+      "line": 18
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P0",
+        "citation": "第二次註冊不會成功。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確主張第二次註冊不會成功，在 API 測試中斷言回傳 4xx 錯誤狀態碼是此失敗主張的直接對應。",
+        "assertion": "expect(response.status).toBeGreaterThanOrEqual(400)",
+        "line": 16
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求第二次註冊不會成功，未指定 API 回應狀態碼必須小於 500（屬 4xx 用戶端錯誤契約）。",
+        "assertion": "expect(response.status).toBeLessThan(500)",
+        "line": 17
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求第二次註冊不會成功，未規範 API 需回傳 errors 屬性，但此為 RealWorld Conduit API 規範常見的錯誤回應格式。",
+        "assertion": "expect(response.json).toHaveProperty('errors')",
+        "line": 18
+      }
+    ],
+    "terra": [
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只主張第二次註冊不成功，未主張必須透過 API 回應碼且狀態碼至少為 400 來表現。",
+        "assertion": "expect(response.status).toBeGreaterThanOrEqual(400)",
+        "line": 16
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只主張第二次註冊不成功，未主張失敗回應必須是非 5xx 狀態。",
+        "assertion": "expect(response.status).toBeLessThan(500)",
+        "line": 17
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只主張第二次註冊不成功，未主張失敗回應的 JSON 必須包含 errors 欄位。",
+        "assertion": "expect(response.json).toHaveProperty('errors')",
+        "line": 18
+      }
+    ]
+  },
+  "gen_wall_seconds": 2.3,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

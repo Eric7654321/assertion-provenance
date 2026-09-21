@@ -1,0 +1,23 @@
+{
+  "source": "PR_gem_precise_H02_s1.json",
+  "gen": "gem",
+  "arm": "precise",
+  "item": "H02",
+  "seed": 1,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/comments.spec.ts",
+      "line_start": 108,
+      "line_end": 112,
+      "quote": "    // Wait for Angular to complete auth check - either comment form OR sign in link appears\n    await page2.waitForSelector('textarea[placeholder=\"Write a comment...\"], a[href=\"/login\"]', { timeout: 10000 });\n    // Should see sign in/sign up links instead of comment form\n    await expect(page2.locator('a[href=\"/login\"]')).toBeVisible();\n    await expect(page2.locator('textarea[placeholder=\"Write a comment...\"]')).not.toBeVisible();",
+      "why": "E2E 測試在未登入訪客查看文章頁時，明確斷言並驗證應顯示前往登入的連結（Sign in）而不是留言輸入框。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 4,
+      "assertion": "await expect(page.getByRole('link', { name: 'Sign in' }).first()).toBeVisible()",
+      "line": 23,
+      "p2_candidate": true
+    }
+  ]
+}

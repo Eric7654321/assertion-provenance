@@ -1,0 +1,23 @@
+{
+  "source": "PR_gem_precise_S02_s3.json",
+  "gen": "gem",
+  "arm": "precise",
+  "item": "S02",
+  "seed": 3,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/error-handling.spec.ts",
+      "line_start": 50,
+      "line_end": 64,
+      "quote": "  test('should handle 400 on registration with validation errors', async ({ page }) => {\n    await mockApiError(page, '/users', 400, {\n      errors: {\n        email: ['is already taken'],\n        username: ['is too short (minimum is 3 characters)'],\n      },\n    });\n    await page.goto('/register');\n    await page.fill('input[name=\"username\"]', 'ab');\n    await page.fill('input[name=\"email\"]', 'taken@test.com');\n    await page.fill('input[name=\"password\"]', 'password123');\n    await page.click('button[type=\"submit\"]');\n    // Should show error messages\n    await expect(page.locator('.error-messages')).toBeVisible();",
+      "why": "公開規格中模板與 E2E 測試皆明示註冊時 email 重複錯誤會以「That email is already taken」或包含 email 的錯誤訊息呈現在 .error-messages 中。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 1,
+      "assertion": "await expect(errorMessage).toContainText('email')",
+      "line": 20,
+      "p2_candidate": true
+    }
+  ]
+}

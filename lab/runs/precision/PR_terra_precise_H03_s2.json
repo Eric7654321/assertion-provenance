@@ -1,0 +1,399 @@
+{
+  "gen": "terra",
+  "gen_model": "gpt-5.6-terra",
+  "arm": "precise",
+  "item": "H03",
+  "seed": 2,
+  "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:H03\n    Scenario: Tag-filtered pagination\n      Given there are 15 articles under a specific tag\n      When the user filters by that tag on the home page\n      Then the number of articles per page should match the pagination settings\n      When the user selects page 2 from the pagination controls\n      Then the articles displayed should be the continuation of the list\n      And the URL should reflect the current page number\n      When the user directly navigates to the URL with page=2 in a new page\n      Then the user should arrive at the same page\n      When the user switches back to the all articles list\n      Then the list should return to page 1\n",
+  "spec": "generated/PR_terra_precise_H03_s2.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "點擊標籤按鈕前確認元素可見的守衛斷言，需求與 Gherkin 均未將該元素的可見性作為行為主張。",
+      "assertion": "await expect(tagLink).toBeVisible()",
+      "line": 27
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅在第 2 頁時要求網址反映頁碼，並未主張點選標籤篩選當下網址需帶有 tag 參數。",
+      "assertion": "await expect(page).toHaveURL(new RegExp(`#/\\\\?tag=${encodeURIComponent(tag)}`))",
+      "line": 30
+    },
+    {
+      "class": "P0",
+      "citation": "每頁的文章數符合分頁設定",
+      "p2_candidate": false,
+      "borderline": true,
+      "why": "驗收要求提及每頁文章數符合分頁設定且note說明每頁筆數以產品預設為準（Conduit預設10筆），判不準時往有依據判。",
+      "assertion": "await expect(articlePreviews).toHaveCount(10)",
+      "line": 33
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "在點擊第 2 頁連結之前確認其可見，屬於操作前的可見性守衛。",
+      "assertion": "await expect(page2Link).toBeVisible()",
+      "line": 40
+    },
+    {
+      "class": "P0",
+      "citation": "網址會反映目前頁碼",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出點選第2頁後「網址會反映目前頁碼」，斷言檢查 URL 包含 page=2 符合要求。",
+      "assertion": "await expect(page).toHaveURL( new RegExp(`#/\\\\?tag=${encodeURIComponent(tag)}&page=2`), )",
+      "line": 43
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求僅陳述共15篇且每頁筆數以產品預設為準，未在規格中明定每頁為10篇（故第2頁為5篇），兩邊均未明確支持toHaveCount(5)。",
+      "assertion": "await expect(articlePreviews).toHaveCount(5)",
+      "line": 46
+    },
+    {
+      "class": "P0",
+      "citation": "第二頁是接續的文章",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "斷言第二頁標題列表不等於第一頁標題列表，直接對應驗收要求中「第二頁是接續的文章」的行為主張。",
+      "assertion": "expect(secondPageTitles).not.toEqual(firstPageTitles)",
+      "line": 52
+    },
+    {
+      "class": "P0",
+      "citation": "準備某個標籤底下共 15 篇文章……每頁的文章數符合分頁設定，第二頁是接續的文章",
+      "p2_candidate": false,
+      "borderline": true,
+      "why": "驗收要求指定共15篇文章且依預設分頁（Conduit預設每頁10篇），第二頁為接續文章故蘊含剩下5篇。",
+      "assertion": "expect(secondPageTitles).toHaveLength(5)",
+      "line": 53
+    },
+    {
+      "class": "P0",
+      "citation": "網址會反映目前頁碼；直接輸入網址可以到達同一頁",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出直接輸入帶 page=2 網址後網址會反映頁碼並到達同一頁，此斷言直接驗證該頁面的 URL。",
+      "assertion": "await expect(directPage).toHaveURL( new RegExp(`#/\\\\?tag=${encodeURIComponent(tag)}&page=2`), )",
+      "line": 58
+    },
+    {
+      "class": "P0",
+      "citation": "直接輸入網址可以到達同一頁",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "要求明載直接輸入網址可以到達同一頁，且前設共有15篇、每頁10篇，第二頁為接續的5篇，此斷言驗證到達該頁後文章數為5。",
+      "assertion": "await expect(directPage.locator('.article-preview')).toHaveCount(5)",
+      "line": 61
+    },
+    {
+      "class": "P0",
+      "citation": "直接輸入網址可以到達同一頁",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確說明直接輸入網址可以到達同一頁，檢查頁面上的文章標題與第二頁相同（secondPageTitles）即為驗證到達同一頁的操作化。",
+      "assertion": "await expect(directPage.locator('.article-preview h1')).toHaveText( secondPageTitles, )",
+      "line": 62
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求切回全部文章時回到第一頁，並未具體規定 URL 必須變為 '#/$'。",
+      "assertion": "await expect(page).toHaveURL(new RegExp('#/$'))",
+      "line": 68
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求「切回全部文章時回到第一頁」，未具體約定全部文章列表中第一頁的文章數量為 10 篇。",
+      "assertion": "await expect(articlePreviews).toHaveCount(10)",
+      "line": 69
+    },
+    {
+      "class": "P0",
+      "citation": "切回全部文章時回到第一頁。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出切回全部文章時回到第一頁，斷言分頁連結 '1' 具有 active 樣式即為該要求在 UI 上的操作化驗證。",
+      "assertion": "await expect(page.getByRole('link', { name: '1', exact: true })).toHaveClass( /active/, )",
+      "line": 70
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "點擊標籤按鈕前確認元素可見的守衛斷言，需求與 Gherkin 均未將該元素的可見性作為行為主張。",
+        "assertion": "await expect(tagLink).toBeVisible()",
+        "line": 27
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅在第 2 頁時要求網址反映頁碼，並未主張點選標籤篩選當下網址需帶有 tag 參數。",
+        "assertion": "await expect(page).toHaveURL(new RegExp(`#/\\\\?tag=${encodeURIComponent(tag)}`))",
+        "line": 30
+      },
+      {
+        "class": "P0",
+        "citation": "每頁的文章數符合分頁設定",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "驗收要求提及每頁文章數符合分頁設定且note說明每頁筆數以產品預設為準（Conduit預設10筆），判不準時往有依據判。",
+        "assertion": "await expect(articlePreviews).toHaveCount(10)",
+        "line": 33
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "在點擊第 2 頁連結之前確認其可見，屬於操作前的可見性守衛。",
+        "assertion": "await expect(page2Link).toBeVisible()",
+        "line": 40
+      },
+      {
+        "class": "P0",
+        "citation": "網址會反映目前頁碼",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出點選第2頁後「網址會反映目前頁碼」，斷言檢查 URL 包含 page=2 符合要求。",
+        "assertion": "await expect(page).toHaveURL( new RegExp(`#/\\\\?tag=${encodeURIComponent(tag)}&page=2`), )",
+        "line": 43
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求僅陳述共15篇且每頁筆數以產品預設為準，未在規格中明定每頁為10篇（故第2頁為5篇），兩邊均未明確支持toHaveCount(5)。",
+        "assertion": "await expect(articlePreviews).toHaveCount(5)",
+        "line": 46
+      },
+      {
+        "class": "P0",
+        "citation": "第二頁是接續的文章",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言第二頁標題列表不等於第一頁標題列表，直接對應驗收要求中「第二頁是接續的文章」的行為主張。",
+        "assertion": "expect(secondPageTitles).not.toEqual(firstPageTitles)",
+        "line": 52
+      },
+      {
+        "class": "P0",
+        "citation": "準備某個標籤底下共 15 篇文章……每頁的文章數符合分頁設定，第二頁是接續的文章",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "驗收要求指定共15篇文章且依預設分頁（Conduit預設每頁10篇），第二頁為接續文章故蘊含剩下5篇。",
+        "assertion": "expect(secondPageTitles).toHaveLength(5)",
+        "line": 53
+      },
+      {
+        "class": "P0",
+        "citation": "網址會反映目前頁碼；直接輸入網址可以到達同一頁",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出直接輸入帶 page=2 網址後網址會反映頁碼並到達同一頁，此斷言直接驗證該頁面的 URL。",
+        "assertion": "await expect(directPage).toHaveURL( new RegExp(`#/\\\\?tag=${encodeURIComponent(tag)}&page=2`), )",
+        "line": 58
+      },
+      {
+        "class": "P0",
+        "citation": "直接輸入網址可以到達同一頁",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "要求明載直接輸入網址可以到達同一頁，且前設共有15篇、每頁10篇，第二頁為接續的5篇，此斷言驗證到達該頁後文章數為5。",
+        "assertion": "await expect(directPage.locator('.article-preview')).toHaveCount(5)",
+        "line": 61
+      },
+      {
+        "class": "P0",
+        "citation": "直接輸入網址可以到達同一頁",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確說明直接輸入網址可以到達同一頁，檢查頁面上的文章標題與第二頁相同（secondPageTitles）即為驗證到達同一頁的操作化。",
+        "assertion": "await expect(directPage.locator('.article-preview h1')).toHaveText( secondPageTitles, )",
+        "line": 62
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求切回全部文章時回到第一頁，並未具體規定 URL 必須變為 '#/$'。",
+        "assertion": "await expect(page).toHaveURL(new RegExp('#/$'))",
+        "line": 68
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求「切回全部文章時回到第一頁」，未具體約定全部文章列表中第一頁的文章數量為 10 篇。",
+        "assertion": "await expect(articlePreviews).toHaveCount(10)",
+        "line": 69
+      },
+      {
+        "class": "P0",
+        "citation": "切回全部文章時回到第一頁。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出切回全部文章時回到第一頁，斷言分頁連結 '1' 具有 active 樣式即為該要求在 UI 上的操作化驗證。",
+        "assertion": "await expect(page.getByRole('link', { name: '1', exact: true })).toHaveClass( /active/, )",
+        "line": 70
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此可見性斷言位於點擊標籤前，驗收要求與 Gherkin 都未主張該標籤連結在此時可見，僅作為後續點擊的守衛。",
+        "assertion": "await expect(tagLink).toBeVisible()",
+        "line": 27
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只要求選擇第 2 頁後網址反映目前頁碼，未主張僅以標籤篩選後網址必須含有該 tag 查詢參數。",
+        "assertion": "await expect(page).toHaveURL(new RegExp(`#/\\\\?tag=${encodeURIComponent(tag)}`))",
+        "line": 30
+      },
+      {
+        "class": "P0",
+        "citation": "每頁的文章數符合分頁設定",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在標籤篩選後驗證目前頁面有 10 篇文章，屬於每頁文章數符合產品分頁設定的具體檢查。",
+        "assertion": "await expect(articlePreviews).toHaveCount(10)",
+        "line": 33
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於點選第 2 頁之前，且驗收要求與 Gherkin 都未主張該連結在此時可見，屬於操作前的可見性守衛。",
+        "assertion": "await expect(page2Link).toBeVisible()",
+        "line": 40
+      },
+      {
+        "class": "P0",
+        "citation": "網址會反映目前頁碼；",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "點選第 2 頁後網址包含 tag 篩選與 page=2，是網址反映目前頁碼的具體且無歧義實作。",
+        "assertion": "await expect(page).toHaveURL( new RegExp(`#/\\\\?tag=${encodeURIComponent(tag)}&page=2`), )",
+        "line": 43
+      },
+      {
+        "class": "P0",
+        "citation": "每頁的文章數符合分頁設定，第二頁是接續的文章；網址會反映目前頁碼；直接輸入網址可以到達同一頁；切回全部文章時回到第一頁。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在點選第二頁後驗證文章數為產品分頁設定的每頁筆數（此測試設定下為 5），屬於驗收要求的直接具體化。",
+        "assertion": "await expect(articlePreviews).toHaveCount(5)",
+        "line": 46
+      },
+      {
+        "class": "P0",
+        "citation": "第二頁是接續的文章",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "第二頁標題集合不等於第一頁標題集合是在驗證第二頁為接續文章的可檢查表現。",
+        "assertion": "expect(secondPageTitles).not.toEqual(firstPageTitles)",
+        "line": 52
+      },
+      {
+        "class": "P0",
+        "citation": "每頁的文章數符合分頁設定，第二頁是接續的文章；網址會反映目前頁碼；直接輸入網址可以到達同一頁；切回全部文章時回到第一頁。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言第二頁有 5 篇文章是在驗證第二頁每頁文章數符合產品預設的分頁設定。",
+        "assertion": "expect(secondPageTitles).toHaveLength(5)",
+        "line": 53
+      },
+      {
+        "class": "P0",
+        "citation": "網址會反映目前頁碼；直接輸入網址可以到達同一頁；",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "直接輸入帶 page=2 的網址後，網址仍反映目前頁碼是驗收要求的直接行為主張。",
+        "assertion": "await expect(directPage).toHaveURL( new RegExp(`#/\\\\?tag=${encodeURIComponent(tag)}&page=2`), )",
+        "line": 58
+      },
+      {
+        "class": "P0",
+        "citation": "每頁的文章數符合分頁設定，第二頁是接續的文章；網址會反映目前頁碼；直接輸入網址可以到達同一頁；切回全部文章時回到第一頁。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "直接輸入 page=2 網址後斷言文章數為產品分頁設定的 5 篇，屬於每頁文章數符合分頁設定的具體驗證。",
+        "assertion": "await expect(directPage.locator('.article-preview')).toHaveCount(5)",
+        "line": 61
+      },
+      {
+        "class": "P0",
+        "citation": "直接輸入網址可以到達同一頁；",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言直接輸入 page=2 網址後顯示的文章標題與第二頁相同，屬於到達同一頁的具體驗證。",
+        "assertion": "await expect(directPage.locator('.article-preview h1')).toHaveText( secondPageTitles, )",
+        "line": 62
+      },
+      {
+        "class": "P0",
+        "citation": "切回全部文章時回到第一頁。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "點擊 Global Feed 後網址為根路徑可視為回到第一頁的具體 URL 表現，但驗收要求未明示根路徑格式。",
+        "assertion": "await expect(page).toHaveURL(new RegExp('#/$'))",
+        "line": 68
+      },
+      {
+        "class": "P0",
+        "citation": "每頁的文章數符合分頁設定，第二頁是接續的文章；網址會反映目前頁碼；直接輸入網址可以到達同一頁；切回全部文章時回到第一頁。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "切回全部文章列表後斷言顯示 10 篇文章，是「每頁的文章數符合分頁設定」在產品預設每頁 10 篇下的具體驗證。",
+        "assertion": "await expect(articlePreviews).toHaveCount(10)",
+        "line": 69
+      },
+      {
+        "class": "P0",
+        "citation": "切回全部文章時回到第一頁。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "切回全部文章列表後，分頁連結「1」為 active 是回到第一頁的直接 UI 表現。",
+        "assertion": "await expect(page.getByRole('link', { name: '1', exact: true })).toHaveClass( /active/, )",
+        "line": 70
+      }
+    ]
+  },
+  "gen_wall_seconds": 7.2,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

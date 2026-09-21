@@ -1,0 +1,48 @@
+{
+  "gen": "terra",
+  "gen_model": "gpt-5.6-terra",
+  "arm": "terse",
+  "item": "H01",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H01\n    Scenario: Article tagging and editing\n      Given a logged-in user is on the new article page\n      When the user fills in the title and body, adds three tags, and publishes the article\n      Then the article page content matches the input\n      When the user clicks edit on the article page\n      And the user changes the title to another string, removes all tags, and submits\n      Then the article page is updated accordingly\n",
+  "spec": "generated/PR_terra_terse_H01_s3.spec.ts",
+  "rows": [
+    {
+      "class": "P0",
+      "citation": "在該文章頁點選編輯",
+      "p2_candidate": false,
+      "borderline": true,
+      "why": "發佈後進入文章頁為後續在該文章頁操作的前提，驗收要求明確指示發佈後需處於「該文章頁」。",
+      "assertion": "await expect(page).toHaveURL(/#\\/article\\//); await expect(page.getByRole('heading', { name: originalTitle })).toBeVisible(); await expect(page.locator('.article-content')).toContainText(body); for (const tag of tags) { await expect(page.getByText(tag, { exact: true }).first()).toBeVisible(); } await page.getByRole('button', { name: /Edit Article/i }).click(); await expect(page).toHaveURL(/#\\/editor\\//); await page.getByPlaceholder('Article Title').fill(updatedTitle); const removeTagButtons = page.locator('.tag-list i'); while ((await removeTagButtons.count()) > 0) { await removeTagButtons.first().click(); } await page.getByRole('button', { name: 'Publish Article' }).click(); await expect(page).toHaveURL(/#\\/article\\//); await expect(page.getByRole('heading', { name: updatedTitle })).toBeVisible(); await expect(page.locator('.article-content')).toContainText(body); for (const tag of tags) { await expect(page.getByText(tag, { exact: true })).toHaveCount(0); } }); });",
+      "line": 29
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P0",
+        "citation": "在該文章頁點選編輯",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "發佈後進入文章頁為後續在該文章頁操作的前提，驗收要求明確指示發佈後需處於「該文章頁」。",
+        "assertion": "await expect(page).toHaveURL(/#\\/article\\//); await expect(page.getByRole('heading', { name: originalTitle })).toBeVisible(); await expect(page.locator('.article-content')).toContainText(body); for (const tag of tags) { await expect(page.getByText(tag, { exact: true }).first()).toBeVisible(); } await page.getByRole('button', { name: /Edit Article/i }).click(); await expect(page).toHaveURL(/#\\/editor\\//); await page.getByPlaceholder('Article Title').fill(updatedTitle); const removeTagButtons = page.locator('.tag-list i'); while ((await removeTagButtons.count()) > 0) { await removeTagButtons.first().click(); } await page.getByRole('button', { name: 'Publish Article' }).click(); await expect(page).toHaveURL(/#\\/article\\//); await expect(page.getByRole('heading', { name: updatedTitle })).toBeVisible(); await expect(page.locator('.article-content')).toContainText(body); for (const tag of tags) { await expect(page.getByText(tag, { exact: true })).toHaveCount(0); } }); });",
+        "line": 29
+      }
+    ],
+    "terra": [
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只主張文章頁內容與輸入一致，未主張發佈後或編輯送出後必須以特定 URL 路徑（#/article/）呈現。",
+        "assertion": "await expect(page).toHaveURL(/#\\/article\\//); await expect(page.getByRole('heading', { name: originalTitle })).toBeVisible(); await expect(page.locator('.article-content')).toContainText(body); for (const tag of tags) { await expect(page.getByText(tag, { exact: true }).first()).toBeVisible(); } await page.getByRole('button', { name: /Edit Article/i }).click(); await expect(page).toHaveURL(/#\\/editor\\//); await page.getByPlaceholder('Article Title').fill(updatedTitle); const removeTagButtons = page.locator('.tag-list i'); while ((await removeTagButtons.count()) > 0) { await removeTagButtons.first().click(); } await page.getByRole('button', { name: 'Publish Article' }).click(); await expect(page).toHaveURL(/#\\/article\\//); await expect(page.getByRole('heading', { name: updatedTitle })).toBeVisible(); await expect(page.locator('.article-content')).toContainText(body); for (const tag of tags) { await expect(page.getByText(tag, { exact: true })).toHaveCount(0); } }); });",
+        "line": 29
+      }
+    ]
+  },
+  "gen_wall_seconds": 6.4,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

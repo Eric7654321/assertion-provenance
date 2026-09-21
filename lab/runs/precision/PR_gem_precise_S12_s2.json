@@ -1,0 +1,183 @@
+{
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "precise",
+  "item": "S12",
+  "seed": 2,
+  "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:S12\n    Scenario: Article list pagination\n      Given a user scrolls to the pagination controls on the home page article list\n      When the user selects page 2\n      Then the articles displayed should be the continuation of the list\n",
+  "spec": "generated/PR_gem_precise_S12_s2.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "出現在換頁操作前，用於確認首頁文章載入完畢以記錄第一頁標題的測試準備守衛。",
+      "assertion": "await expect(articleHeadings.first()).toBeVisible()",
+      "line": 21
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此斷言位於點擊第 2 頁按鈕之前，作為操作對象存在的可見性守衛，非需求驗收之結果主張。",
+      "assertion": "await expect(page2Button).toBeVisible()",
+      "line": 26
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求顯示接續的文章，並未主張分頁按鈕需呈現特定無障礙狀態文字（'Page 2 is your current page'）。",
+      "assertion": "await expect(page.getByRole('button', { name: 'Page 2 is your current page' })).toBeVisible()",
+      "line": 32
+    },
+    {
+      "class": "P0",
+      "citation": "顯示的是接續的文章。",
+      "p2_candidate": false,
+      "borderline": true,
+      "why": "驗收要求期待換頁後「顯示的是接續的文章」，隱含換頁後列表中必須有顯示文章（數量大於 0）。",
+      "assertion": "expect(page2Articles.length).toBeGreaterThan(0)",
+      "line": 36
+    },
+    {
+      "class": "P0",
+      "citation": "顯示的是接續的文章。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求指明換頁後顯示接續的文章，斷言第二頁文章清單不等於第一頁文章清單乃直接體現換頁後顯示新內容的操作化驗證。",
+      "assertion": "expect(page2Articles).not.toEqual(page1Articles)",
+      "line": 37
+    },
+    {
+      "class": "P0",
+      "citation": "顯示的是接續的文章。",
+      "p2_candidate": false,
+      "borderline": true,
+      "why": "驗收要求規定換頁後顯示接續的文章，斷言第二頁的第一篇文章不包含在第一頁中是確認兩頁內容不重複的具體操作化驗證。",
+      "assertion": "expect(page1Articles).not.toContain(page2Articles[0])",
+      "line": 40
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "出現在換頁操作前，用於確認首頁文章載入完畢以記錄第一頁標題的測試準備守衛。",
+        "assertion": "await expect(articleHeadings.first()).toBeVisible()",
+        "line": 21
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於點擊第 2 頁按鈕之前，作為操作對象存在的可見性守衛，非需求驗收之結果主張。",
+        "assertion": "await expect(page2Button).toBeVisible()",
+        "line": 26
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求顯示接續的文章，並未主張分頁按鈕需呈現特定無障礙狀態文字（'Page 2 is your current page'）。",
+        "assertion": "await expect(page.getByRole('button', { name: 'Page 2 is your current page' })).toBeVisible()",
+        "line": 32
+      },
+      {
+        "class": "P0",
+        "citation": "顯示的是接續的文章。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "驗收要求期待換頁後「顯示的是接續的文章」，隱含換頁後列表中必須有顯示文章（數量大於 0）。",
+        "assertion": "expect(page2Articles.length).toBeGreaterThan(0)",
+        "line": 36
+      },
+      {
+        "class": "P0",
+        "citation": "顯示的是接續的文章。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求指明換頁後顯示接續的文章，斷言第二頁文章清單不等於第一頁文章清單乃直接體現換頁後顯示新內容的操作化驗證。",
+        "assertion": "expect(page2Articles).not.toEqual(page1Articles)",
+        "line": 37
+      },
+      {
+        "class": "P0",
+        "citation": "顯示的是接續的文章。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "驗收要求規定換頁後顯示接續的文章，斷言第二頁的第一篇文章不包含在第一頁中是確認兩頁內容不重複的具體操作化驗證。",
+        "assertion": "expect(page1Articles).not.toContain(page2Articles[0])",
+        "line": 40
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言在點選第 2 頁之前僅確認首頁文章列表已載入、供後續記錄第一頁標題使用，驗收要求與 Gherkin 均未主張此時首篇標題的可見性。",
+        "assertion": "await expect(articleHeadings.first()).toBeVisible()",
+        "line": 21
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於點選第 2 頁之前，且驗收要求與 Gherkin 都未主張該按鈕在此時可見，僅作為後續點擊的可見性守衛。",
+        "assertion": "await expect(page2Button).toBeVisible()",
+        "line": 26
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只要求第 2 頁顯示接續文章，未主張分頁按鈕在點擊後必須以「目前頁面」名稱或可見狀態呈現。",
+        "assertion": "await expect(page.getByRole('button', { name: 'Page 2 is your current page' })).toBeVisible()",
+        "line": 32
+      },
+      {
+        "class": "P0",
+        "citation": "顯示的是接續的文章。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "第二頁顯示接續文章蘊含第二頁文章列表非空，但原文未明說數量。",
+        "assertion": "expect(page2Articles.length).toBeGreaterThan(0)",
+        "line": 36
+      },
+      {
+        "class": "P0",
+        "citation": "顯示的是接續的文章。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "第二頁文章列表與第一頁不相等是「顯示的是接續的文章」的直接可檢查改寫。",
+        "assertion": "expect(page2Articles).not.toEqual(page1Articles)",
+        "line": 37
+      },
+      {
+        "class": "P0",
+        "citation": "顯示的是接續的文章。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "第二頁第一篇文章不在第一頁文章中，是驗證顯示內容為接續文章的具體可檢查表述。",
+        "assertion": "expect(page1Articles).not.toContain(page2Articles[0])",
+        "line": 40
+      }
+    ]
+  },
+  "gen_wall_seconds": 28.5,
+  "probe_steps": 3,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

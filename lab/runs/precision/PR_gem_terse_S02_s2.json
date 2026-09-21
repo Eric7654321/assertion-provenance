@@ -1,0 +1,102 @@
+{
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "terse",
+  "item": "S02",
+  "seed": 2,
+  "feature": "Feature: Conduit Acceptance Requirements\n\n  @item:S02\n    Scenario: Registration with duplicate email\n      Given a user completes registration with an unused email\n      And the user logs out\n      When the user registers again with the same email\n      Then the second registration should not succeed\n",
+  "spec": "generated/PR_gem_terse_S02_s2.spec.ts",
+  "rows": [
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅說明第二次註冊不會成功，並未具體規定頁面必須停留在 /#/register，但此行為可由標準 SPA 註冊失敗流程推出。",
+      "assertion": "await expect(page).toHaveURL(/#\\/register/)",
+      "line": 21
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅規定「第二次註冊不會成功」，未提及應顯示錯誤訊息元素（.error-messages）。",
+      "assertion": "await expect(page.locator('.error-messages')).toBeVisible()",
+      "line": 22
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅規定「第二次註冊不會成功」，未指定錯誤訊息須包含 email 字樣，但此為 RealWorld 規範常見行為。",
+      "assertion": "await expect(page.locator('.error-messages')).toContainText(/email/i)",
+      "line": 23
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅說明第二次註冊不會成功，並未具體規定頁面必須停留在 /#/register，但此行為可由標準 SPA 註冊失敗流程推出。",
+        "assertion": "await expect(page).toHaveURL(/#\\/register/)",
+        "line": 21
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅規定「第二次註冊不會成功」，未提及應顯示錯誤訊息元素（.error-messages）。",
+        "assertion": "await expect(page.locator('.error-messages')).toBeVisible()",
+        "line": 22
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅規定「第二次註冊不會成功」，未指定錯誤訊息須包含 email 字樣，但此為 RealWorld 規範常見行為。",
+        "assertion": "await expect(page.locator('.error-messages')).toContainText(/email/i)",
+        "line": 23
+      }
+    ],
+    "terra": [
+      {
+        "class": "P0",
+        "citation": "第二次註冊不會成功。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "第二次註冊後仍停留在註冊頁可作為註冊未成功的行為表現，但驗收要求未明確指定此觀測管道。",
+        "assertion": "await expect(page).toHaveURL(/#\\/register/)",
+        "line": 21
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只主張第二次註冊不成功，未主張必須以可見的錯誤訊息元素呈現。",
+        "assertion": "await expect(page.locator('.error-messages')).toBeVisible()",
+        "line": 22
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只主張第二次註冊不成功，未主張錯誤訊息必須包含「email」文字。",
+        "assertion": "await expect(page.locator('.error-messages')).toContainText(/email/i)",
+        "line": 23
+      }
+    ]
+  },
+  "gen_wall_seconds": 32.5,
+  "probe_steps": 3,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

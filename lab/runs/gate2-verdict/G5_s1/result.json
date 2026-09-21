@@ -1,0 +1,202 @@
+{
+  "group": "G5",
+  "seed": 1,
+  "items": [
+    "H01",
+    "S02",
+    "H03",
+    "S07",
+    "H02",
+    "S09",
+    "H04",
+    "S10",
+    "S03",
+    "S12"
+  ],
+  "oa_variant": "item_precise",
+  "model": "gemini-3.8-flash",
+  "thinking_budget": 0,
+  "arms": {
+    "self": {
+      "arm": "self",
+      "translation": "@item:H01\n1. 這條在驗證發佈帶有標籤的文章，以及後續編輯修改標題並移除所有標籤的功能。\n2. 可檢查的事實：\n- 文章頁面顯示的內容與發佈時輸入的標題、內文及三個標籤相符\n- 編輯送出後，文章標題已更新為修改後的字串\n- 編輯送出後，標籤不再出現於頁面上\n\n@item:S02\n1. 這條在驗證使用已註冊過的電子信箱再次註冊時的阻擋機制。\n2. 可檢查的事實：\n- 註冊失敗並顯示錯誤訊息\n- 使用者處於未登入狀態\n\n@item:H03\n1. 這條在驗證依標籤篩選文章列表時的分頁行為、網址連動與切換回全部列表的重設狀態。\n2. 可檢查的事實：\n- 依標籤篩選後，每頁顯示的文章數量符合分頁設定\n- 點選第 2 頁後，該頁顯示接續的文章\n- 當前網址反映了目前的頁碼\n- 直接開啟帶有 page=2 參數的網址會抵達相同的第 2 頁內容\n- 切換回「全部文章列表」時，列表回到第 1 頁\n\n@item:S07\n1. 這條在驗證作者刪除自己的文章後，該文章會從首頁文章列表中移除。\n2. 可檢查的事實：\n- 該文章不再出現在首頁的文章列表中\n\n@item:H02\n1. 這條在驗證未登入訪客與非作者登入者在文章頁面的瀏覽權限，以及留言刪除控制項的擁有者可見性。\n2. 可檢查的事實：\n- 未登入訪客可以查看文章內容\n- 未登入訪客無法發表留言\n- 非作者的登入使用者看不到編輯該文章的控制項\n- 非作者的登入使用者看不到刪除該文章的控制項\n- 留言的刪除控制項僅對各自留言的作者顯示\n\n@item:S09\n1. 這條在驗證使用者在同一篇文章的留言列表中，只能看到自己留言的刪除按鈕。\n2. 可檢查的事實：\n- 使用者 B 看不到使用者 A 所留留言的刪除控制項\n- 使用者 B 看得到自己所留留言的刪除控制項\n\n@item:H04\n1. 這條在驗證追蹤與取消追蹤作者時的按鈕狀態切換，以及其文章在「Your Feed」中的出現、消失與空狀態。\n2. 可檢查的事實：\n- 點選追蹤後，追蹤按鈕切換為「取消追蹤」狀態\n- 切換至「Your Feed」時，作者 A 的文章會顯示在列表內\n- 點選取消追蹤後，按鈕恢復為最初的原始狀態\n- 再次切換至「Your Feed」時，作者 A 的文章不再出現\n- 當「Your Feed」內沒有任何文章時，顯示空狀態（empty state）\n\n@item:S10\n1. 這條在驗證收藏一篇文章時按鈕狀態的變更與收藏計數的增加。\n2. 可檢查的事實：\n- 收藏按鈕切換為「取消收藏」狀態\n- 文章的收藏計數由 0 變更為 1\n\n@item:S03\n1. 這條在驗證使用已註冊的帳號輸入錯誤密碼登入時的阻擋與錯誤提示。\n2. 可檢查的事實：\n- 畫面停留在登入頁面\n- 畫面上顯示錯誤訊息\n\n@item:S12\n1. 這條在驗證首頁文章列表切換到第 2 頁時的分頁內容顯示。\n2. 可檢查的事實：\n- 文章列表顯示接續的文章內容",
+      "judge_reply": "[\n  {\n    \"item\": \"H01\",\n    \"verdict\": \"equal\",\n    \"over_claims\": [],\n    \"under_claims\": []\n  },\n  {\n    \"item\": \"S02\",\n    \"verdict\": \"equal\",\n    \"over_claims\": [],\n    \"under_claims\": []\n  },\n  {\n    \"item\": \"H03\",\n    \"verdict\": \"equal\",\n    \"over_claims\": [],\n    \"under_claims\": []\n  },\n  {\n    \"item\": \"S07\",\n    \"verdict\": \"equal\",\n    \"over_claims\": [],\n    \"under_claims\": []\n  },\n  {\n    \"item\": \"H02\",\n    \"verdict\": \"equal\",\n    \"over_claims\": [],\n    \"under_claims\": []\n  },\n  {\n    \"item\": \"S09\",\n    \"verdict\": \"equal\",\n    \"over_claims\": [],\n    \"under_claims\": []\n  },\n  {\n    \"item\": \"H04\",\n    \"verdict\": \"equal\",\n    \"over_claims\": [],\n    \"under_claims\": []\n  },\n  {\n    \"item\": \"S10\",\n    \"verdict\": \"equal\",\n    \"over_claims\": [],\n    \"under_claims\": []\n  },\n  {\n    \"item\": \"S03\",\n    \"verdict\": \"equal\",\n    \"over_claims\": [],\n    \"under_claims\": []\n  },\n  {\n    \"item\": \"S12\",\n    \"verdict\": \"equal\",\n    \"over_claims\": [],\n    \"under_claims\": []\n  }\n]",
+      "verdicts": {
+        "H01": {
+          "item": "H01",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "S02": {
+          "item": "S02",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "H03": {
+          "item": "H03",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "S07": {
+          "item": "S07",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "H02": {
+          "item": "H02",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "S09": {
+          "item": "S09",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "H04": {
+          "item": "H04",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "S10": {
+          "item": "S10",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "S03": {
+          "item": "S03",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "S12": {
+          "item": "S12",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        }
+      },
+      "counts": {
+        "equal": 10,
+        "over": 0,
+        "under": 0
+      },
+      "ledger": {},
+      "ledger_rows": 0,
+      "budget": {
+        "calls": 2,
+        "total_tokens": 11245,
+        "prompt_tokens": 9945,
+        "output_tokens": 1300,
+        "thinking_tokens": 0,
+        "cached_prompt_tokens": 0,
+        "seconds": 5.9,
+        "resolved_models": [
+          "gemini-3.8-flash"
+        ]
+      },
+      "wall_seconds": 5.88
+    },
+    "blind": {
+      "arm": "blind",
+      "oa_leak_check": {
+        "checked": true,
+        "oa_lines_checked": 118,
+        "ngram_window": 8,
+        "ngrams_checked": 768,
+        "leaked": []
+      },
+      "translation": "@item:H01\n1. 這條在驗文章的發布、內容顯示，以及編輯文章時更新標題與移除所有標籤的功能。\n2. 可檢查的事實：\n- 發布後，文章頁面顯示的內容與所輸入的標題、內文及三個標籤相符\n- 編輯並提交後，文章標題已更新為修改後的字串\n- 編輯並提交後，頁面上不再出現任何標籤\n\n@item:S02\n1. 這條在驗使用已註冊過的重複 Email 進行註冊時會失敗且不會登入。\n2. 可檢查的事實：\n- 註冊失敗並顯示錯誤\n- 使用者處於未登入狀態\n\n@item:H03\n1. 這條在驗在標籤篩選條件下，文章列表的分頁顯示、換頁、URL 參數反映、透過 URL 直接造訪特定頁碼，以及切換回全部文章列表時重設為第一頁的行為。\n2. 可檢查的事實：\n- 在首頁依該標籤篩選後，每頁顯示的文章數量符合分頁設定\n- 在分頁列選擇第 2 頁後，第 2 頁顯示接續上一頁的文章（consecutive articles）\n- 在分頁列選擇第 2 頁後，URL 反映出當前的頁碼\n- 直接開啟帶有 page=2 的 URL 時，會到達與上述相同的頁面\n- 切換回全部文章列表時，列表會回到第 1 頁\n\n@item:S07\n1. 這條在驗作者在自己的文章頁面刪除文章後，首頁的文章列表中不再出現該文章。\n2. 可檢查的事實：\n- 首頁的文章列表中不再出現該篇文章\n\n@item:H02\n1. 這條在驗文章與留言在未登入訪客及非作者的登入使用者視角下的檢視權限與操作控制項顯示規則。\n2. 可檢查的事實：\n- 未登入訪客可以檢視文章，但無法發表留言\n- 非作者的登入使用者檢視該文章頁面時，看不到編輯或刪除該文章的控制項\n- 該使用者發表留言後，留言的刪除控制項只會向各自留言的作者顯示\n\n@item:S09\n1. 這條在驗使用者在文章留言區只能看到自己留言的刪除控制項，而看不到他人留言的刪除控制項。\n2. 可檢查的事實：\n- 使用者 B 看不到使用者 A 留言的刪除控制項\n- 使用者 B 看得到自己留言的刪除控制項\n\n@item:H04\n1. 這條在驗追蹤與取消追蹤作者時，按鈕狀態的切換以及首頁「Your Feed」中該作者文章的顯示、消失與空狀態。\n2. 可檢查的事實：\n- 使用者 B 追蹤作者 A 後，追蹤按鈕變為取消追蹤狀態\n- 切換至「Your Feed」後，作者 A 的文章出現在「Your Feed」中\n- 使用者 B 取消追蹤作者 A 後，按鈕回復到原本的狀態\n- 再次切換至「Your Feed」後，作者 A 的文章不再出現\n- 當「Your Feed」中沒有文章時，顯示空狀態\n\n@item:S10\n1. 這條在驗將未收藏的文章加入收藏時，收藏按鈕狀態與收藏計數的變化。\n2. 可檢查的事實：\n- 收藏按鈕變為取消收藏狀態\n- 收藏計數從 0 變為 1\n\n@item:S03\n1. 這條在驗使用已註冊的 Email 搭配錯誤密碼登入時會停留在登入頁並顯示錯誤訊息。\n2. 可檢查的事實：\n- 停留（未離開）在登入頁面\n- 顯示錯誤訊息\n\n@item:S12\n1. 這條在驗首頁文章列表點選分頁列第 2 頁時會顯示接續的文章。\n2. 可檢查的事實：\n- 列表顯示接續上一頁的文章（consecutive articles）",
+      "judge_reply": "[\n  {\"item\":\"H01\",\"verdict\":\"equal\",\"over_claims\":[],\"under_claims\":[]},\n  {\"item\":\"S02\",\"verdict\":\"equal\",\"over_claims\":[],\"under_claims\":[]},\n  {\"item\":\"H03\",\"verdict\":\"equal\",\"over_claims\":[],\"under_claims\":[]},\n  {\"item\":\"S07\",\"verdict\":\"equal\",\"over_claims\":[],\"under_claims\":[]},\n  {\"item\":\"H02\",\"verdict\":\"equal\",\"over_claims\":[],\"under_claims\":[]},\n  {\"item\":\"S09\",\"verdict\":\"equal\",\"over_claims\":[],\"under_claims\":[]},\n  {\"item\":\"H04\",\"verdict\":\"equal\",\"over_claims\":[],\"under_claims\":[]},\n  {\"item\":\"S10\",\"verdict\":\"equal\",\"over_claims\":[],\"under_claims\":[]},\n  {\"item\":\"S03\",\"verdict\":\"equal\",\"over_claims\":[],\"under_claims\":[]},\n  {\"item\":\"S12\",\"verdict\":\"equal\",\"over_claims\":[],\"under_claims\":[]}\n]",
+      "verdicts": {
+        "H01": {
+          "item": "H01",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "S02": {
+          "item": "S02",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "H03": {
+          "item": "H03",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "S07": {
+          "item": "S07",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "H02": {
+          "item": "H02",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "S09": {
+          "item": "S09",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "H04": {
+          "item": "H04",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "S10": {
+          "item": "S10",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "S03": {
+          "item": "S03",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "S12": {
+          "item": "S12",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        }
+      },
+      "counts": {
+        "equal": 10,
+        "over": 0,
+        "under": 0
+      },
+      "ledger": {},
+      "ledger_rows": 0,
+      "budget": {
+        "calls": 2,
+        "total_tokens": 4517,
+        "prompt_tokens": 3331,
+        "output_tokens": 1186,
+        "thinking_tokens": 0,
+        "cached_prompt_tokens": 0,
+        "seconds": 5.9,
+        "resolved_models": [
+          "gemini-3.8-flash"
+        ]
+      },
+      "wall_seconds": 5.86
+    }
+  }
+}

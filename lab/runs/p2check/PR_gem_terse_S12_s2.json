@@ -1,0 +1,17 @@
+{
+  "source": "PR_gem_terse_S12_s2.json",
+  "gen": "gem",
+  "arm": "terse",
+  "item": "S12",
+  "seed": 2,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約中要求分頁項使用 active 類別（.page-item.active），完全未提及或測試按鈕需要具備 'Page 2 is your current page' 的 accessible name 或 aria 標籤。",
+      "row": 3,
+      "assertion": "await expect(page.getByRole('button', { name: 'Page 2 is your current page' })).toBeVisible()",
+      "line": 23,
+      "p2_candidate": false
+    }
+  ]
+}

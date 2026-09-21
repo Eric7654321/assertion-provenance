@@ -1,0 +1,31 @@
+{
+  "source": "PR_terra_terse_S09_s2.json",
+  "gen": "terra",
+  "arm": "terse",
+  "item": "S09",
+  "seed": 2,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/comments.spec.ts",
+      "line_start": 38,
+      "line_end": 48,
+      "quote": "  test('should delete own comment', async ({ page }) => {\n    const commentText = 'Comment to be deleted';\n    await addComment(page, commentText);\n    // Comment should be visible\n    await expect(page.locator(`.card:not(.comment-form) .card-block:has-text(\"${commentText}\")`)).toBeVisible();\n    // Delete the comment\n    await deleteComment(page, commentText);\n    // Comment should no longer be visible\n    await expect(page.locator(`.card:not(.comment-form) .card-block:has-text(\"${commentText}\")`)).not.toBeVisible();\n  });",
+      "why": "官方 E2E 測試明確驗證了在刪除使用者自己的留言後，該留言內容在頁面上不再可見（數量為 0 / not.toBeVisible）。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 6,
+      "assertion": "await expect(page.getByText('Comment written by user B')).toHaveCount(0)",
+      "line": 49,
+      "p2_candidate": false
+    },
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約中僅有 API 層級驗證刪除一則留言後另一則保留（specs/api/hurl/comments.hurl），未在前端 E2E 測試或規格中定義或測試使用者刪除自己的留言後其他人的留言仍維持可見的可觀測行為。",
+      "row": 7,
+      "assertion": "await expect(page.getByText('Comment written by user A')).toBeVisible()",
+      "line": 50,
+      "p2_candidate": false
+    }
+  ]
+}

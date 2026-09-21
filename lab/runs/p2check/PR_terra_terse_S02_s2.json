@@ -1,0 +1,37 @@
+{
+  "source": "PR_terra_terse_S02_s2.json",
+  "gen": "terra",
+  "arm": "terse",
+  "item": "S02",
+  "seed": 2,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/api/hurl/errors_auth.hurl",
+      "line_start": 66,
+      "line_end": 77,
+      "quote": "# Register duplicate email\nPOST {{host}}/api/users\n{\n  \"user\": {\n    \"username\": \"ea_dup2_{{uid}}\",\n    \"email\": \"ea_dup_{{uid}}@test.com\",\n    \"password\": \"password123\"\n  }\n}\nHTTP 409\n[Asserts]\njsonpath \"$.errors.email[0]\" == \"has already been taken\"",
+      "why": "公開契約的 Hurl 測試明確規範當使用已存在的重複 email 進行註冊時，API 應回傳 409（屬於小於 500 的 4xx 狀態碼）。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 1,
+      "assertion": "expect(response.status).toBeLessThan(500)",
+      "line": 17,
+      "p2_candidate": true
+    },
+    {
+      "supported": true,
+      "file": "specs/api/hurl/errors_auth.hurl",
+      "line_start": 66,
+      "line_end": 77,
+      "quote": "# Register duplicate email\nPOST {{host}}/api/users\n{\n  \"user\": {\n    \"username\": \"ea_dup2_{{uid}}\",\n    \"email\": \"ea_dup_{{uid}}@test.com\",\n    \"password\": \"password123\"\n  }\n}\nHTTP 409\n[Asserts]\njsonpath \"$.errors.email[0]\" == \"has already been taken\"",
+      "why": "契約中的 Hurl 測試明確驗證使用重複 email 註冊時，回應包含 errors 物件且其下有具體的錯誤訊息。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 2,
+      "assertion": "expect(response.json).toHaveProperty('errors')",
+      "line": 18,
+      "p2_candidate": true
+    }
+  ]
+}

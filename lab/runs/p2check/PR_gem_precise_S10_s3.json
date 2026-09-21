@@ -1,0 +1,8 @@
+{
+  "source": "PR_gem_precise_S10_s3.json",
+  "gen": "gem",
+  "arm": "precise",
+  "item": "S10",
+  "seed": 3,
+  "checks": []
+}

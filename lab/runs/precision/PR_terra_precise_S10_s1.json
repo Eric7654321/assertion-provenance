@@ -1,0 +1,102 @@
+{
+  "gen": "terra",
+  "gen_model": "gpt-5.6-terra",
+  "arm": "precise",
+  "item": "S10",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S10\n    Scenario: Favorite an article\n      Given I view an un-favorited article with an initial favorite count of 0\n      When I choose to favorite the article\n      Then the favorite button changes to an un-favorite state\n      And the favorite count changes from 0 to 1\n",
+  "spec": "generated/PR_terra_precise_S10_s1.spec.ts",
+  "rows": [
+    {
+      "class": "P0",
+      "citation": "該文章的初始收藏數為 0。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求的 note 明確指出該文章的初始收藏數為 0，在點擊收藏前斷言按鈕包含 '0' 屬於前置狀態的驗證",
+      "assertion": "await expect(favoriteButton).toContainText('0')",
+      "line": 15
+    },
+    {
+      "class": "P0",
+      "citation": "收藏後按鈕切換成取消收藏的狀態，且收藏計數由 0 變成 1。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確寫出收藏後收藏計數由 0 變成 1，斷言按鈕包含文字 1 直接符合該要求。",
+      "assertion": "await expect(favoriteButton).toContainText('1')",
+      "line": 18
+    },
+    {
+      "class": "P0",
+      "citation": "收藏後按鈕切換成取消收藏的狀態",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "斷言驗證按鈕在點擊後套用 btn-primary 樣式類別，屬於驗收要求中『按鈕切換成取消收藏的狀態』的具體實作對應。",
+      "assertion": "await expect(favoriteButton).toHaveAttribute('class', /btn-primary/)",
+      "line": 19
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P0",
+        "citation": "該文章的初始收藏數為 0。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求的 note 明確指出該文章的初始收藏數為 0，在點擊收藏前斷言按鈕包含 '0' 屬於前置狀態的驗證",
+        "assertion": "await expect(favoriteButton).toContainText('0')",
+        "line": 15
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕切換成取消收藏的狀態，且收藏計數由 0 變成 1。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確寫出收藏後收藏計數由 0 變成 1，斷言按鈕包含文字 1 直接符合該要求。",
+        "assertion": "await expect(favoriteButton).toContainText('1')",
+        "line": 18
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕切換成取消收藏的狀態",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言驗證按鈕在點擊後套用 btn-primary 樣式類別，屬於驗收要求中『按鈕切換成取消收藏的狀態』的具體實作對應。",
+        "assertion": "await expect(favoriteButton).toHaveAttribute('class', /btn-primary/)",
+        "line": 19
+      }
+    ],
+    "terra": [
+      {
+        "class": "P0",
+        "citation": "該文章的初始收藏數為 0。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在點擊前確認收藏按鈕顯示 0，直接對應驗收要求所述初始收藏數為 0。",
+        "assertion": "await expect(favoriteButton).toContainText('0')",
+        "line": 15
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕切換成取消收藏的狀態，且收藏計數由 0 變成 1。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "點擊收藏後按鈕文字包含「1」是在驗證收藏計數由 0 變成 1。",
+        "assertion": "await expect(favoriteButton).toContainText('1')",
+        "line": 18
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕切換成取消收藏的狀態，且收藏計數由 0 變成 1。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "斷言位於收藏後，按鈕的 btn-primary 類別可作為其已切換為取消收藏狀態的具體可檢查表徵。",
+        "assertion": "await expect(favoriteButton).toHaveAttribute('class', /btn-primary/)",
+        "line": 19
+      }
+    ]
+  },
+  "gen_wall_seconds": 2.9,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

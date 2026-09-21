@@ -1,0 +1,507 @@
+{
+  "gen": "terra",
+  "gen_model": "gpt-5.6-terra",
+  "arm": "terse",
+  "item": "H03",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H03\n    Scenario: Pagination for tag filtering\n      Given there are 15 articles under a specific tag\n      When the user filters by that tag on the home page\n      And the user clicks page 2 in the pagination bar\n      Then the pagination behavior matches the settings, subsequent articles are visible, and the URL changes accordingly\n      When the user opens another page and directly enters the URL with page=2\n      Then the pagination behavior matches the settings, subsequent articles are visible, and the URL changes accordingly\n      When the user switches back to the all articles list\n      Then the pagination behavior matches the settings, subsequent articles are visible, and the URL changes accordingly\n",
+  "spec": "generated/PR_terra_terse_H03_s3.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "在點選標籤過濾前確認頁面導航至首頁的守衛性斷言，非需求層的行為主張。",
+      "assertion": "await expect(page).toHaveURL(/#\\/$/)",
+      "line": 23
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求分頁換頁後網址跟著變，未要求以標籤篩選當下的特定 URL query 結構。",
+      "assertion": "await expect(page).toHaveURL(new RegExp(`#/\\\\?tag=${encodeURIComponent(tag)}`))",
+      "line": 26
+    },
+    {
+      "class": "P0",
+      "citation": "於首頁以該標籤篩選",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求步驟包含以該標籤篩選，斷言篩選後第 1 篇標籤文章可見屬於篩選功能正常呈現文章列表的直接驗證。",
+      "assertion": "await expect(page.getByText(articles[0].title)).toBeVisible()",
+      "line": 28
+    },
+    {
+      "class": "P0",
+      "citation": "每頁筆數以產品預設為準。",
+      "p2_candidate": false,
+      "borderline": true,
+      "why": "驗收要求提及每頁筆數以產品預設為準（Conduit 預設每頁 10 篇），篩選後第一頁應顯示第 1 至 10 篇（索引 0 到 9），故包含第 10 篇文章可見。",
+      "assertion": "await expect(page.getByText(articles[9].title)).toBeVisible()",
+      "line": 29
+    },
+    {
+      "class": "P0",
+      "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求陳述共 15 篇文章且每頁預設 10 筆，篩選第 1 頁時蘊含第 11 筆（索引 10）不應可見以符合分頁設定。",
+      "assertion": "await expect(page.getByText(articles[10].title)).not.toBeVisible()",
+      "line": 30
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此斷言位於點擊第 2 頁按鈕之前，用於確認元素可見以確保後續操作有對象，屬可見性守衛。",
+      "assertion": "await expect(pageTwo).toBeVisible()",
+      "line": 33
+    },
+    {
+      "class": "P0",
+      "citation": "網址跟著變",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確主張點選第 2 頁後「網址跟著變」，斷言檢查換頁後的 URL 包含 tag 與 page=2 是其具體驗證。",
+      "assertion": "await expect(page).toHaveURL( new RegExp(`#/\\\\?tag=${encodeURIComponent(tag)}&page=2|#/\\\\?page=2&tag=${encodeURIComponent(tag)}`), )",
+      "line": 36
+    },
+    {
+      "class": "P0",
+      "citation": "換頁後看得到後續的文章",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出點選第 2 頁後「看得到後續的文章」，斷言第 11 篇（索引 10）可見屬於直接對應的操作化。",
+      "assertion": "await expect(page.getByText(articles[10].title)).toBeVisible()",
+      "line": 39
+    },
+    {
+      "class": "P0",
+      "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出點選第2頁後看得到後續的文章，15篇中第14篇（即最後一篇）屬於後續文章之可見性驗證。",
+      "assertion": "await expect(page.getByText(articles[14].title)).toBeVisible()",
+      "line": 40
+    },
+    {
+      "class": "P0",
+      "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "分頁換至第 2 頁後看得到後續文章蘊含了第 1 頁的文章（articles[0]）不再可見。",
+      "assertion": "await expect(page.getByText(articles[0].title)).not.toBeVisible()",
+      "line": 41
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "測試在執行『另開一頁』步驟前跳轉至文章頁面並確認載入成功，屬於非需求層的測試導航與可見性守衛。",
+      "assertion": "await expect(page.getByText(articles[0].title)).toBeVisible()",
+      "line": 44
+    },
+    {
+      "class": "P0",
+      "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求中明確指出『另開一頁，直接輸入帶 page=2 的網址』時『分頁行為符合設定，換頁後看得到後續的文章，網址跟著變』，斷言直接輸入該網址後 URL 保持/呈現該網址符合預期。",
+      "assertion": "await expect(page).toHaveURL( new RegExp(`#/\\\\?tag=${encodeURIComponent(tag)}&page=2`), )",
+      "line": 47
+    },
+    {
+      "class": "P0",
+      "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出進入第 2 頁後應看得到後續的文章，15 筆資料在換至第 2 頁時第 11 筆（articles[10]）可見屬於直接操作化。",
+      "assertion": "await expect(page.getByText(articles[10].title)).toBeVisible()",
+      "line": 50
+    },
+    {
+      "class": "P0",
+      "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求指明換頁後（page=2）看得到後續的文章，斷言第 15 篇（索引 14）可見屬於該預期的操作化。",
+      "assertion": "await expect(page.getByText(articles[14].title)).toBeVisible()",
+      "line": 51
+    },
+    {
+      "class": "P0",
+      "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+      "p2_candidate": false,
+      "borderline": true,
+      "why": "驗收要求指明換頁後看到後續文章且分頁行為符合設定，切到第 2 頁時第 1 頁的文章（articles[0]）不應可見是被分頁語意蘊含的行為。",
+      "assertion": "await expect(page.getByText(articles[0].title)).not.toBeVisible()",
+      "line": 52
+    },
+    {
+      "class": "P0",
+      "citation": "網址跟著變",
+      "p2_candidate": false,
+      "borderline": true,
+      "why": "驗收要求提及切換列表後「網址跟著變」，切回全部文章列表回到首頁根路徑 URL 是該預期結果的操作化驗證。",
+      "assertion": "await expect(page).toHaveURL(/#\\/$/)",
+      "line": 55
+    },
+    {
+      "class": "P0",
+      "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+      "p2_candidate": false,
+      "borderline": true,
+      "why": "驗收要求中包含切回全部文章後分頁行為符合設定，切回第1頁全部文章列表時驗證首頁文章可見屬於操作化推論。",
+      "assertion": "await expect(page.getByText(articles[0].title)).toBeVisible()",
+      "line": 56
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求切回全部文章後分頁符合設定，未具體規範切回全域列表（預設每頁 10 筆）時第 11 篇（index 10）文章是否應同時可見。",
+      "assertion": "await expect(page.getByText(articles[10].title)).toBeVisible()",
+      "line": 57
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "在點選標籤過濾前確認頁面導航至首頁的守衛性斷言，非需求層的行為主張。",
+        "assertion": "await expect(page).toHaveURL(/#\\/$/)",
+        "line": 23
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求分頁換頁後網址跟著變，未要求以標籤篩選當下的特定 URL query 結構。",
+        "assertion": "await expect(page).toHaveURL(new RegExp(`#/\\\\?tag=${encodeURIComponent(tag)}`))",
+        "line": 26
+      },
+      {
+        "class": "P0",
+        "citation": "於首頁以該標籤篩選",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求步驟包含以該標籤篩選，斷言篩選後第 1 篇標籤文章可見屬於篩選功能正常呈現文章列表的直接驗證。",
+        "assertion": "await expect(page.getByText(articles[0].title)).toBeVisible()",
+        "line": 28
+      },
+      {
+        "class": "P0",
+        "citation": "每頁筆數以產品預設為準。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "驗收要求提及每頁筆數以產品預設為準（Conduit 預設每頁 10 篇），篩選後第一頁應顯示第 1 至 10 篇（索引 0 到 9），故包含第 10 篇文章可見。",
+        "assertion": "await expect(page.getByText(articles[9].title)).toBeVisible()",
+        "line": 29
+      },
+      {
+        "class": "P0",
+        "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求陳述共 15 篇文章且每頁預設 10 筆，篩選第 1 頁時蘊含第 11 筆（索引 10）不應可見以符合分頁設定。",
+        "assertion": "await expect(page.getByText(articles[10].title)).not.toBeVisible()",
+        "line": 30
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於點擊第 2 頁按鈕之前，用於確認元素可見以確保後續操作有對象，屬可見性守衛。",
+        "assertion": "await expect(pageTwo).toBeVisible()",
+        "line": 33
+      },
+      {
+        "class": "P0",
+        "citation": "網址跟著變",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確主張點選第 2 頁後「網址跟著變」，斷言檢查換頁後的 URL 包含 tag 與 page=2 是其具體驗證。",
+        "assertion": "await expect(page).toHaveURL( new RegExp(`#/\\\\?tag=${encodeURIComponent(tag)}&page=2|#/\\\\?page=2&tag=${encodeURIComponent(tag)}`), )",
+        "line": 36
+      },
+      {
+        "class": "P0",
+        "citation": "換頁後看得到後續的文章",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出點選第 2 頁後「看得到後續的文章」，斷言第 11 篇（索引 10）可見屬於直接對應的操作化。",
+        "assertion": "await expect(page.getByText(articles[10].title)).toBeVisible()",
+        "line": 39
+      },
+      {
+        "class": "P0",
+        "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出點選第2頁後看得到後續的文章，15篇中第14篇（即最後一篇）屬於後續文章之可見性驗證。",
+        "assertion": "await expect(page.getByText(articles[14].title)).toBeVisible()",
+        "line": 40
+      },
+      {
+        "class": "P0",
+        "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "分頁換至第 2 頁後看得到後續文章蘊含了第 1 頁的文章（articles[0]）不再可見。",
+        "assertion": "await expect(page.getByText(articles[0].title)).not.toBeVisible()",
+        "line": 41
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "測試在執行『另開一頁』步驟前跳轉至文章頁面並確認載入成功，屬於非需求層的測試導航與可見性守衛。",
+        "assertion": "await expect(page.getByText(articles[0].title)).toBeVisible()",
+        "line": 44
+      },
+      {
+        "class": "P0",
+        "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求中明確指出『另開一頁，直接輸入帶 page=2 的網址』時『分頁行為符合設定，換頁後看得到後續的文章，網址跟著變』，斷言直接輸入該網址後 URL 保持/呈現該網址符合預期。",
+        "assertion": "await expect(page).toHaveURL( new RegExp(`#/\\\\?tag=${encodeURIComponent(tag)}&page=2`), )",
+        "line": 47
+      },
+      {
+        "class": "P0",
+        "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出進入第 2 頁後應看得到後續的文章，15 筆資料在換至第 2 頁時第 11 筆（articles[10]）可見屬於直接操作化。",
+        "assertion": "await expect(page.getByText(articles[10].title)).toBeVisible()",
+        "line": 50
+      },
+      {
+        "class": "P0",
+        "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求指明換頁後（page=2）看得到後續的文章，斷言第 15 篇（索引 14）可見屬於該預期的操作化。",
+        "assertion": "await expect(page.getByText(articles[14].title)).toBeVisible()",
+        "line": 51
+      },
+      {
+        "class": "P0",
+        "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "驗收要求指明換頁後看到後續文章且分頁行為符合設定，切到第 2 頁時第 1 頁的文章（articles[0]）不應可見是被分頁語意蘊含的行為。",
+        "assertion": "await expect(page.getByText(articles[0].title)).not.toBeVisible()",
+        "line": 52
+      },
+      {
+        "class": "P0",
+        "citation": "網址跟著變",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "驗收要求提及切換列表後「網址跟著變」，切回全部文章列表回到首頁根路徑 URL 是該預期結果的操作化驗證。",
+        "assertion": "await expect(page).toHaveURL(/#\\/$/)",
+        "line": 55
+      },
+      {
+        "class": "P0",
+        "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "驗收要求中包含切回全部文章後分頁行為符合設定，切回第1頁全部文章列表時驗證首頁文章可見屬於操作化推論。",
+        "assertion": "await expect(page.getByText(articles[0].title)).toBeVisible()",
+        "line": 56
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求切回全部文章後分頁符合設定，未具體規範切回全域列表（預設每頁 10 筆）時第 11 篇（index 10）文章是否應同時可見。",
+        "assertion": "await expect(page.getByText(articles[10].title)).toBeVisible()",
+        "line": 57
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言僅確認測試導航至首頁後網址已就緒，位於標籤篩選動作之前，驗收要求與 Gherkin 均未主張此時首頁 URL 的具體形式。",
+        "assertion": "await expect(page).toHaveURL(/#\\/$/)",
+        "line": 23
+      },
+      {
+        "class": "P0",
+        "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "標籤篩選後網址帶有對應 tag 參數可視為「網址跟著變」的具體實作，但驗收要求未明示該參數格式。",
+        "assertion": "await expect(page).toHaveURL(new RegExp(`#/\\\\?tag=${encodeURIComponent(tag)}`))",
+        "line": 26
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於點擊第 2 頁之前，驗收要求與 Gherkin 都未主張篩選後首篇文章在此時點可見，屬於後續分頁操作的可見性守衛。",
+        "assertion": "await expect(page.getByText(articles[0].title)).toBeVisible()",
+        "line": 28
+      },
+      {
+        "class": "P0",
+        "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "此斷言驗證標籤篩選後首頁頁面仍顯示該標籤文章，屬於分頁設定下可見文章的行為主張，但未明確指定第 10 篇。",
+        "assertion": "await expect(page.getByText(articles[9].title)).toBeVisible()",
+        "line": 29
+      },
+      {
+        "class": "P0",
+        "citation": "每頁筆數以產品預設為準。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "在已準備 15 篇文章且產品預設每頁筆數的前提下，首頁第一頁不顯示第 11 篇文章是分頁設定所蘊含的行為。",
+        "assertion": "await expect(page.getByText(articles[10].title)).not.toBeVisible()",
+        "line": 30
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於點擊第 2 頁之前，驗收要求與 Gherkin 都未主張該連結在此時可見，僅是確保後續點擊有對象的守衛。",
+        "assertion": "await expect(pageTwo).toBeVisible()",
+        "line": 33
+      },
+      {
+        "class": "P0",
+        "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "點選第 2 頁後斷言網址包含該標籤與 page=2，是「網址跟著變」在此操作與篩選條件下的具體驗證。",
+        "assertion": "await expect(page).toHaveURL( new RegExp(`#/\\\\?tag=${encodeURIComponent(tag)}&page=2|#/\\\\?page=2&tag=${encodeURIComponent(tag)}`), )",
+        "line": 36
+      },
+      {
+        "class": "P0",
+        "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "點選第 2 頁後驗證第 11 篇文章可見，直接對應換頁後看得到後續文章的要求。",
+        "assertion": "await expect(page.getByText(articles[10].title)).toBeVisible()",
+        "line": 39
+      },
+      {
+        "class": "P0",
+        "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "點選第 2 頁後驗證第 15 篇文章可見，是「換頁後看得到後續的文章」的直接具體化。",
+        "assertion": "await expect(page.getByText(articles[14].title)).toBeVisible()",
+        "line": 40
+      },
+      {
+        "class": "P0",
+        "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "在第 2 頁斷言第 1 篇文章不可見，是「換頁後看得到後續文章」所隱含的分頁結果。",
+        "assertion": "await expect(page.getByText(articles[0].title)).not.toBeVisible()",
+        "line": 41
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言是在直接進入單篇文章頁後確認文章標題可見，驗收要求與 Gherkin 只主張標籤篩選列表的分頁、後續文章可見及網址變化，未支持單篇文章頁的可見性。",
+        "assertion": "await expect(page.getByText(articles[0].title)).toBeVisible()",
+        "line": 44
+      },
+      {
+        "class": "P0",
+        "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "直接輸入帶 page=2 的網址後，斷言網址包含該 tag 與 page=2，是「網址跟著變」在此操作下的具體驗證。",
+        "assertion": "await expect(page).toHaveURL( new RegExp(`#/\\\\?tag=${encodeURIComponent(tag)}&page=2`), )",
+        "line": 47
+      },
+      {
+        "class": "P0",
+        "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言在直接輸入 page=2 網址後確認第 11 篇文章可見，屬於換頁後可看見後續文章的具體驗證。",
+        "assertion": "await expect(page.getByText(articles[10].title)).toBeVisible()",
+        "line": 50
+      },
+      {
+        "class": "P0",
+        "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "直接進入 page=2 後驗證第 15 篇文章可見，是「換頁後看得到後續的文章」的具體檢查。",
+        "assertion": "await expect(page.getByText(articles[14].title)).toBeVisible()",
+        "line": 51
+      },
+      {
+        "class": "P0",
+        "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "在已知第 2 頁顯示後續文章的分頁語境下，首頁第一篇文章不應仍出現在第 2 頁可視列表中。",
+        "assertion": "await expect(page.getByText(articles[0].title)).not.toBeVisible()",
+        "line": 52
+      },
+      {
+        "class": "P0",
+        "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "切回全部文章列表後網址回到首頁根路徑是「網址跟著變」在此操作下的具體可檢查表現。",
+        "assertion": "await expect(page).toHaveURL(/#\\/$/)",
+        "line": 55
+      },
+      {
+        "class": "P0",
+        "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "切回全部文章列表後首篇文章可見，屬於列表切換後文章可見這一驗收行為的具體觀測。",
+        "assertion": "await expect(page.getByText(articles[0].title)).toBeVisible()",
+        "line": 56
+      },
+      {
+        "class": "P0",
+        "citation": "分頁行為符合設定，換頁後看得到後續的文章，網址跟著變。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "切回全部文章列表後驗證後續文章可見，屬於驗收要求所述換頁後可見後續文章的直接行為主張。",
+        "assertion": "await expect(page.getByText(articles[10].title)).toBeVisible()",
+        "line": 57
+      }
+    ]
+  },
+  "gen_wall_seconds": 6.2,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

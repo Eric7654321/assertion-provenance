@@ -1,0 +1,17 @@
+import { test, expect } from '@playwright/test';
+import { newUser, loginAs, UI } from '../support/fixtures';
+
+test.describe('Conduit Acceptance Tests', () => {
+  test('@item:S03 Login with incorrect password', async ({ page }) => {
+    const user = await newUser();
+
+    await page.goto(`${UI}/#/login`);
+
+    await page.getByPlaceholder('Email').fill(user.email);
+    await page.getByPlaceholder('Password').fill('incorrect-password');
+    await page.getByRole('button', { name: /sign in/i }).click();
+
+    await expect(page).toHaveURL(/#\/login$/);
+    await expect(page.locator('.error-messages')).toBeVisible();
+  });
+});

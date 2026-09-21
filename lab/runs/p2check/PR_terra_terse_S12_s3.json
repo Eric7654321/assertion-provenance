@@ -1,0 +1,25 @@
+{
+  "source": "PR_terra_terse_S12_s3.json",
+  "gen": "terra",
+  "arm": "terse",
+  "item": "S12",
+  "seed": 3,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開規格與測試中分頁的 URL 參數規定為 ?page=N，從未要求使用 ?offset=10 作為前端網址參數。",
+      "row": 2,
+      "assertion": "await expect(page).toHaveURL(/[#/]\\/?\\?offset=10/)",
+      "line": 32,
+      "p2_candidate": false
+    },
+    {
+      "status": "P4 confirmed",
+      "why": "公開材料中未規定首頁分頁後第二頁必須恰好顯示 2 篇文章（僅在特定自定義標籤測試中有 5 篇或 API Hurl 範例中的不同筆數，但無首頁第二頁 count 為 2 的要求）。",
+      "row": 3,
+      "assertion": "await expect(articlePreviews).toHaveCount(2)",
+      "line": 33,
+      "p2_candidate": false
+    }
+  ]
+}

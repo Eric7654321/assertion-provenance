@@ -1,0 +1,156 @@
+{
+  "gen": "terra",
+  "gen_model": "gpt-5.6-terra",
+  "arm": "precise",
+  "item": "H01",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H01\n    Scenario: Article tags and editing\n      Given a logged-in user is on the new article page\n      When the user publishes an article with a title, body, and three tags\n      Then the article page displays content matching the input\n      When the user edits the article from the article page\n      And changes the title to another string, removes all tags, and submits\n      Then the article page displays the updated title\n      And no tags appear on the article page\n",
+  "spec": "generated/PR_terra_precise_H01_s3.spec.ts",
+  "rows": [
+    {
+      "class": "P0",
+      "citation": "文章頁顯示的內容與輸入一致",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "發佈文章後驗證標題可見，直接對應驗收要求中「文章頁顯示的內容與輸入一致」。",
+      "assertion": "await expect(page.getByRole('heading', { name: title })).toBeVisible()",
+      "line": 27
+    },
+    {
+      "class": "P0",
+      "citation": "文章頁顯示的內容與輸入一致",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出文章頁顯示內容需與輸入一致，驗證發佈後的內文可見直接落實該要求。",
+      "assertion": "await expect(page.getByText(body)).toBeVisible()",
+      "line": 28
+    },
+    {
+      "class": "P0",
+      "citation": "文章頁顯示的內容與輸入一致",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出發佈後文章頁顯示的內容與輸入一致，且 note 補充三個標籤是為覆蓋多標籤顯示，故包含驗證所輸入標籤的可見性。",
+      "assertion": "await expect(page.getByText(tag, { exact: true })).toBeVisible()",
+      "line": 31
+    },
+    {
+      "class": "P0",
+      "citation": "編輯送出後標題更新",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確要求編輯送出後標題更新，斷言檢查更新後的標題可見直接對應此要求。",
+      "assertion": "await expect(page.getByRole('heading', { name: updatedTitle })).toBeVisible()",
+      "line": 45
+    },
+    {
+      "class": "P0",
+      "citation": "編輯送出後標題更新，標籤不再出現。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出編輯送出後「標籤不再出現」，斷言已移除的標籤數量為 0 是直接對應的主張。",
+      "assertion": "await expect(page.getByText(tag, { exact: true })).toHaveCount(0)",
+      "line": 48
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P0",
+        "citation": "文章頁顯示的內容與輸入一致",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "發佈文章後驗證標題可見，直接對應驗收要求中「文章頁顯示的內容與輸入一致」。",
+        "assertion": "await expect(page.getByRole('heading', { name: title })).toBeVisible()",
+        "line": 27
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁顯示的內容與輸入一致",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出文章頁顯示內容需與輸入一致，驗證發佈後的內文可見直接落實該要求。",
+        "assertion": "await expect(page.getByText(body)).toBeVisible()",
+        "line": 28
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁顯示的內容與輸入一致",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出發佈後文章頁顯示的內容與輸入一致，且 note 補充三個標籤是為覆蓋多標籤顯示，故包含驗證所輸入標籤的可見性。",
+        "assertion": "await expect(page.getByText(tag, { exact: true })).toBeVisible()",
+        "line": 31
+      },
+      {
+        "class": "P0",
+        "citation": "編輯送出後標題更新",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確要求編輯送出後標題更新，斷言檢查更新後的標題可見直接對應此要求。",
+        "assertion": "await expect(page.getByRole('heading', { name: updatedTitle })).toBeVisible()",
+        "line": 45
+      },
+      {
+        "class": "P0",
+        "citation": "編輯送出後標題更新，標籤不再出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出編輯送出後「標籤不再出現」，斷言已移除的標籤數量為 0 是直接對應的主張。",
+        "assertion": "await expect(page.getByText(tag, { exact: true })).toHaveCount(0)",
+        "line": 48
+      }
+    ],
+    "terra": [
+      {
+        "class": "P0",
+        "citation": "文章頁顯示的內容與輸入一致；",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "發佈後文章頁標題以 heading 可見的方式呈現，屬於文章頁內容與輸入一致的直接驗證。",
+        "assertion": "await expect(page.getByRole('heading', { name: title })).toBeVisible()",
+        "line": 27
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁顯示的內容與輸入一致；編輯送出後標題更新，標籤不再出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在發佈後驗證文章內文可見，屬於文章頁內容與輸入一致的直接驗證。",
+        "assertion": "await expect(page.getByText(body)).toBeVisible()",
+        "line": 28
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁顯示的內容與輸入一致；編輯送出後標題更新，標籤不再出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "發佈時輸入三個標籤，文章頁顯示內容與輸入一致，蘊含各標籤在發佈後可見。",
+        "assertion": "await expect(page.getByText(tag, { exact: true })).toBeVisible()",
+        "line": 31
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁顯示的內容與輸入一致；編輯送出後標題更新，標籤不再出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "送出編輯後以頁面標題可見來驗證標題已更新，屬於驗收要求的直接觀測。",
+        "assertion": "await expect(page.getByRole('heading', { name: updatedTitle })).toBeVisible()",
+        "line": 45
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁顯示的內容與輸入一致；編輯送出後標題更新，標籤不再出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在編輯送出後確認各標籤文字不再出現，直接對應驗收要求。",
+        "assertion": "await expect(page.getByText(tag, { exact: true })).toHaveCount(0)",
+        "line": 48
+      }
+    ]
+  },
+  "gen_wall_seconds": 5.3,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

@@ -1,0 +1,17 @@
+{
+  "source": "PR_gem_precise_H01_s2.json",
+  "gen": "gem",
+  "arm": "precise",
+  "item": "H01",
+  "seed": 2,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約中規定的編輯文章路由為 `/editor/:slug`，未包含或測試帶有 hash 路由格式（/#/editor/.+）的可觀測行為。",
+      "row": 3,
+      "assertion": "await expect(page).toHaveURL(/#\\/editor\\/.+/)",
+      "line": 43,
+      "p2_candidate": true
+    }
+  ]
+}

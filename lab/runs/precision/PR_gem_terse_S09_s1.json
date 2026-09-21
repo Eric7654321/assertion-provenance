@@ -1,0 +1,129 @@
+{
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "terse",
+  "item": "S09",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Requirements\n\n  @item:S09\n    Scenario: Comment deletion visibility\n      Given User A leaves a comment on an article\n      When User B opens the same article and leaves their own comment\n      Then deleting a comment should only be possible for one's own comment\n",
+  "spec": "generated/PR_gem_terse_S09_s1.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "確認使用者 A 的留言卡片已渲染可見，是為了後續檢查其刪除按鈕權限而進行的前置元素守衛，非驗收要求核心主張。",
+      "assertion": "await expect(page.locator('.card', { hasText: commentAText })).toBeVisible()",
+      "line": 28
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求只驗證留言刪除權限，此斷言是在檢查刪除按鈕前確保剛發布的留言 B 渲染完成的可見性守衛。",
+      "assertion": "await expect(page.locator('.card', { hasText: commentBText })).toBeVisible()",
+      "line": 29
+    },
+    {
+      "class": "P0",
+      "citation": "留言的刪除只有自己的留言做得到。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出刪除留言只有自己的留言做得到，因此對他人（使用者 A）留言卡片檢查不具備刪除按鈕為直接蘊含的無歧義操作化。",
+      "assertion": "await expect(cardA.locator('.mod-options, .ion-trash-a, [aria-label*=\"delete\" i], button i.fa-trash, .fa-trash, .fa-trash-alt')).toHaveCount(0)",
+      "line": 36
+    },
+    {
+      "class": "P0",
+      "citation": "留言的刪除只有自己的留言做得到。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求指明只有自己的留言可以刪除，對使用者 B 而言其自己的留言出現刪除按鈕為該要求的直接行為呈現。",
+      "assertion": "await expect(deleteButtonB.first()).toBeVisible()",
+      "line": 40
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "確認使用者 A 的留言卡片已渲染可見，是為了後續檢查其刪除按鈕權限而進行的前置元素守衛，非驗收要求核心主張。",
+        "assertion": "await expect(page.locator('.card', { hasText: commentAText })).toBeVisible()",
+        "line": 28
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求只驗證留言刪除權限，此斷言是在檢查刪除按鈕前確保剛發布的留言 B 渲染完成的可見性守衛。",
+        "assertion": "await expect(page.locator('.card', { hasText: commentBText })).toBeVisible()",
+        "line": 29
+      },
+      {
+        "class": "P0",
+        "citation": "留言的刪除只有自己的留言做得到。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出刪除留言只有自己的留言做得到，因此對他人（使用者 A）留言卡片檢查不具備刪除按鈕為直接蘊含的無歧義操作化。",
+        "assertion": "await expect(cardA.locator('.mod-options, .ion-trash-a, [aria-label*=\"delete\" i], button i.fa-trash, .fa-trash, .fa-trash-alt')).toHaveCount(0)",
+        "line": 36
+      },
+      {
+        "class": "P0",
+        "citation": "留言的刪除只有自己的留言做得到。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求指明只有自己的留言可以刪除，對使用者 B 而言其自己的留言出現刪除按鈕為該要求的直接行為呈現。",
+        "assertion": "await expect(deleteButtonB.first()).toBeVisible()",
+        "line": 40
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言在後續檢查刪除權限前確認留言 A 已顯示，驗收要求與 Gherkin 都未主張此時間點的可見性。",
+        "assertion": "await expect(page.locator('.card', { hasText: commentAText })).toBeVisible()",
+        "line": 28
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於後續刪除權限檢查之前，僅確認剛發布的留言卡片存在以備後續操作；驗收要求與 Gherkin 均未主張此時留言可見。",
+        "assertion": "await expect(page.locator('.card', { hasText: commentBText })).toBeVisible()",
+        "line": 29
+      },
+      {
+        "class": "P0",
+        "citation": "留言的刪除只有自己的留言做得到。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言驗證使用者 B 對使用者 A 的留言沒有刪除選項，直接對應只有自己的留言可刪除。",
+        "assertion": "await expect(cardA.locator('.mod-options, .ion-trash-a, [aria-label*=\"delete\" i], button i.fa-trash, .fa-trash, .fa-trash-alt')).toHaveCount(0)",
+        "line": 36
+      },
+      {
+        "class": "P0",
+        "citation": "留言的刪除只有自己的留言做得到。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言使用者 B 可看見自己留言的刪除按鈕，直接支持「只有自己的留言做得到」這項刪除權限行為。",
+        "assertion": "await expect(deleteButtonB.first()).toBeVisible()",
+        "line": 40
+      }
+    ]
+  },
+  "gen_wall_seconds": 35.9,
+  "probe_steps": 4,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

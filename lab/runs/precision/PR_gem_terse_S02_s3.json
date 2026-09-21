@@ -1,0 +1,102 @@
+{
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "terse",
+  "item": "S02",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S02\n    Scenario: Registration with duplicate email\n      Given a user completes registration with an unused email\n      And the user logs out\n      When the user registers again with the same email\n      Then the second registration is not successful\n",
+  "spec": "generated/PR_gem_terse_S02_s3.spec.ts",
+  "rows": [
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求第二次註冊不會成功，並未規範失敗時頁面 URL 必須停留在註冊頁。",
+      "assertion": "await expect(page).toHaveURL(/.*#\\/register/)",
+      "line": 21
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求「第二次註冊不會成功」，未提及必須顯示錯誤訊息元素，但符合 Conduit 規範之 P2 候選。",
+      "assertion": "await expect(page.locator('.error-messages, [role=\"alert\"]')).toBeVisible()",
+      "line": 22
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅規定「第二次註冊不會成功」，未指定錯誤訊息內容需包含 email taken 等字樣，但此為 Conduit 規範的 API/UI 行為。",
+      "assertion": "await expect(page.locator('.error-messages, [role=\"alert\"]')).toContainText(/email.*has already been taken|email.*taken|already taken/i)",
+      "line": 23
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求第二次註冊不會成功，並未規範失敗時頁面 URL 必須停留在註冊頁。",
+        "assertion": "await expect(page).toHaveURL(/.*#\\/register/)",
+        "line": 21
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求「第二次註冊不會成功」，未提及必須顯示錯誤訊息元素，但符合 Conduit 規範之 P2 候選。",
+        "assertion": "await expect(page.locator('.error-messages, [role=\"alert\"]')).toBeVisible()",
+        "line": 22
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅規定「第二次註冊不會成功」，未指定錯誤訊息內容需包含 email taken 等字樣，但此為 Conduit 規範的 API/UI 行為。",
+        "assertion": "await expect(page.locator('.error-messages, [role=\"alert\"]')).toContainText(/email.*has already been taken|email.*taken|already taken/i)",
+        "line": 23
+      }
+    ],
+    "terra": [
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只主張第二次註冊不成功，未主張失敗後 URL 必須仍停留在 register 頁面。",
+        "assertion": "await expect(page).toHaveURL(/.*#\\/register/)",
+        "line": 21
+      },
+      {
+        "class": "P0",
+        "citation": "第二次註冊不會成功。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "第二次註冊失敗可合理涵蓋顯示錯誤訊息，但驗收要求未明示其具體呈現方式。",
+        "assertion": "await expect(page.locator('.error-messages, [role=\"alert\"]')).toBeVisible()",
+        "line": 22
+      },
+      {
+        "class": "P0",
+        "citation": "第二次註冊不會成功。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "重複 email 註冊失敗可合理蘊含顯示 email 已被使用的錯誤訊息，但驗收要求未明示錯誤文案。",
+        "assertion": "await expect(page.locator('.error-messages, [role=\"alert\"]')).toContainText(/email.*has already been taken|email.*taken|already taken/i)",
+        "line": 23
+      }
+    ]
+  },
+  "gen_wall_seconds": 26.7,
+  "probe_steps": 3,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

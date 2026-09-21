@@ -1,0 +1,17 @@
+{
+  "source": "PR_gem_precise_H03_s1.json",
+  "gen": "gem",
+  "arm": "precise",
+  "item": "H03",
+  "seed": 1,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約中僅驗證標籤篩選分頁的文章數量（如每頁10篇、第二頁5篇）及分頁網址，並未斷言特定順序或特定標題清單內容。",
+      "row": 2,
+      "assertion": "await expect(articlePreviewHeadings.nth(i)).toHaveText(expectedPage1Titles[i])",
+      "line": 41,
+      "p2_candidate": false
+    }
+  ]
+}

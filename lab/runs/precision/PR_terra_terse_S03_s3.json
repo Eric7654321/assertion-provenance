@@ -1,0 +1,75 @@
+{
+  "gen": "terra",
+  "gen_model": "gpt-5.6-terra",
+  "arm": "terse",
+  "item": "S03",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S03\n    Scenario: Login with incorrect password\n      Given the user is on the login page\n      When the user enters a registered email and an incorrect password, and submits\n      Then the login is not successful and the screen notifies the user\n",
+  "spec": "generated/PR_terra_terse_S03_s3.spec.ts",
+  "rows": [
+    {
+      "class": "P0",
+      "citation": "登入不會成功",
+      "p2_candidate": false,
+      "borderline": true,
+      "why": "「登入不會成功」直接蘊含停留在原本的登入頁面（URL 保持在 /#/login），為驗收要求的合理操作化。",
+      "assertion": "await expect(page).toHaveURL(/#\\/login$/)",
+      "line": 14
+    },
+    {
+      "class": "P0",
+      "citation": "登入不會成功，畫面會告知。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求已明確指出登入失敗時「畫面會告知」，斷言錯誤訊息元素可見直接對應該要求。",
+      "assertion": "await expect(page.locator('.error-messages')).toBeVisible()",
+      "line": 15
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P0",
+        "citation": "登入不會成功",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "「登入不會成功」直接蘊含停留在原本的登入頁面（URL 保持在 /#/login），為驗收要求的合理操作化。",
+        "assertion": "await expect(page).toHaveURL(/#\\/login$/)",
+        "line": 14
+      },
+      {
+        "class": "P0",
+        "citation": "登入不會成功，畫面會告知。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求已明確指出登入失敗時「畫面會告知」，斷言錯誤訊息元素可見直接對應該要求。",
+        "assertion": "await expect(page.locator('.error-messages')).toBeVisible()",
+        "line": 15
+      }
+    ],
+    "terra": [
+      {
+        "class": "P0",
+        "citation": "登入不會成功，畫面會告知。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "送出錯誤密碼後仍停留在登入頁可作為登入不成功的直接可觀察表現。",
+        "assertion": "await expect(page).toHaveURL(/#\\/login$/)",
+        "line": 14
+      },
+      {
+        "class": "P0",
+        "citation": "登入不會成功，畫面會告知。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "送出錯誤密碼後錯誤訊息區塊可見，是「畫面會告知」的直接可觀測改寫。",
+        "assertion": "await expect(page.locator('.error-messages')).toBeVisible()",
+        "line": 15
+      }
+    ]
+  },
+  "gen_wall_seconds": 2.8,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

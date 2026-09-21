@@ -1,0 +1,23 @@
+{
+  "source": "PR_terra_precise_H01_s1.json",
+  "gen": "terra",
+  "arm": "precise",
+  "item": "H01",
+  "seed": 1,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/articles.spec.ts",
+      "line_start": 38,
+      "line_end": 39,
+      "quote": "    // Should be on article page\n    await expect(page).toHaveURL(/\\/article\\/.+/);",
+      "why": "公開的 E2E 測試在發佈文章後明確驗證了瀏覽器 URL 導向至文章詳細頁（/article/...）。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 0,
+      "assertion": "await expect(page).toHaveURL(/#\\/article\\//); await expect(page.getByRole('heading', { name: originalTitle })).toBeVisible(); await expect(page.getByText(body)).toBeVisible(); for (const tag of tags) { await expect(page.getByText(tag, { exact: true })).toBeVisible(); } await page.getByRole('button', { name: 'Edit Article' }).click(); await expect(page).toHaveURL(/#\\/editor\\//); await page.getByPlaceholder('Article Title').fill(updatedTitle); const removeTagButtons = page.locator('.tag-list i'); while (await removeTagButtons.count()) { await removeTagButtons.first().click(); } await page.getByRole('button', { name: 'Publish Article' }).click(); await expect(page).toHaveURL(/#\\/article\\//); await expect(page.getByRole('heading', { name: updatedTitle })).toBeVisible(); await expect(page.getByRole('heading', { name: originalTitle })).not.toBeVisible(); for (const tag of tags) { await expect(page.getByText(tag, { exact: true })).not.toBeVisible(); } }); });",
+      "line": 28,
+      "p2_candidate": true
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "source": "PR_terra_terse_S10_s2.json",
+  "gen": "terra",
+  "arm": "terse",
+  "item": "S10",
+  "seed": 2,
+  "checks": []
+}

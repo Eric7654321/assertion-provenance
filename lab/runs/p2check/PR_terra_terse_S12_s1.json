@@ -1,0 +1,25 @@
+{
+  "source": "PR_terra_terse_S12_s1.json",
+  "gen": "terra",
+  "arm": "terse",
+  "item": "S12",
+  "seed": 1,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開材料中規範的分頁路由格式為 /?page=N（如 specs/e2e/SELECTORS.md 第 147 行及 specs/e2e/url-navigation.spec.ts），並未規範或提及使用 Hash 路由的 /#/?page=2。",
+      "row": 2,
+      "assertion": "await expect(page).toHaveURL(/#\\/\\?page=2/)",
+      "line": 35,
+      "p2_candidate": true
+    },
+    {
+      "status": "P4 confirmed",
+      "why": "公開材料中未規定點選第 2 頁時文章列表預覽數量必須恰好為 1。",
+      "row": 3,
+      "assertion": "await expect(articlePreviews).toHaveCount(1)",
+      "line": 36,
+      "p2_candidate": false
+    }
+  ]
+}

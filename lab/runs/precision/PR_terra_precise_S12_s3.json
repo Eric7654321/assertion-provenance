@@ -1,0 +1,156 @@
+{
+  "gen": "terra",
+  "gen_model": "gpt-5.6-terra",
+  "arm": "precise",
+  "item": "S12",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S12\n    Scenario: Article list pagination\n      Given a user views the article list on the home page and scrolls to the pagination controls\n      When the user selects page 2\n      Then the subsequent articles are displayed\n",
+  "spec": "generated/PR_terra_precise_S12_s3.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "在點選第 2 頁操作之前檢查分頁列可見，屬於操作前確認元素存在的可見性守衛。",
+      "assertion": "await expect(pagination).toBeVisible()",
+      "line": 21
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "該可見性斷言位於點擊第 2 頁的動作之前，為確保後續點擊有操作對象的可見性守衛。",
+      "assertion": "await expect(pageTwo).toBeVisible()",
+      "line": 24
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求顯示接續的文章，並未規定 URL 必須包含 page=2 或 offset=10 的參數或 hash。",
+      "assertion": "await expect(page).toHaveURL(/[#?&]page=2|offset=10/)",
+      "line": 28
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求顯示接續的文章，未規定接續文章的確切數量為 2 篇。",
+      "assertion": "await expect(articlePreviews).toHaveCount(2)",
+      "line": 31
+    },
+    {
+      "class": "P0",
+      "citation": "顯示的是接續的文章。",
+      "p2_candidate": false,
+      "borderline": true,
+      "why": "驗收要求指定換頁後顯示接續的文章，斷言檢查特定測試資料標題屬於對接續文章內容的操作化驗證。",
+      "assertion": "await expect(articlePreviews.first()).toContainText('Pagination article 2')",
+      "line": 32
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "在點選第 2 頁操作之前檢查分頁列可見，屬於操作前確認元素存在的可見性守衛。",
+        "assertion": "await expect(pagination).toBeVisible()",
+        "line": 21
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "該可見性斷言位於點擊第 2 頁的動作之前，為確保後續點擊有操作對象的可見性守衛。",
+        "assertion": "await expect(pageTwo).toBeVisible()",
+        "line": 24
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求顯示接續的文章，並未規定 URL 必須包含 page=2 或 offset=10 的參數或 hash。",
+        "assertion": "await expect(page).toHaveURL(/[#?&]page=2|offset=10/)",
+        "line": 28
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求顯示接續的文章，未規定接續文章的確切數量為 2 篇。",
+        "assertion": "await expect(articlePreviews).toHaveCount(2)",
+        "line": 31
+      },
+      {
+        "class": "P0",
+        "citation": "顯示的是接續的文章。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "驗收要求指定換頁後顯示接續的文章，斷言檢查特定測試資料標題屬於對接續文章內容的操作化驗證。",
+        "assertion": "await expect(articlePreviews.first()).toContainText('Pagination article 2')",
+        "line": 32
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於選擇第 2 頁之前，僅確認分頁容器可供後續操作，驗收要求與 Gherkin 都未主張該時間點的可見性。",
+        "assertion": "await expect(pagination).toBeVisible()",
+        "line": 21
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於點選第 2 頁之前，且需求與 Gherkin 都未主張第 2 頁連結在該時間點可見，僅是確保後續點擊有對象的守衛。",
+        "assertion": "await expect(pageTwo).toBeVisible()",
+        "line": 24
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只主張選第 2 頁後顯示接續文章，未主張 URL 必須含有 page=2 或 offset=10。",
+        "assertion": "await expect(page).toHaveURL(/[#?&]page=2|offset=10/)",
+        "line": 28
+      },
+      {
+        "class": "P0",
+        "citation": "顯示的是接續的文章。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "點選第 2 頁後文章列表應顯示接續文章，文章預覽數量為 2 是對該結果的具體可檢查呈現，但需求未明示數量。",
+        "assertion": "await expect(articlePreviews).toHaveCount(2)",
+        "line": 31
+      },
+      {
+        "class": "P0",
+        "citation": "顯示的是接續的文章。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "點選第 2 頁後第一篇文章包含「Pagination article 2」是在驗證顯示內容確為接續文章的具體可檢查表現。",
+        "assertion": "await expect(articlePreviews.first()).toContainText('Pagination article 2')",
+        "line": 32
+      }
+    ]
+  },
+  "gen_wall_seconds": 4.2,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

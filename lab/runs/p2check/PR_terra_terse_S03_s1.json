@@ -1,0 +1,17 @@
+{
+  "source": "PR_terra_terse_S03_s1.json",
+  "gen": "terra",
+  "arm": "terse",
+  "item": "S03",
+  "seed": 1,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約的 E2E 測試僅驗證 .error-messages 可見，API 規格僅定義錯誤格式與狀態碼，未規範前端畫面必須包含特定字串 'email or password is invalid'。",
+      "row": 2,
+      "assertion": "await expect(page.locator('.error-messages')).toContainText(/email or password is invalid/i)",
+      "line": 16,
+      "p2_candidate": true
+    }
+  ]
+}

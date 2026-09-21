@@ -1,0 +1,102 @@
+{
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "precise",
+  "item": "S12",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S12\n    Scenario: Article list pagination\n      Given I scroll to the pagination bar in the article list on the home page\n      When I select page 2\n      Then the list displays the consecutive articles\n",
+  "spec": "generated/PR_gem_precise_S12_s1.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此斷言出現在點擊「Page 2」之前，用於確認元素可見性以確保後續操作有對象，非需求層的行為主張。",
+      "assertion": "await expect(page2Button).toBeVisible()",
+      "line": 27
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求顯示接續的文章，並未規定分頁按鈕必須呈現當前頁面狀態 Accessibility 標籤。",
+      "assertion": "await expect(page.getByRole('button', { name: 'Page 2 is your current page' })).toBeVisible()",
+      "line": 34
+    },
+    {
+      "class": "P0",
+      "citation": "顯示的是接續的文章。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "斷言驗證第 2 頁的第一篇文章標題可見，為驗收要求中『顯示的是接續的文章』的直接操作化實作。",
+      "assertion": "await expect(page.getByRole('heading', { name: expectedFirstArticlePage2 })).toBeVisible()",
+      "line": 38
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言出現在點擊「Page 2」之前，用於確認元素可見性以確保後續操作有對象，非需求層的行為主張。",
+        "assertion": "await expect(page2Button).toBeVisible()",
+        "line": 27
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求顯示接續的文章，並未規定分頁按鈕必須呈現當前頁面狀態 Accessibility 標籤。",
+        "assertion": "await expect(page.getByRole('button', { name: 'Page 2 is your current page' })).toBeVisible()",
+        "line": 34
+      },
+      {
+        "class": "P0",
+        "citation": "顯示的是接續的文章。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言驗證第 2 頁的第一篇文章標題可見，為驗收要求中『顯示的是接續的文章』的直接操作化實作。",
+        "assertion": "await expect(page.getByRole('heading', { name: expectedFirstArticlePage2 })).toBeVisible()",
+        "line": 38
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於點選第 2 頁之前，驗收要求與 Gherkin 都未主張該按鈕此時可見，僅是確保後續點擊有對象的可見性守衛。",
+        "assertion": "await expect(page2Button).toBeVisible()",
+        "line": 27
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言主張第 2 頁按鈕在點選後以「目前頁面」狀態可見，驗收要求與 Gherkin 只要求顯示接續文章，未主張分頁按鈕狀態。",
+        "assertion": "await expect(page.getByRole('button', { name: 'Page 2 is your current page' })).toBeVisible()",
+        "line": 34
+      },
+      {
+        "class": "P0",
+        "citation": "顯示的是接續的文章。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "第 2 頁首篇預期文章標題可見，是驗證列表已顯示接續文章的直接觀測。",
+        "assertion": "await expect(page.getByRole('heading', { name: expectedFirstArticlePage2 })).toBeVisible()",
+        "line": 38
+      }
+    ]
+  },
+  "gen_wall_seconds": 32.1,
+  "probe_steps": 3,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

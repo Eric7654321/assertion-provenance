@@ -1,0 +1,23 @@
+{
+  "source": "PR_terra_precise_S07_s1.json",
+  "gen": "terra",
+  "arm": "precise",
+  "item": "S07",
+  "seed": 1,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/articles.spec.ts",
+      "line_start": 76,
+      "line_end": 81,
+      "quote": "    // Delete the article\n    await deleteArticle(page);\n\n    // Should be redirected to home\n    await expect(page).toHaveURL('/');",
+      "why": "E2E 測試明確要求並測試在刪除文章後，使用者必須被重新導向回首頁（/）。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 1,
+      "assertion": "await expect(page).toHaveURL(new RegExp(`${UI.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}/#/?$`))",
+      "line": 16,
+      "p2_candidate": true
+    }
+  ]
+}

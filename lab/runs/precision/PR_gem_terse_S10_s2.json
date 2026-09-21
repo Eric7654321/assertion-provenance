@@ -1,0 +1,102 @@
+{
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "terse",
+  "item": "S10",
+  "seed": 2,
+  "feature": "Feature: Conduit Acceptance Requirements\n\n  @item:S10\n    Scenario: Favorite an article\n      Given an article with an initial favorite count of 0 is opened and not yet favorited\n      When the user clicks favorite\n      Then the button and count should reflect the action\n",
+  "spec": "generated/PR_gem_terse_S10_s2.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此斷言出現在點擊收藏按鈕之前，用於確認元素可見以確保後續操作有對象，屬可見性守衛。",
+      "assertion": "await expect(favoriteButton).toBeVisible()",
+      "line": 15
+    },
+    {
+      "class": "P0",
+      "citation": "收藏後按鈕與計數反映這次操作。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求已指定收藏後按鈕需反映操作，此斷言檢查收藏後的按鈕呈現於畫面上，直接落實該要求。",
+      "assertion": "await expect(favoritedButton).toBeVisible()",
+      "line": 22
+    },
+    {
+      "class": "P0",
+      "citation": "收藏後按鈕與計數反映這次操作。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求已指定初始收藏數為 0，且收藏後計數需反映這次操作，因此計數變為 1 被直接蘊含。",
+      "assertion": "await expect(favoritedButton).toContainText('1')",
+      "line": 23
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言出現在點擊收藏按鈕之前，用於確認元素可見以確保後續操作有對象，屬可見性守衛。",
+        "assertion": "await expect(favoriteButton).toBeVisible()",
+        "line": 15
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕與計數反映這次操作。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求已指定收藏後按鈕需反映操作，此斷言檢查收藏後的按鈕呈現於畫面上，直接落實該要求。",
+        "assertion": "await expect(favoritedButton).toBeVisible()",
+        "line": 22
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕與計數反映這次操作。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求已指定初始收藏數為 0，且收藏後計數需反映這次操作，因此計數變為 1 被直接蘊含。",
+        "assertion": "await expect(favoritedButton).toContainText('1')",
+        "line": 23
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此可見性斷言位於點擊收藏之前，且驗收要求與 Gherkin 都未主張按鈕在該時間點可見，屬於操作前守衛。",
+        "assertion": "await expect(favoriteButton).toBeVisible()",
+        "line": 15
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕與計數反映這次操作。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在點選收藏後確認按鈕以反映操作結果的狀態可見，屬於驗收要求所述的後置行為。",
+        "assertion": "await expect(favoritedButton).toBeVisible()",
+        "line": 22
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕與計數反映這次操作。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "初始收藏數為 0，點選收藏後計數反映本次操作，蘊含按鈕文字中的計數為 1。",
+        "assertion": "await expect(favoritedButton).toContainText('1')",
+        "line": 23
+      }
+    ]
+  },
+  "gen_wall_seconds": 84.1,
+  "probe_steps": 6,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

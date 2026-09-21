@@ -1,0 +1,102 @@
+{
+  "gen": "terra",
+  "gen_model": "gpt-5.6-terra",
+  "arm": "terse",
+  "item": "S10",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S10\n    Scenario: Favorite article\n      Given an article has an initial favorite count of 0 and has not been favorited\n      When the user opens the article and clicks to favorite it\n      Then the button and the count reflect this action\n",
+  "spec": "generated/PR_terra_terse_S10_s3.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此可見性斷言位於點擊收藏按鈕之前，且規格與 Gherkin 均未主張點擊前按鈕必須可見，屬於操作前的可見性守衛。",
+      "assertion": "await expect(favoriteButton).toBeVisible()",
+      "line": 17
+    },
+    {
+      "class": "P0",
+      "citation": "該文章的初始收藏數為 0。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求的 note 明確指定初始收藏數為 0，點擊前的按鈕包含計數 0 符合該前置條件主張。",
+      "assertion": "await expect(favoriteButton).toHaveText(/0/)",
+      "line": 18
+    },
+    {
+      "class": "P0",
+      "citation": "收藏後按鈕與計數反映這次操作。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求指定初始收藏數為0且收藏後按鈕與計數需反映操作，斷言驗證點擊後按鈕變成已收藏狀態且計數為1，屬於前置條件蘊含的操作化驗證。",
+      "assertion": "await expect( page.getByRole('button', { name: new RegExp(`Unfavorite Article\\\\s*\\\\(1\\\\)`, 'i'), }), ).toBeVisible()",
+      "line": 22
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此可見性斷言位於點擊收藏按鈕之前，且規格與 Gherkin 均未主張點擊前按鈕必須可見，屬於操作前的可見性守衛。",
+        "assertion": "await expect(favoriteButton).toBeVisible()",
+        "line": 17
+      },
+      {
+        "class": "P0",
+        "citation": "該文章的初始收藏數為 0。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求的 note 明確指定初始收藏數為 0，點擊前的按鈕包含計數 0 符合該前置條件主張。",
+        "assertion": "await expect(favoriteButton).toHaveText(/0/)",
+        "line": 18
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕與計數反映這次操作。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求指定初始收藏數為0且收藏後按鈕與計數需反映操作，斷言驗證點擊後按鈕變成已收藏狀態且計數為1，屬於前置條件蘊含的操作化驗證。",
+        "assertion": "await expect( page.getByRole('button', { name: new RegExp(`Unfavorite Article\\\\s*\\\\(1\\\\)`, 'i'), }), ).toBeVisible()",
+        "line": 22
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此可見性斷言位於點擊收藏之前，驗收要求與 Gherkin 都未主張按鈕在該時間點可見，僅作為後續操作的守衛。",
+        "assertion": "await expect(favoriteButton).toBeVisible()",
+        "line": 17
+      },
+      {
+        "class": "P0",
+        "citation": "該文章的初始收藏數為 0。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在收藏動作前確認按鈕文字含有 0，直接對應驗收要求明示的初始收藏數為 0。",
+        "assertion": "await expect(favoriteButton).toHaveText(/0/)",
+        "line": 18
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕與計數反映這次操作。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "初始收藏數為 0，點選收藏後按鈕顯示 Unfavorite 且計數為 1 是對該次操作結果的無歧義具體化。",
+        "assertion": "await expect( page.getByRole('button', { name: new RegExp(`Unfavorite Article\\\\s*\\\\(1\\\\)`, 'i'), }), ).toBeVisible()",
+        "line": 22
+      }
+    ]
+  },
+  "gen_wall_seconds": 3.0,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

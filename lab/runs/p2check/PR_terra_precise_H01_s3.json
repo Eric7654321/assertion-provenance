@@ -1,0 +1,8 @@
+{
+  "source": "PR_terra_precise_H01_s3.json",
+  "gen": "terra",
+  "arm": "precise",
+  "item": "H01",
+  "seed": 3,
+  "checks": []
+}

@@ -1,0 +1,69 @@
+{
+  "source": "PR_terra_terse_H03_s1.json",
+  "gen": "terra",
+  "arm": "terse",
+  "item": "H03",
+  "seed": 1,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約中規範與測試的標籤路由為 '/tag/:tag'（如 SELECTORS.md 行 148 與 url-navigation.spec.ts），未要求或測試 '#/?tag=' 這種 Hash 路由形式。",
+      "row": 1,
+      "assertion": "await expect(page).toHaveURL(new RegExp(`#/?\\\\?tag=${tag}`))",
+      "line": 30,
+      "p2_candidate": true
+    },
+    {
+      "supported": true,
+      "file": "specs/e2e/url-navigation.spec.ts",
+      "line_start": 252,
+      "line_end": 254,
+      "quote": "    // First page should show 10 articles\n    const articlesOnPage1 = await page.locator('.article-preview').count();\n    expect(articlesOnPage1).toBe(10);",
+      "why": "E2E 測試明確測試了在 15 篇標籤篩選文章下，第一頁的 .article-preview 數量為 10 篇。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 2,
+      "assertion": "await expect(articlePreviews).toHaveCount(10)",
+      "line": 33,
+      "p2_candidate": true
+    },
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約與 E2E 測試中僅驗證標籤篩選分頁的數量與分頁 URL 變化，並未規範或斷言第一筆文章預覽必須包含特定文字 'Pagination article 15'。",
+      "row": 3,
+      "assertion": "await expect(articlePreviews.first()).toContainText('Pagination article 15')",
+      "line": 34,
+      "p2_candidate": true
+    },
+    {
+      "supported": true,
+      "file": "specs/e2e/url-navigation.spec.ts",
+      "line_start": 266,
+      "line_end": 268,
+      "quote": "    // Second page should have 5 articles (15 - 10 = 5)\n    const articlesOnPage2 = await page.locator('.article-preview').count();\n    expect(articlesOnPage2).toBe(5);",
+      "why": "E2E 測試明確驗證了在 15 篇文章的標籤分頁下，切換至第 2 頁時文章預覽數量為 5 篇。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 6,
+      "assertion": "await expect(articlePreviews).toHaveCount(5)",
+      "line": 43,
+      "p2_candidate": true
+    },
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約與 E2E 測試皆規範切換至 Global Feed 時 URL 應為 '/'，並未要求或測試以 Hash 路由形式（/#/?$）呈現。",
+      "row": 11,
+      "assertion": "await expect(page).toHaveURL(/#\\/?$/)",
+      "line": 60,
+      "p2_candidate": true
+    },
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約與測試中未規定或斷言切回 Global Feed 後文章預覽數量必須恰好為 10 筆。",
+      "row": 12,
+      "assertion": "await expect(articlePreviews).toHaveCount(10)",
+      "line": 61,
+      "p2_candidate": true
+    }
+  ]
+}

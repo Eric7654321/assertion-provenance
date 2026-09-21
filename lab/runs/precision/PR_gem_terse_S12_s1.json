@@ -1,0 +1,129 @@
+{
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "terse",
+  "item": "S12",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Requirements\n\n  @item:S12\n    Scenario: Article list pagination\n      Given the user scrolls to the pagination bar on the home page article list\n      When the user clicks page 2\n      Then the user should see different articles after changing the page\n",
+  "spec": "generated/PR_gem_terse_S12_s1.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此斷言位於點選換頁操作之前，用來等待並確保首頁第一頁文章已載入的可見性守衛。",
+      "assertion": "await expect(articleHeadings.first()).toBeVisible()",
+      "line": 10
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求換頁後看到不一樣的文章，未主張分頁按鈕需顯示為目前頁面狀態。",
+      "assertion": "await expect(page.getByRole('button', { name: 'Page 2 is your current page' })).toBeVisible()",
+      "line": 19
+    },
+    {
+      "class": "P0",
+      "citation": "換頁後看到的是不一樣的文章。",
+      "p2_candidate": false,
+      "borderline": true,
+      "why": "驗收要求明確主張換頁後能看到文章，且此斷言確保新文章渲染可見以比對不同。",
+      "assertion": "await expect(articleHeadings.first()).toBeVisible()",
+      "line": 22
+    },
+    {
+      "class": "P0",
+      "citation": "換頁後看到的是不一樣的文章。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "斷言比對第二頁的文章標題與第一頁不同，直接對應驗收要求的換頁後看到不一樣的文章。",
+      "assertion": "expect(pageTwoTitles).not.toEqual(pageOneTitles)",
+      "line": 25
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於點選換頁操作之前，用來等待並確保首頁第一頁文章已載入的可見性守衛。",
+        "assertion": "await expect(articleHeadings.first()).toBeVisible()",
+        "line": 10
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求換頁後看到不一樣的文章，未主張分頁按鈕需顯示為目前頁面狀態。",
+        "assertion": "await expect(page.getByRole('button', { name: 'Page 2 is your current page' })).toBeVisible()",
+        "line": 19
+      },
+      {
+        "class": "P0",
+        "citation": "換頁後看到的是不一樣的文章。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "驗收要求明確主張換頁後能看到文章，且此斷言確保新文章渲染可見以比對不同。",
+        "assertion": "await expect(articleHeadings.first()).toBeVisible()",
+        "line": 22
+      },
+      {
+        "class": "P0",
+        "citation": "換頁後看到的是不一樣的文章。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言比對第二頁的文章標題與第一頁不同，直接對應驗收要求的換頁後看到不一樣的文章。",
+        "assertion": "expect(pageTwoTitles).not.toEqual(pageOneTitles)",
+        "line": 25
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言在點選第 2 頁前僅確認文章標題元素可見，以便取得第 1 頁標題作後續比較，驗收要求與 Gherkin 均未主張此時的可見性。",
+        "assertion": "await expect(articleHeadings.first()).toBeVisible()",
+        "line": 10
+      },
+      {
+        "class": "P0",
+        "citation": "換頁後看到的是不一樣的文章。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "點選第 2 頁後第 2 頁成為目前頁面是換頁完成的合理蘊含，但驗收文字未明示其按鈕可見狀態。",
+        "assertion": "await expect(page.getByRole('button', { name: 'Page 2 is your current page' })).toBeVisible()",
+        "line": 19
+      },
+      {
+        "class": "P0",
+        "citation": "換頁後看到的是不一樣的文章。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "此斷言在換頁後確認文章標題元素可見，作為「看到文章」且可比較為不同文章的行為觀測，與驗收要求有依據。",
+        "assertion": "await expect(articleHeadings.first()).toBeVisible()",
+        "line": 22
+      },
+      {
+        "class": "P0",
+        "citation": "換頁後看到的是不一樣的文章。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言直接驗證切換到第 2 頁後的文章標題集合與第 1 頁不同，與驗收要求一致。",
+        "assertion": "expect(pageTwoTitles).not.toEqual(pageOneTitles)",
+        "line": 25
+      }
+    ]
+  },
+  "gen_wall_seconds": 29.1,
+  "probe_steps": 3,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

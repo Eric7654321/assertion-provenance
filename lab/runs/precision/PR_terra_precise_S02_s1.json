@@ -1,0 +1,156 @@
+{
+  "gen": "terra",
+  "gen_model": "gpt-5.6-terra",
+  "arm": "precise",
+  "item": "S02",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S02\n    Scenario: Registration with duplicate email\n      Given a user has completed registration with an unused email and logged out\n      When someone attempts to register again with the same email\n      Then the registration fails with an error displayed\n      And the user is not logged in\n",
+  "spec": "generated/PR_terra_precise_S02_s1.spec.ts",
+  "rows": [
+    {
+      "class": "P0",
+      "citation": "第二次註冊失敗並顯示錯誤",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出第二次註冊失敗並顯示錯誤，因此斷言錯誤訊息可見直接對應需求",
+      "assertion": "await expect(error).toBeVisible()",
+      "line": 16
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求「顯示錯誤」，未指定錯誤訊息必須包含 email already taken 等特定文字，但符合 RealWorld 規格。",
+      "assertion": "await expect(error).toContainText(/email.*already|already.*email|taken/i)",
+      "line": 17
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求註冊失敗並顯示錯誤且未登入，並未規範頁面 URL 必須維持在 /#/register。",
+      "assertion": "await expect(page).toHaveURL(/#\\/register$/)",
+      "line": 19
+    },
+    {
+      "class": "P0",
+      "citation": "使用者未登入。",
+      "p2_candidate": false,
+      "borderline": true,
+      "why": "驗收要求指明「使用者未登入」，在前端介面上通常藉由導覽列顯示 Sign in / Sign up 來反映未登入狀態，屬於操作化斷言。",
+      "assertion": "await expect(page.getByRole('link', { name: 'Sign in' })).toBeVisible()",
+      "line": 20
+    },
+    {
+      "class": "P0",
+      "citation": "使用者未登入",
+      "p2_candidate": false,
+      "borderline": true,
+      "why": "驗收要求指明『使用者未登入』，在未登入狀態下導覽列顯示 Sign up 連結屬於該狀態的操作化驗證。",
+      "assertion": "await expect(page.getByRole('link', { name: 'Sign up' })).toBeVisible()",
+      "line": 21
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P0",
+        "citation": "第二次註冊失敗並顯示錯誤",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出第二次註冊失敗並顯示錯誤，因此斷言錯誤訊息可見直接對應需求",
+        "assertion": "await expect(error).toBeVisible()",
+        "line": 16
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求「顯示錯誤」，未指定錯誤訊息必須包含 email already taken 等特定文字，但符合 RealWorld 規格。",
+        "assertion": "await expect(error).toContainText(/email.*already|already.*email|taken/i)",
+        "line": 17
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求註冊失敗並顯示錯誤且未登入，並未規範頁面 URL 必須維持在 /#/register。",
+        "assertion": "await expect(page).toHaveURL(/#\\/register$/)",
+        "line": 19
+      },
+      {
+        "class": "P0",
+        "citation": "使用者未登入。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "驗收要求指明「使用者未登入」，在前端介面上通常藉由導覽列顯示 Sign in / Sign up 來反映未登入狀態，屬於操作化斷言。",
+        "assertion": "await expect(page.getByRole('link', { name: 'Sign in' })).toBeVisible()",
+        "line": 20
+      },
+      {
+        "class": "P0",
+        "citation": "使用者未登入",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "驗收要求指明『使用者未登入』，在未登入狀態下導覽列顯示 Sign up 連結屬於該狀態的操作化驗證。",
+        "assertion": "await expect(page.getByRole('link', { name: 'Sign up' })).toBeVisible()",
+        "line": 21
+      }
+    ],
+    "terra": [
+      {
+        "class": "P0",
+        "citation": "第二次註冊失敗並顯示錯誤，使用者未登入。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在第二次註冊觸發後確認錯誤元素可見，直接對應驗收要求的「顯示錯誤」。",
+        "assertion": "await expect(error).toBeVisible()",
+        "line": 16
+      },
+      {
+        "class": "P0",
+        "citation": "第二次註冊失敗並顯示錯誤，使用者未登入。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "斷言驗證重複 email 導致的錯誤內容，屬於「顯示錯誤」的具體化，但驗收要求未明示錯誤文案。",
+        "assertion": "await expect(error).toContainText(/email.*already|already.*email|taken/i)",
+        "line": 17
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只主張第二次註冊失敗、顯示錯誤且未登入，未主張網址必須停留在 #/register。",
+        "assertion": "await expect(page).toHaveURL(/#\\/register$/)",
+        "line": 19
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言主張註冊失敗後「Sign in」連結可見，驗收要求與 Gherkin 都只要求顯示錯誤且使用者未登入，未主張該連結可見。",
+        "assertion": "await expect(page.getByRole('link', { name: 'Sign in' })).toBeVisible()",
+        "line": 20
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言在註冊失敗後主張「Sign up」連結可見，但驗收要求與 Gherkin 都只主張顯示錯誤且使用者未登入，未主張該連結可見。",
+        "assertion": "await expect(page.getByRole('link', { name: 'Sign up' })).toBeVisible()",
+        "line": 21
+      }
+    ]
+  },
+  "gen_wall_seconds": 3.3,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

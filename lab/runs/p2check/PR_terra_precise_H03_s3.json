@@ -1,0 +1,25 @@
+{
+  "source": "PR_terra_precise_H03_s3.json",
+  "gen": "terra",
+  "arm": "precise",
+  "item": "H03",
+  "seed": 3,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開材料中定義的標籤路由為 `/tag/:tag`，未規定或測試 `/#/?tag=...` 這種 hash-based 路由格式。",
+      "row": 2,
+      "assertion": "await expect(page).toHaveURL(new RegExp(`#/\\\\?tag=${encodeURIComponent(tag)}`))",
+      "line": 29,
+      "p2_candidate": true
+    },
+    {
+      "status": "P4 confirmed",
+      "why": "公開材料中定義的首頁路由為 '/'（如 url-navigation.spec.ts 第 228-229 行切換回 Global Feed 時預期 URL 為 '/'），並無任何要求或測試使用包含 Hash 路由 '/#/' 的 URL。",
+      "row": 11,
+      "assertion": "await expect(page).toHaveURL(new RegExp(`${UI.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}/#/$`))",
+      "line": 66,
+      "p2_candidate": true
+    }
+  ]
+}

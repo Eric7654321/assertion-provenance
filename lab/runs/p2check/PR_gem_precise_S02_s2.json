@@ -1,0 +1,17 @@
+{
+  "source": "PR_gem_precise_S02_s2.json",
+  "gen": "gem",
+  "arm": "precise",
+  "item": "S02",
+  "seed": 2,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開材料中定義了註冊路由為 '/register' 且錯誤時停留在 '/register'（如 error-handling.spec.ts 第 64 行），但未要求或測試 hash 路由模式 '/#/register'。",
+      "row": 2,
+      "assertion": "await expect(page).toHaveURL(/#\\/register/)",
+      "line": 24,
+      "p2_candidate": true
+    }
+  ]
+}

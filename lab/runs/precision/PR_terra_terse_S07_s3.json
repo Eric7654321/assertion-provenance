@@ -1,0 +1,102 @@
+{
+  "gen": "terra",
+  "gen_model": "gpt-5.6-terra",
+  "arm": "terse",
+  "item": "S07",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S07\n    Scenario: Author deletes their own article\n      Given the author opens their own article page\n      When the author clicks to delete the article\n      Then the article disappears from the list after deletion\n",
+  "spec": "generated/PR_terra_terse_S07_s3.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "出現在點擊刪除按鈕之前，用於確保文章頁載入完成的可見性守衛，非需求層的行為主張。",
+      "assertion": "await expect(page.getByRole('heading', { name: article.title })).toBeVisible()",
+      "line": 12
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求刪除後文章從列表消失，未提及刪除後應導向首頁 URL。",
+      "assertion": "await expect(page).toHaveURL(new RegExp(`${UI.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}/#/?$`))",
+      "line": 16
+    },
+    {
+      "class": "P0",
+      "citation": "刪除後該文章從列表上消失。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "斷言文章標題連結數量為 0 直接對應驗收要求中「刪除後該文章從列表上消失」的主張。",
+      "assertion": "await expect(page.getByRole('link', { name: article.title })).toHaveCount(0)",
+      "line": 17
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "出現在點擊刪除按鈕之前，用於確保文章頁載入完成的可見性守衛，非需求層的行為主張。",
+        "assertion": "await expect(page.getByRole('heading', { name: article.title })).toBeVisible()",
+        "line": 12
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求刪除後文章從列表消失，未提及刪除後應導向首頁 URL。",
+        "assertion": "await expect(page).toHaveURL(new RegExp(`${UI.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}/#/?$`))",
+        "line": 16
+      },
+      {
+        "class": "P0",
+        "citation": "刪除後該文章從列表上消失。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言文章標題連結數量為 0 直接對應驗收要求中「刪除後該文章從列表上消失」的主張。",
+        "assertion": "await expect(page.getByRole('link', { name: article.title })).toHaveCount(0)",
+        "line": 17
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於刪除動作之前，且驗收要求與 Gherkin 都未主張文章標題此時可見，僅是確保後續操作所在頁面已載入的守衛。",
+        "assertion": "await expect(page.getByRole('heading', { name: article.title })).toBeVisible()",
+        "line": 12
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只主張刪除後文章從列表消失，未主張刪除後必須導向根網址。",
+        "assertion": "await expect(page).toHaveURL(new RegExp(`${UI.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}/#/?$`))",
+        "line": 16
+      },
+      {
+        "class": "P0",
+        "citation": "刪除後該文章從列表上消失。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "刪除動作後斷言文章連結在列表中數量為 0，直接驗證文章從列表消失。",
+        "assertion": "await expect(page.getByRole('link', { name: article.title })).toHaveCount(0)",
+        "line": 17
+      }
+    ]
+  },
+  "gen_wall_seconds": 2.6,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

@@ -1,0 +1,202 @@
+{
+  "group": "G4",
+  "seed": 3,
+  "items": [
+    "H01",
+    "S02",
+    "H03",
+    "S07",
+    "H02",
+    "S09",
+    "H04",
+    "S10",
+    "S03",
+    "S12"
+  ],
+  "oa_variant": "item_terse",
+  "model": "gemini-3.8-flash",
+  "thinking_budget": 0,
+  "arms": {
+    "self": {
+      "arm": "self",
+      "translation": "@item:H01\n1. 這條在驗證已登入使用者發布帶有三個標籤的文章後，以及後續修改標題並移除所有標籤後，文章頁內容是否正確呈現與更新。\n2. 可檢查的事實：\n- 文章頁的內容與先前輸入的標題、內文及三個標籤相符\n- 編輯送出後，文章頁面相應地更新（反映修改後的標題與移除所有標籤的狀態）\n\n@item:S02\n1. 這條在驗證使用者登出後，使用已被註冊過的同一組 email 再次嘗試註冊時是否會失敗。\n2. 可檢查的事實：\n- 第二次註冊操作不成功\n\n@item:H03\n1. 這條在驗證在特定標籤下透過點擊分頁列、直接以網址造訪第 2 頁，以及切回全部文章列表時的分頁行為與網址變化。\n2. 可檢查的事實：\n- 點選分頁列第 2 頁後，分頁行為符合設定\n- 點選分頁列第 2 頁後，看得到後續的文章\n- 點選分頁列第 2 頁後，網址跟著相應改變\n- 直接輸入帶有 page=2 的網址造訪後，分頁行為符合設定\n- 直接輸入帶有 page=2 的網址造訪後，看得到後續的文章\n- 直接輸入帶有 page=2 的網址造訪後，網址跟著相應改變\n- 切回全部文章列表後，分頁行為符合設定\n- 切回全部文章列表後，看得到後續的文章\n- 切回全部文章列表後，網址跟著相應改變\n\n@item:S07\n1. 這條在驗證作者在自己的文章頁點選刪除文章後，該文章是否從列表中移除。\n2. 可檢查的事實：\n- 刪除操作執行後，該文章從列表中消失\n\n@item:H02\n1. 這條在驗證未登入訪客與另一位已登入的非作者使用者，在文章頁上所見內容與可操作項目是否因角色而有所差異。\n2. 可檢查的事實：\n- 未登入訪客所看到的內容與可執行的操作會因角色而有所不同（文字描述抽象，具體可檢查項目不明）\n- 另一位已登入且留下留言的非作者使用者，所看到的內容與可執行的操作會因角色而有所不同（文字描述抽象，具體可檢查項目不明）\n\n@item:S09\n1. 這條在驗證當文章中存在不同使用者的留言時，刪除留言的權限是否僅限於使用者自己的留言。\n2. 可檢查的事實：\n- 刪除留言的操作只有在使用者自己的留言上才可進行（他人留言不可刪除）\n\n@item:H04\n1. 這條在驗證使用者追蹤與取消追蹤某位作者後，相關按鈕狀態以及首頁 Your Feed 的內容變化。\n2. 可檢查的事實：\n- 追蹤作者後，按鈕反映出已追蹤的狀態\n- 追蹤作者後，Your Feed 反映出已追蹤的狀態\n- 取消追蹤作者後，整體狀態回到原本的樣子\n\n@item:S10\n1. 這條在驗證使用者將一篇初始收藏數為 0 的文章加入收藏後，按鈕狀態與計數是否相應更新。\n2. 可檢查的事實：\n- 收藏文章後，收藏按鈕反映了這次操作\n- 收藏文章後，收藏計數反映了這次操作\n\n@item:S03\n1. 這條在驗證於登入頁輸入已註冊的 email 與錯誤的密碼並送出時，登入是否失敗且畫面是否出現提示。\n2. 可檢查的事實：\n- 登入未成功\n- 螢幕畫面有向使用者發出通知\n\n@item:S12\n1. 這條在驗證首頁文章列表切換到第 2 頁後，所顯示的文章是否有所不同。\n2. 可檢查的事實：\n- 換頁至第 2 頁後，畫面上顯示出不一樣的文章",
+      "judge_reply": "[\n  {\"item\":\"H01\",\"verdict\":\"equal\",\"over_claims\":[],\"under_claims\":[]},\n  {\"item\":\"S02\",\"verdict\":\"equal\",\"over_claims\":[],\"under_claims\":[]},\n  {\"item\":\"H03\",\"verdict\":\"equal\",\"over_claims\":[],\"under_claims\":[]},\n  {\"item\":\"S07\",\"verdict\":\"equal\",\"over_claims\":[],\"under_claims\":[]},\n  {\"item\":\"H02\",\"verdict\":\"equal\",\"over_claims\":[],\"under_claims\":[]},\n  {\"item\":\"S09\",\"verdict\":\"equal\",\"over_claims\":[],\"under_claims\":[]},\n  {\"item\":\"H04\",\"verdict\":\"equal\",\"over_claims\":[],\"under_claims\":[]},\n  {\"item\":\"S10\",\"verdict\":\"equal\",\"over_claims\":[],\"under_claims\":[]},\n  {\"item\":\"S03\",\"verdict\":\"equal\",\"over_claims\":[],\"under_claims\":[]},\n  {\"item\":\"S12\",\"verdict\":\"equal\",\"over_claims\":[],\"under_claims\":[]}\n]",
+      "verdicts": {
+        "H01": {
+          "item": "H01",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "S02": {
+          "item": "S02",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "H03": {
+          "item": "H03",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "S07": {
+          "item": "S07",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "H02": {
+          "item": "H02",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "S09": {
+          "item": "S09",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "H04": {
+          "item": "H04",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "S10": {
+          "item": "S10",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "S03": {
+          "item": "S03",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "S12": {
+          "item": "S12",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        }
+      },
+      "counts": {
+        "equal": 10,
+        "over": 0,
+        "under": 0
+      },
+      "ledger": {},
+      "ledger_rows": 0,
+      "budget": {
+        "calls": 2,
+        "total_tokens": 11127,
+        "prompt_tokens": 9911,
+        "output_tokens": 1216,
+        "thinking_tokens": 0,
+        "cached_prompt_tokens": 0,
+        "seconds": 8.0,
+        "resolved_models": [
+          "gemini-3.8-flash"
+        ]
+      },
+      "wall_seconds": 7.99
+    },
+    "blind": {
+      "arm": "blind",
+      "oa_leak_check": {
+        "checked": true,
+        "oa_lines_checked": 118,
+        "ngram_window": 8,
+        "ngrams_checked": 628,
+        "leaked": []
+      },
+      "translation": "@item:H01\n1. 這條在驗文章的發布、標籤新增，以及後續修改標題和移除所有標籤的編輯功能。\n2. 可檢查的事實：\n- 發布後，文章頁面的內容與輸入的標題、內文及三個標籤相符\n- 編輯並提交後，文章頁面相應更新（反映了修改後的標題以及標籤被全數移除的狀態）\n\n@item:S02\n1. 這條在驗使用已註冊過的電子郵件再次註冊時會失敗。\n2. 可檢查的事實：\n- 第二次使用相同電子郵件進行的註冊不成功\n\n@item:H03\n1. 這條在驗依標籤篩選文章時的分頁點擊、直接透過 URL 帶參數訪問，以及切換回全部文章列表時的分頁行為。\n2. 可檢查的事實：\n- 點擊分頁列第 2 頁後，分頁行為符合設定、後續文章可見，且 URL 相應改變（看不懂具體符合什麼設定、顯示哪些文章、URL 變成什麼）\n- 另開頁面並直接輸入帶有 page=2 的 URL 後，分頁行為符合設定、後續文章可見，且 URL 相應改變（同上，具體期待不明確）\n- 切換回全部文章列表後，分頁行為符合設定、後續文章可見，且 URL 相應改變（同上，具體期待不明確）\n\n@item:S07\n1. 這條在驗作者刪除自己的文章後，該文章會從列表中消失。\n2. 可檢查的事實：\n- 刪除操作後，該文章從列表中消失（看不懂是從哪一個列表中消失）\n\n@item:H02\n1. 這條在驗未登入訪客與非作者的登入使用者在文章頁面上的可見內容與可用操作權限差異。\n2. 可檢查的事實：\n- 未登入訪客開啟文章頁面時，可見內容與可用操作依角色而有所不同（看不懂具體可見內容與可用操作是什麼）\n- 另一位非作者的登入使用者開啟頁面並留言後，可見內容與可用操作依角色而有所不同（同上，具體差異不明確）\n\n@item:S09\n1. 這條在驗使用者只能看到或使用自己留言的刪除功能。\n2. 可檢查的事實：\n- 刪除留言的功能僅對自己的留言可用\n\n@item:H04\n1. 這條在驗追蹤與取消追蹤作者時，個人個人檔案按鈕與首頁「Your Feed」的狀態變化。\n2. 可檢查的事實：\n- 點擊追蹤後，按鈕與「Your Feed」反映出已追蹤的狀態（看不懂按鈕具體文字/樣式與 Feed 具體顯示內容是什麼）\n- 點擊取消追蹤後，狀態恢復為原本的狀態（看不懂原本狀態的具體判定標準）\n\n@item:S10\n1. 這條在驗對文章點擊收藏後，收藏按鈕與收藏數量的更新。\n2. 可檢查的事實：\n- 按鈕與計數反映了點擊收藏的動作（看不懂按鈕具體變化及計數是否明確變為 1）\n\n@item:S03\n1. 這條在驗使用已註冊帳號但輸入錯誤密碼登入時會失敗並提示使用者。\n2. 可檢查的事實：\n- 登入不成功\n- 螢幕顯示通知提示使用者（看不懂通知的具體文字或形式是什麼）\n\n@item:S12\n1. 這條在驗首頁文章列表切換到第 2 頁時會顯示不同的文章。\n2. 可檢查的事實：\n- 切換頁面後，畫面上顯示出不同的文章（看不懂具體該顯示哪些文章）",
+      "judge_reply": "[\n  {\"item\":\"H01\",\"verdict\":\"equal\",\"over_claims\":[],\"under_claims\":[]},\n  {\"item\":\"S02\",\"verdict\":\"equal\",\"over_claims\":[],\"under_claims\":[]},\n  {\"item\":\"H03\",\"verdict\":\"equal\",\"over_claims\":[],\"under_claims\":[]},\n  {\"item\":\"S07\",\"verdict\":\"equal\",\"over_claims\":[],\"under_claims\":[]},\n  {\"item\":\"H02\",\"verdict\":\"equal\",\"over_claims\":[],\"under_claims\":[]},\n  {\"item\":\"S09\",\"verdict\":\"equal\",\"over_claims\":[],\"under_claims\":[]},\n  {\"item\":\"H04\",\"verdict\":\"equal\",\"over_claims\":[],\"under_claims\":[]},\n  {\"item\":\"S10\",\"verdict\":\"equal\",\"over_claims\":[],\"under_claims\":[]},\n  {\"item\":\"S03\",\"verdict\":\"equal\",\"over_claims\":[],\"under_claims\":[]},\n  {\"item\":\"S12\",\"verdict\":\"equal\",\"over_claims\":[],\"under_claims\":[]}\n]",
+      "verdicts": {
+        "H01": {
+          "item": "H01",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "S02": {
+          "item": "S02",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "H03": {
+          "item": "H03",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "S07": {
+          "item": "S07",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "H02": {
+          "item": "H02",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "S09": {
+          "item": "S09",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "H04": {
+          "item": "H04",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "S10": {
+          "item": "S10",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "S03": {
+          "item": "S03",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        },
+        "S12": {
+          "item": "S12",
+          "verdict": "equal",
+          "over_claims": [],
+          "under_claims": []
+        }
+      },
+      "counts": {
+        "equal": 10,
+        "over": 0,
+        "under": 0
+      },
+      "ledger": {},
+      "ledger_rows": 0,
+      "budget": {
+        "calls": 2,
+        "total_tokens": 4225,
+        "prompt_tokens": 3083,
+        "output_tokens": 1142,
+        "thinking_tokens": 0,
+        "cached_prompt_tokens": 0,
+        "seconds": 7.2,
+        "resolved_models": [
+          "gemini-3.8-flash"
+        ]
+      },
+      "wall_seconds": 7.22
+    }
+  }
+}

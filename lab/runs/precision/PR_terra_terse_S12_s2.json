@@ -1,0 +1,129 @@
+{
+  "gen": "terra",
+  "gen_model": "gpt-5.6-terra",
+  "arm": "terse",
+  "item": "S12",
+  "seed": 2,
+  "feature": "Feature: Conduit Acceptance Requirements\n\n  @item:S12\n    Scenario: Article list pagination\n      Given the user scrolls to the pagination bar on the home page article list\n      When the user clicks page 2\n      Then different articles should be displayed after changing pages\n",
+  "spec": "generated/PR_terra_terse_S12_s2.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "在點擊換頁之前確保首頁文章已載入可見以讀取初始標題，屬於操作前的可見性守衛。",
+      "assertion": "await expect(articlePreviews.first()).toBeVisible()",
+      "line": 20
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此斷言出現在點擊第 2 頁之前，用來確保後續操作有對象，屬可見性守衛。",
+      "assertion": "await expect(pageTwo).toBeVisible()",
+      "line": 28
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求換頁後顯示不同文章，並未要求分頁按鈕需呈現 active 樣式。",
+      "assertion": "await expect(pageTwo).toHaveClass(/active/)",
+      "line": 31
+    },
+    {
+      "class": "P0",
+      "citation": "換頁後看到的是不一樣的文章。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出換頁後看到的是不一樣的文章，斷言檢查換頁後第一篇文章標題不同於第一頁標題，是該要求的具體無歧義驗證。",
+      "assertion": "await expect(articlePreviews.first().locator('h1')).not.toHaveText( firstPageArticleTitle ?? '', )",
+      "line": 32
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "在點擊換頁之前確保首頁文章已載入可見以讀取初始標題，屬於操作前的可見性守衛。",
+        "assertion": "await expect(articlePreviews.first()).toBeVisible()",
+        "line": 20
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言出現在點擊第 2 頁之前，用來確保後續操作有對象，屬可見性守衛。",
+        "assertion": "await expect(pageTwo).toBeVisible()",
+        "line": 28
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求換頁後顯示不同文章，並未要求分頁按鈕需呈現 active 樣式。",
+        "assertion": "await expect(pageTwo).toHaveClass(/active/)",
+        "line": 31
+      },
+      {
+        "class": "P0",
+        "citation": "換頁後看到的是不一樣的文章。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出換頁後看到的是不一樣的文章，斷言檢查換頁後第一篇文章標題不同於第一頁標題，是該要求的具體無歧義驗證。",
+        "assertion": "await expect(articlePreviews.first().locator('h1')).not.toHaveText( firstPageArticleTitle ?? '', )",
+        "line": 32
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言在點選第 2 頁之前僅確認文章預覽存在可供讀取與後續比較，驗收要求與 Gherkin 都未主張此時首篇文章的可見性。",
+        "assertion": "await expect(articlePreviews.first()).toBeVisible()",
+        "line": 20
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於點擊第 2 頁之前，且驗收要求與 Gherkin 都未主張該連結在此時可見，僅是確保後續點擊有對象的守衛。",
+        "assertion": "await expect(pageTwo).toBeVisible()",
+        "line": 28
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只要求換頁後顯示不同文章，未主張第 2 頁連結必須具有 active CSS class。",
+        "assertion": "await expect(pageTwo).toHaveClass(/active/)",
+        "line": 31
+      },
+      {
+        "class": "P0",
+        "citation": "換頁後看到的是不一樣的文章。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "點選第 2 頁後首篇文章標題不同於第一頁首篇標題，是驗證換頁後文章不同的直接觀測。",
+        "assertion": "await expect(articlePreviews.first().locator('h1')).not.toHaveText( firstPageArticleTitle ?? '', )",
+        "line": 32
+      }
+    ]
+  },
+  "gen_wall_seconds": 4.0,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

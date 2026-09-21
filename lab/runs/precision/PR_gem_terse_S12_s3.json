@@ -1,0 +1,129 @@
+{
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "terse",
+  "item": "S12",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S12\n    Scenario: Article list pagination\n      Given the user is on the article list on the home page\n      When the user scrolls to the pagination bar and clicks page 2\n      Then different articles are displayed after changing the page\n",
+  "spec": "generated/PR_gem_terse_S12_s3.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此斷言出現在點擊換頁操作之前，用於確認分頁列已載入可見的守衛斷言，非需求層的主張。",
+      "assertion": "await expect(paginationNav).toBeVisible()",
+      "line": 10
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "在點擊換頁動作前確認第 1 頁文章可見以便後續抓取文字作為比對基準，屬於非需求層的可見性守衛。",
+      "assertion": "await expect(articleHeadings.first()).toBeVisible()",
+      "line": 14
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求換頁後看到不同的文章，並未要求分頁按鈕必須具備 aria-current 屬性。",
+      "assertion": "await expect(page2Button).toHaveAttribute('aria-current', 'page').catch(async () => { // 若沒有 aria-current，確保第 1 頁與第 2 頁文章內容有所變更 })",
+      "line": 23
+    },
+    {
+      "class": "P0",
+      "citation": "換頁後看到的是不一樣的文章。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出換頁後看到不一樣的文章，斷言檢查第二頁標題清單不等於第一頁標題即為其直接操作化驗證。",
+      "assertion": "await expect(async () => { const secondPageHeadings = await articleHeadings.allInnerTexts(); expect(secondPageHeadings.length).toBeGreaterThan(0); expect(secondPageHeadings).not.toEqual(firstPageHeadings); }).toPass()",
+      "line": 28
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言出現在點擊換頁操作之前，用於確認分頁列已載入可見的守衛斷言，非需求層的主張。",
+        "assertion": "await expect(paginationNav).toBeVisible()",
+        "line": 10
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "在點擊換頁動作前確認第 1 頁文章可見以便後續抓取文字作為比對基準，屬於非需求層的可見性守衛。",
+        "assertion": "await expect(articleHeadings.first()).toBeVisible()",
+        "line": 14
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求換頁後看到不同的文章，並未要求分頁按鈕必須具備 aria-current 屬性。",
+        "assertion": "await expect(page2Button).toHaveAttribute('aria-current', 'page').catch(async () => { // 若沒有 aria-current，確保第 1 頁與第 2 頁文章內容有所變更 })",
+        "line": 23
+      },
+      {
+        "class": "P0",
+        "citation": "換頁後看到的是不一樣的文章。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出換頁後看到不一樣的文章，斷言檢查第二頁標題清單不等於第一頁標題即為其直接操作化驗證。",
+        "assertion": "await expect(async () => { const secondPageHeadings = await articleHeadings.allInnerTexts(); expect(secondPageHeadings.length).toBeGreaterThan(0); expect(secondPageHeadings).not.toEqual(firstPageHeadings); }).toPass()",
+        "line": 28
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於點選第 2 頁之前，驗收要求與 Gherkin 都未主張分頁列在此時可見，僅是確保後續操作有對象的守衛。",
+        "assertion": "await expect(paginationNav).toBeVisible()",
+        "line": 10
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於點擊第 2 頁之前，且驗收要求與 Gherkin 都未主張此時文章標題的可見性，僅是取得初始列表前的守衛。",
+        "assertion": "await expect(articleHeadings.first()).toBeVisible()",
+        "line": 14
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只要求換頁後顯示不同文章，未主張第 2 頁按鈕必須具有 aria-current=\"page\" 屬性。",
+        "assertion": "await expect(page2Button).toHaveAttribute('aria-current', 'page').catch(async () => { // 若沒有 aria-current，確保第 1 頁與第 2 頁文章內容有所變更 })",
+        "line": 23
+      },
+      {
+        "class": "P0",
+        "citation": "換頁後看到的是不一樣的文章。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在換頁後確認文章標題列表非空且與第一頁不同，直接驗證換頁後顯示不同文章。",
+        "assertion": "await expect(async () => { const secondPageHeadings = await articleHeadings.allInnerTexts(); expect(secondPageHeadings.length).toBeGreaterThan(0); expect(secondPageHeadings).not.toEqual(firstPageHeadings); }).toPass()",
+        "line": 28
+      }
+    ]
+  },
+  "gen_wall_seconds": 32.5,
+  "probe_steps": 5,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
-"""跑一格 (條件 × 情境 × seed)：讓受測 agent 產一支測試，然後量它。
+"""Run one cell (condition x scenario x seed): generate a test, then measure it.
 
-量什麼：
-  valid        產出的檔案跑得起來
-  clean_pass   在乾淨站台上通過（dry-run）
-  detected     在對應的注入缺陷上失敗（＝真的抓到了）
-  tokens/秒    受測 agent 花的預算（totalTokenCount，含 thinking）
-  gate_rounds  被 gate 退回修正幾次
-  improvised_probe / wanted_walk   它有沒有想用另一個管道
+Measures:
+  valid        the generated file runs
+  clean_pass   passes on a clean application (dry-run)
+  detected     fails on the matching injected fault
+  tokens/s     budget used by the generator (totalTokenCount, including thinking)
+  gate_rounds  number of gate rejections
+  improvised_probe / wanted_walk   attempts to use another exploration channel
 
-用法：
+Usage:
   python3 harness/run.py --cond C2 --scenario S10 --seed 1
-  python3 harness/run.py --cond C0 --scenario S10 --seed 1 --no-measure   # 只產不量
+  python3 harness/run.py --cond C0 --scenario S10 --seed 1 --no-measure   # generate only
 """
 import argparse
 import json
@@ -25,7 +25,7 @@ import sandbox
 
 
 def checkpoint(stage, budget, log):
-    """每次模型／工具回合落盤，整格 timeout 時仍能診斷原因。"""
+    """Persist every model/tool turn so a timed-out cell can still be diagnosed."""
     common.RUNS.mkdir(exist_ok=True)
     path = common.RUNS / f"{CURRENT_SPEC['name']}.progress.json"
     tmp = path.with_suffix(".tmp")
@@ -33,7 +33,7 @@ def checkpoint(stage, budget, log):
                               ensure_ascii=False, indent=2))
     tmp.replace(path)
 
-# 情境 → (需求敘述, 對應的注入缺陷)
+# scenario -> (requirement, injected fault)
 SCENARIOS = {
     "S02": ("以已被註冊的 email 再次註冊時，畫面要出現錯誤訊息，而且不會變成登入狀態。", "F07"),
     "S03": ("登入時密碼錯誤，要停留在登入頁並顯示錯誤訊息，不會進入首頁。", "F08"),
@@ -49,7 +49,7 @@ SCENARIOS = {
     "S12": ("文章列表換到第二頁時，顯示的是下一批文章，不會重複第一頁已經出現過的文章。", "F03"),
 }
 
-# 契約只有 OPEN <route> [--as-user]；舊的 --click 已移除，留著會讓模型用到不被執行的語法。
+# Only OPEN <route> [--as-user] is supported; no other flags are advertised.
 OPEN_RE = re.compile(r'^\s*OPEN\s+(\S+)(\s+--as-user)?\s*$', re.M)
 FIND_RE = re.compile(r'^\s*FIND\s+"([^"]+)"\s*$', re.M)
 LOCATOR_RE = re.compile(r'^\s*LOCATOR\s+(\S+)\s*$', re.M)
@@ -64,7 +64,7 @@ def extract_final(text: str):
 
 def agent_loop(cond: str, scenario_text: str, budget: common.Budget, log: list,
                model: str | None = None):
-    """model 省略時用 common.MODEL；指定時只換下游生成器，走查工具與量測不變。"""
+    """`model` replaces only the generator; exploration and measurement are unchanged."""
     cfg = conditions.CONDITIONS[cond]
     prompt = conditions.build_prompt(cond, scenario_text, str(common.LAB))
     messages = [{"role": "user", "text": prompt}]
@@ -72,7 +72,7 @@ def agent_loop(cond: str, scenario_text: str, budget: common.Budget, log: list,
     try:
         return _agent_steps(cfg, messages, budget, log, counters, model)
     finally:
-        # 不管是正常結束、沒收斂還是丟例外，具名 session 都要關；否則 browser 會留下來。
+        # Always close the named session so the browser does not linger.
         if cfg["explore"] == "walk" and counters["probe_steps"]:
             common.close_probe_session(CURRENT_SPEC["name"])
 
@@ -140,7 +140,7 @@ def _agent_steps(cfg, messages, budget, log, counters, model=None):
 
 
 def gate_loop(cond, code, scenario_text, budget, log, messages_tail, max_rounds=3):
-    """C2 系列：靜態 gate ＋ dry-run，沒過就退回要求修正。"""
+    """C2 conditions: static gate + dry-run; failures are returned for revision."""
     rounds = 0
     rejections = []
     while True:
@@ -172,7 +172,7 @@ def gate_loop(cond, code, scenario_text, budget, log, messages_tail, max_rounds=
 
 
 def self_review(code, scenario_text, budget, log, target_tokens, max_rounds=5):
-    """C1S：只給需求／規範／自身程式碼，不給測試執行結果。"""
+    """C1S: self-review from requirement, rules, and own code, without execution results."""
     rounds = 0
     while rounds < max_rounds and (rounds == 0 or budget.total_tokens < target_tokens):
         prompt = (f"需求：{scenario_text}\n\n規範：\n{conditions.RULES}\n"
@@ -282,8 +282,8 @@ def main():
     result["wall_seconds"] = round(time.time() - t0, 1)
 
     common.RUNS.mkdir(exist_ok=True)
-    # 只產不量時寫 .gen.json，measure.py 會把它補成 .json
-    # 未接受／未產出的 run 已是最終結果，必須進分析分母；只有待量測者留 .gen.json。
+    # Generate-only runs are written as .gen.json for measure.py to complete. Rejected or
+    # empty runs are final and stay in the denominator.
     suffix = ".gen.json" if args.no_measure and result.get("accepted", False) else ".json"
     (common.RUNS / f"{run_id}{suffix}").write_text(json.dumps(result, ensure_ascii=False, indent=2))
     (common.RUNS / f"{run_id}.log.json").write_text(json.dumps(log, ensure_ascii=False, indent=2))

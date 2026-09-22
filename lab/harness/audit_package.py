@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""把 final P2／P4 整理成人工可以快速稽核的樣子。不呼叫任何模型，不改任何判定。
+"""Render the final P2 and P4 labels as an audit package. Calls no model, changes no label.
 
-輸出（都在 ../audit/）：
-  P4_audit.md / P4_audit.csv   55 條 confirmed P4：需求、Gherkin、斷言與前後文、兩層判定理由、
-                                公開材料範圍、以及機械關鍵字命中（僅供稽核導航）
-  P2_audit.md / P2_audit.csv   143 條 P2：斷言、引用位置、模型給的摘錄、以及**該檔原始行**
+Outputs (in ../audit/):
+  P4_audit.md / P4_audit.csv   every confirmed P4: requirement, Gherkin, assertion in context,
+                                both judgments, and keyword hits in the public references
+  P2_audit.md / P2_audit.csv   every P2: assertion, citation, model quote, and the cited lines
 
-「關鍵字命中」是從斷言裡抽出字串常數與識別字，在公開材料裡 grep 的結果。它只告訴稽核者
-「最接近的材料大概在哪」，**不參與任何判定**。
+Keyword hits grep string literals and identifiers from the assertion in the public references.
+They only help navigation and take no part in any label.
 """
 import csv
 import json

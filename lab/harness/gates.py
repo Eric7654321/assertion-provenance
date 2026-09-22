@@ -1,9 +1,8 @@
-"""機械化 gate：不通過就把理由退回去要求修正（只有 C2 系列會執行）。
+"""Mechanical gate for the C2 conditions: failures are returned to the model for revision.
 
-分兩類，之後 RQ2 要拆開看哪一類有用：
-  form      形式檢查（有沒有斷言、有沒有恆真斷言、有沒有硬等）
-  behavior  靜態啟發式（有沒有值斷言、狀態類需求是否寫了回查）；不證明語義正確
-  dry-run   在 run.py 執行，回饋記為 runtime
+  form      assertions present, no tautological assertions, no hard waits
+  behavior  static heuristics (value assertions, state re-checks); not a semantic proof
+  dry-run   executed in run.py and reported as runtime feedback
 """
 import re
 
@@ -13,7 +12,7 @@ STATE_WORDS = ("追蹤", "unfollow", "follow", "刪除", "delete", "favorite", "
 
 
 def check_static(code: str, scenario: str):
-    """回傳 [(類別, 訊息), ...]；空 list 代表通過。"""
+    """Return [(category, message), ...]; an empty list means pass."""
     problems = []
 
     if "expect(" not in code:

@@ -1,16 +1,13 @@
 #!/usr/bin/env python3
-"""公開 Conduit 的驗收要求，改寫成真實 QA checklist item 的形狀。
+"""Conduit acceptance requirements in QA checklist-item form (title, steps, expected result, note).
 
-為什麼要這個：先前的 OA 是一段把動作與預期揉在同一句的中文散文，而 QA checklist item 是分欄位的
-（標題、步驟、預期結果、附註）。偏強偏弱是從欄位之間的落差長出來的 ——
-`steps` 詳細而 `expect` 精簡時，Then 要嘛吸收 steps 的細節（偏強）、要嘛跟 expect 一樣空（偏弱）；
-`note` 的限定條件要嘛被丟掉（偏弱）要嘛被寫死（偏強）。散文 OA 把這些落差全抹平了。
-
-行為與 G1/G2 相同，只有寫法不同 —— 三組共用同一批行為，是配對操弄。
-出處仍是 RealWorld 官方 E2E（commit ebbcdeb8d55b42a3a613c787560498b8ef10003f），見 ../OA_DRAFT_V2.md。
+Over- and under-claiming arise from gaps between fields: detailed `steps` with a brief `expect`,
+or qualifiers in `note`. Single-sentence prose removes those gaps, so the fields are kept.
+Behaviors match G1/G2; only the format differs. Derived from the RealWorld E2E suite
+(commit ebbcdeb8d55b42a3a613c787560498b8ef10003f).
 """
 
-# itemId 用研究自己的編號；真實 checklist 是數字 id，這裡沿用 H0x/S0x 以便跟 G1/G2 對照。
+# H0x/S0x ids match G1/G2.
 ITEMS = {
     "H01": {
         "testcase": "文章標籤與編輯",
@@ -108,12 +105,11 @@ ITEMS = {
 }
 
 
-# ── 精確度操弄（事前登記的改寫規則）────────────────────────────────────────────
-# 只改 `expect` 一欄，`testcase` / `steps` / `note` / `tags` 逐字相同。
-# 規則：拿掉具體數值、具體控制項名稱、以及逐條列出的否定條款，
-#       改用「反映這次操作」「跟著更新」「符合設定」這類不指定判準的說法。
-#       **描述的行為完全相同，變的只有判準寫得多明確。**
-# 這是刺激層的操弄（研究者可以控制），不是模型產出層的改寫。
+# ── Precision manipulation (rewriting rule fixed in advance) ───────────────────────
+# Only `expect` differs; `testcase` / `steps` / `note` / `tags` are identical.
+# Concise: drop concrete values, control names, and enumerated negations, and use
+# criterion-free wording such as "reflects the action" or "matches the setting".
+# These variants manipulate the input requirement, not model-generated artifacts.
 TERSE_EXPECT = {
     "H01": "文章頁的內容與輸入一致；編輯送出後頁面跟著更新。",
     "S02": "第二次註冊不會成功。",
@@ -127,7 +123,7 @@ TERSE_EXPECT = {
     "S12": "換頁後看到的是不一樣的文章。",
 }
 
-# 精確版：把每條可檢查的判準寫明。S10 原本就是精簡寫法，這裡補上它的精確版。
+# Precise: every checkable criterion stated (S10's base text is concise, so it is added here).
 PRECISE_EXPECT = {
     "S10": "收藏後按鈕切換成取消收藏的狀態，且收藏計數由 0 變成 1。",
 }
@@ -140,7 +136,7 @@ def expect_of(item_id, precision="precise"):
 
 
 def render(item_id, precision="precise"):
-    """整組 prompt 裡一條 item 的區塊格式。"""
+    """Format one item as a block of the group prompt."""
     r = ITEMS[item_id]
     body = f"--- steps ---\n{r['steps']}\n--- expect ---\n{expect_of(item_id, precision)}\n"
     if r["note"]:

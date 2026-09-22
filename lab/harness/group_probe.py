@@ -1,12 +1,9 @@
 #!/usr/bin/env python3
-"""整組 Gate 2：一次餵 N 條 OA，看回譯與盲回譯會不會改動 Gherkin。
+"""Batched Gate 2: requirements are processed as a group rather than one at a time.
 
-跟 gate2_probe.py 的差別只有一個：**工作單位是組，不是條**。
-prompt 形狀：A 整組產出，一條 item 一個 Scenario、帶 @item:<id>，另外列「OA 漏掉的判準」；
-B 只拿整份 .feature 還原。
-
-不產測試碼、不碰 app、不碰缺陷。
-用法：python3 harness/group_probe.py [--seeds 3] [--group G1]
+A writes one Scenario per item, tagged @item:<id>, plus a list of criteria it believes the
+requirements omit; B restates from the whole .feature only. No tests, app, or faults.
+Usage: python3 harness/group_probe.py [--seeds 3] [--group G1]
 """
 import argparse
 import json
@@ -23,16 +20,12 @@ from gate2_probe import OA_V2
 ROOT = common.RUNS / "group-probe"
 CONDITIONS = bp.CONDITIONS
 
-# 固定組成、固定順序，三組共用同一份初始 .feature。難度混合：
-# 四條多子句（H01–H04，見 ../OA_DRAFT_V2.md）＋ 六條現有單句。
+# Fixed composition and order: four multi-clause (H01-H04) and six single-sentence items.
 ITEMS = ["H01", "S02", "H03", "S07", "H02", "S09", "H04", "S10", "S03", "S12"]
 
-# 模糊化改寫規則（事前登記，逐條一致套用）：
-#   保留「做了什麼動作」與「大致會看到什麼」；
-#   拿掉所有具體數值、具體按鈕文字、具體位置、以及逐條列出的否定條款；
-#   改用「看得到…的結果」「會跟著更新」「恢復原狀」這類不指定判準的說法。
-# 目的是製造「Gherkin 非補細節不可」的情境 —— 過度主張的來源。
-# 底下的行為與明確版完全相同，變的只有寫法。
+# Vague rewriting rule, fixed in advance and applied uniformly: keep the action and the
+# rough outcome; drop concrete values, control labels, positions, and enumerated negations.
+# Behavior is identical to the clear version; only the wording differs.
 OA_VAGUE = {
     "H01": "建立一篇帶標籤的文章，發佈後看得到文章內容和標籤。之後編輯它，改掉標題、把標籤拿掉，文章頁會跟著更新。",
     "S02": "用已經註冊過的 email 再註冊一次，會被擋下來。",
@@ -46,17 +39,17 @@ OA_VAGUE = {
     "S12": "文章列表換頁之後看到的是不一樣的文章。",
 }
 
-# (條目, OA 寫法)。三組的行為集合相同，唯一差別是 OA 怎麼寫 —— 配對操弄。
-#   clear  多子句散文（動作與預期揉在同一句）
-#   vague  模糊散文（拿掉具體值與判準）
-#   item   真實 checklist item 的分欄位形狀（testcase / steps / expect / note / tags）
+# (items, requirement format). All groups share the same behaviors; only the format varies.
+#   clear  multi-clause prose
+#   vague  prose without concrete values or criteria
+#   item   checklist-item fields (testcase / steps / expect / note / tags)
 GROUPS = {
     "G1": (ITEMS, "clear"),
     "G2": (ITEMS, "vague"),
-    "G3": (ITEMS, "item"),          # item 形狀，expect 精確
+    "G3": (ITEMS, "item"),          # item format
     "G4": (ITEMS, "item_terse"),
-    # G3 是精確度操弄之前產的（S10 還是精簡寫法），刺激與 G5 不同，不可當精確臂用。
-    "G5": (ITEMS, "item_precise"),    # item 形狀，expect 精簡（只差這一欄）
+    # G3 predates the precision manipulation (S10 still concise); not the precise arm.
+    "G5": (ITEMS, "item_precise"),    # item format, precise expected results
 }
 
 
@@ -71,9 +64,9 @@ def oa_of(item_id, variant="clear"):
 
 
 def group_initial_prompt(items, variant="clear"):
-    """A：整組進去，一條一個 Scenario，帶 @item:<id>。"""
+    """A: the whole group in, one Scenario per item tagged @item:<id>."""
     if variant.startswith("item"):
-        # oa_items.render() 已經是完整的區塊格式，不要再包第二層
+        # render() already returns a complete requirement block.
         oa = "\n\n".join(oa_of(i, variant) for i in items)
     else:
         oa = "\n\n".join(f"### {i} 驗收要求\n\n```\n{oa_of(i, variant)}\n```" for i in items)
@@ -91,7 +84,7 @@ def group_initial_prompt(items, variant="clear"):
 
 
 def group_translation_prompt(feature, oa_block=None):
-    """B：只吃整份 .feature。盲組結構上拿不到 OA。"""
+    """B: the .feature only; the blind arm never receives the requirement."""
     prompt = (
         "下面是一組 Gherkin scenario。**逐條**用**繁體中文**還原：\n\n"
         "1. 這條在驗什麼（一句話）\n"
@@ -121,7 +114,7 @@ ITEM_RE = re.compile(r'@item:([A-Za-z0-9_]+)')
 
 
 def scenarios_by_item(feature):
-    """把整份 .feature 依 @item tag 切成 {item_id: 該段文字}，供逐條比對。"""
+    """Split a .feature by @item tag into {item_id: text}."""
     out, current, buf = {}, None, []
     for line in feature.splitlines():
         m = ITEM_RE.search(line)
@@ -144,9 +137,8 @@ def prepare(group, seed):
     oa_block = "\n\n".join(f"### {i}\n{oa_of(i, variant)}" for i in items)
     if target.exists():
         data = json.loads(target.read_text())
-        # ⚠️ 要比對的是**實際送出的 prompt**，不是 item 清單。2026-09-21 實例：加入精確度操弄時
-        # render() 的預設改成 precise，S10 的 expect 跟著變，而 item 清單一個字都沒變 ——
-        # 只比對清單的話，舊初稿（精簡版 S10 產的）會被默默當成「精確」那一臂沿用。
+        # Compare the full prompt actually sent, not the item list: a requirement's text can
+        # change while the list stays the same, and a stale draft would then be reused.
         fresh = group_initial_prompt(items, variant)
         if data["items"] != items or data["model"] != common.MODEL or data["prompt"] != fresh:
             raise RuntimeError(
@@ -156,7 +148,7 @@ def prepare(group, seed):
     budget = common.Budget()
     prompt = group_initial_prompt(items, variant)
     reply = bp.call(prompt, budget)
-    feature = bp.feature_from_reply(reply)          # 只取 gherkin 區塊，A 的「漏掉的判準」不進 B
+    feature = bp.feature_from_reply(reply)          # Only the gherkin block reaches B, not A's list of omitted criteria.
     data = {"group": group, "seed": seed, "items": items, "oa_variant": variant,
             "model": common.MODEL,
             "thinking_budget": common.THINKING_BUDGET, "prompt": prompt,

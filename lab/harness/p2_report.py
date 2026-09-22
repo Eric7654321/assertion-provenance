@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""P2 核對完成後的最終 provenance 分布，以及代表案例。
+"""Final provenance distribution after reference checking, with representative cases.
 
-只讀 runs/precision（主判定器結果）與 runs/p2check（P2 核對結果），不呼叫任何模型。
-P4 → 三種：P2 confirmed ／ P4 confirmed ／ P2/P4 unresolved。其餘類別不動。
+Reads runs/precision (primary judge) and runs/p2check only; calls no model. Provisional P4
+splits into P2 confirmed / P4 confirmed / P2/P4 unresolved; other classes are unchanged.
 
-用法：python3 harness/p2_report.py [--examples 3]
+Usage: python3 harness/p2_report.py [--examples 3]
 """
 import argparse
 import json
@@ -70,7 +70,7 @@ def main():
         beh = a["P0"] + a["P1"] + a["P2"] + a["P4"] + a["unresolved"] + a["P4 未核對"]
         orig_p4 = a["P2"] + a["P4"] + a["unresolved"] + a["P4 未核對"]
         label = f"{NAME[key[0]]} / {NAME[key[1]]}"
-        # ⚠️ 未核對那欄一定要印：沒印的話未核對的條目不在任何一欄，比例會被算成 0%。
+        # Always print the unchecked column; otherwise unchecked items silently disappear.
         print(f"{label:18s} {beh:>6} {a['P0']:>4} {a['P1']:>4} {a['P2']:>4} {a['P4']:>4} "
               f"{a['unresolved']:>4} {a['P4 未核對']:>5} {a['P4'] / beh * 100:>8.1f}% "
               f"{(a['P4'] + a['unresolved']) / beh * 100:>11.1f}% "

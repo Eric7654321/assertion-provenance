@@ -1,10 +1,8 @@
-"""執行受測 agent 寫的拋棄式腳本。
+"""Execute disposable probe scripts with best-effort risk reduction.
 
-⚠️ 這是**減害**，不是沙箱：腳本要能啟動瀏覽器，就必須放行 child process，
-而 child process 一旦放行，Node 的權限模型就管不到它。做到的事：
-  - 檔案**寫入**只開一個暫存目錄（讀是全開的，Playwright 啟動會探測大量系統路徑）
-  - 明顯危險的字樣直接拒收，不執行
-  - 逾時砍掉
+This is not a security boundary: child processes must remain enabled for browser
+automation. Writes are restricted to temporary paths, risky tokens are rejected,
+and execution is time-bounded.
 """
 import pathlib
 import os
@@ -33,7 +31,7 @@ def check(code: str):
 
 
 def run_script(code: str, timeout: int = 90):
-    """回傳 (ok, 輸出)。ok=False 代表被拒收或執行失敗。"""
+    """Return (ok, output); ok=False means rejected or failed."""
     ok, why = check(code)
     if not ok:
         return False, f"REFUSED: {why}"
@@ -42,8 +40,7 @@ def run_script(code: str, timeout: int = 90):
         script.write_text(code)
         cmd = [
             "node", "--permission", "--allow-child-process",
-            # 讀全開、寫只開暫存目錄：Playwright 啟動時會探測一堆系統路徑，
-            # 逐條放行擋不完；真正要防的是「寫壞東西」。
+            # Browser startup probes system paths; writes remain temporary-only.
             "--allow-fs-read=*", f"--allow-fs-write={tmp}", "--allow-fs-write=/tmp",
             str(script),
         ]

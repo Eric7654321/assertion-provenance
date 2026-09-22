@@ -1,11 +1,11 @@
-"""實驗條件：兩個因子。
+"""Generation conditions (earlier pilot design; two factors).
 
-A 規範怎麼生效：不說 / 寫成文字 / 文字＋自我檢查 / 文字＋機械化 gate
-B 走查管道：  walk＝結構化走查工具（OPEN → 無障礙樹）
-              script＝沒有走查工具，只能自己寫拋棄式腳本丟給我跑
+A  how test rules are enforced: none / written / written + self-review / written + mechanical gate
+B  exploration channel: walk = structured exploration tool (OPEN -> accessibility tree);
+                        script = no tool, only disposable scripts executed by the harness
 
-B 這個因子把兩件事分開量：**給它什麼管道**（可控），以及**它想用哪個**（可觀測，見 run.py 的
-improvised_probe / wanted_walk 計數）。
+For B, the channel offered is controlled and the channel the model tries to use is observed
+(run.py counts improvised_probe and wanted_walk).
 """
 
 BASE = """你要為下面這條需求寫一支 Playwright 測試（TypeScript）。
@@ -64,8 +64,8 @@ SELF_CHECK = """輸出 FINAL 之前，先逐條檢查上面五條規範，把不
 把檢查過程寫出來，再輸出 FINAL。
 """
 
-# C2F 是 RQ2 的消融條件：形式檢查＋dry-run；C2 再加行為檢查。
-# dry-run 會給模型執行錯誤回饋，C1S 不會；比較時必須另外報告此差異。
+# C2F is the ablation with form checks + dry-run; C2 adds behavior checks.
+# Dry-run feeds execution errors back to the model, which C1S does not.
 CONDITIONS = {
     "C0":        {"rules": False, "self_check": False, "gates": False, "explore": "walk",   "max_steps": 6},
     "C1":        {"rules": True,  "self_check": False, "gates": False, "explore": "walk",   "max_steps": 6},
@@ -81,11 +81,11 @@ CONDITIONS = {
 
 def build_prompt(cond: str, scenario: str, lab_path: str) -> str:
     cfg = CONDITIONS[cond]
-    # 用 replace 不用 format：提示詞裡有 `{ status, json }` 這種字面大括號
+    # replace() rather than format(): the prompt contains literal braces.
     explore = {"walk": WALK, "script": SCRIPT, "none": NONE}[cfg["explore"]]
     explore = explore.replace("{max_steps}", str(cfg["max_steps"])).replace("{lab}", lab_path)
     text = BASE.replace("{explore}", explore).replace("{scenario}", scenario)
     if cfg["rules"]:
         text += "\n" + RULES
-    # C1S 先用與 C1 相同的初始 prompt，另在 run.py 花指定預算做自我檢查。
+    # C1S shares C1's initial prompt and adds a budgeted self-review in run.py.
     return text

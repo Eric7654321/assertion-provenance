@@ -60,14 +60,11 @@ def translation_prompt(feature, oa=None):
 def assert_blind_prompt_is_clean(prompt, oa, feature=None):
     """Persistable mechanical evidence that OA never enters the blind translator."""
     atoms = [line.strip() for line in oa.splitlines() if line.strip()]
-    # 整行比對擋得住整段貼過去，但擋不住只抄半句。OA 是一兩句中文時整行只有一個樣本，
-    # 所以另外用 8 字滑動窗掃一遍；論文要引用的是這個檢查，不是「我們沒有傳 OA」這句話。
+    # Check both complete lines and shorter windows for accidental requirement leakage.
     window = 8
     grams = {atom[i:i + window] for atom in atoms for i in range(max(1, len(atom) - window + 1))
              if len(atom) >= window}
-    # .feature 本來就是盲組的合法輸入，它從 OA 衍生而來，帶著 OA 的英文詞是正常的
-    # （例：OA 寫「按鈕變成 Unfollow」，Gherkin 也會出現 Unfollow）。
-    # 洩漏的定義是「OA 的內容從 .feature 以外的管道進到 prompt」，所以要先把 feature 扣掉。
+    # The Gherkin is legitimate blind-condition input, so exclude it before scanning.
     rest = prompt.replace(feature, "") if feature else prompt
     leaked = [atom for atom in atoms if atom in rest]
     leaked_grams = sorted(g for g in grams if g in rest)

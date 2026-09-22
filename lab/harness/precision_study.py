@@ -1,17 +1,7 @@
 #!/usr/bin/env python3
-"""正式研究：OA 的判準精確度 → A 產出的 Gherkin → 最終測試斷言的可追溯性。
+"""Run the paired requirement-precision provenance study.
 
-```
-IV   OA 的 expect 精確度（precise / terse）  ← 研究者控制的刺激，合法
-中介  A 整組產出的 Gherkin                    ← 模型產出，研究者完全不碰
-DV   最終測試每條斷言的 P0–P4 分布            ← provenance.py 判定（陽性對照 5/5）
-```
-
-與先前 `strength_to_detection.py` 的差別：**那支的 weak/strong Gherkin 有幾條是研究者手寫的**，
-兩份外部審核都打了這一點。這支整條鏈上沒有任何模型產物出自研究者之手。
-
-可續跑：已經有 spec 或已經有判定結果的格子會跳過。
-用法：python3 harness/precision_study.py [--seeds 3] [--items H01,S10,...]
+Completed cells are loaded from disk, allowing interrupted runs to resume.
 """
 import argparse
 import json
@@ -25,12 +15,12 @@ import provenance as prov
 import oa_items
 
 ROOT = common.RUNS / "precision"
-# 精確臂是 G5 不是 G3：G3 在精確度操弄加入之前產出，當時 S10 的 expect 是精簡寫法。
+# G5 contains the precise requirements; G4 contains the concise variants.
 ARMS = {"precise": "G5", "terse": "G4"}
 
 
 def scenario_feature(group_feature, item):
-    """從整組 .feature 切出一條 scenario，補上 Feature 標頭給下游。"""
+    """Extract one scenario from the group .feature and prepend the Feature header."""
     body = gp.scenarios_by_item(group_feature).get(item)
     if not body:
         return None
@@ -38,10 +28,9 @@ def scenario_feature(group_feature, item):
     return head + "\n\n  " + body.replace("\n", "\n  ").strip() + "\n"
 
 
-# 下游生成器（研究要泛化的對象）。A 固定 Gemini，兩個下游吃同一份 Gherkin，配對設計。
+# Both downstream generators receive the same Gherkin scenario.
 GEN_MODELS = {"gem": "gemini-3.8-flash", "terra": "gpt-5.6-terra"}
-# 判定器兩個都跑：主表用 Gemini，terra 用來算 inter-judge agreement。
-# 兩者都通過凍結判準 v1 的陽性對照（5/5）。
+# Both judges apply the same frozen criterion; Gemini is the primary judge.
 JUDGES = {"gem": "gemini-3.8-flash", "terra": "gpt-5.6-terra"}
 PRIMARY_JUDGE = "gem"
 
@@ -67,13 +56,13 @@ def main():
     budgets = {k: common.Budget() for k in ("gen_gem", "gen_terra", "judge_gem", "judge_terra")}
     records = []
 
-    # 未鎖版本的別名：開跑前打一次 canary，跑完再打一次比對
+    # Canary responses detect changes behind unversioned model aliases.
     canary_before = {k: common.canary(m) for k, m in GEN_MODELS.items()}
     print("canary（開跑前）：", {k: v["resolved"] for k, v in canary_before.items()}, flush=True)
 
     for arm, group in ARMS.items():
         for seed in range(1, args.seeds + 1):
-            base, _ = gp.prepare(group, seed)      # A 整組產一次；兩個下游共用這一份
+            base, _ = gp.prepare(group, seed)
             for item in items:
                 feat = scenario_feature(base["feature"], item)
                 if feat is None:
@@ -139,7 +128,7 @@ def main():
                       f"{len(sub):>4} {beh:>6} {a['P0']:>4} {a['P1']:>4} {a['P2']:>4} "
                       f"{a['P4']:>4} {pct:>8}")
 
-    # inter-judge agreement：同一條斷言兩個判定器給的 class 一不一樣
+    # Agreement is computed over paired classifications of the same assertions.
     pairs = [(x["class"], y["class"]) for r in records if "rows_by_judge" in r
              for x, y in zip(r["rows_by_judge"]["gem"], r["rows_by_judge"]["terra"])]
     if pairs:

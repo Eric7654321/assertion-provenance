@@ -1,27 +1,25 @@
 #!/usr/bin/env python3
-"""把生成的 spec 裡的斷言逐條抽出來。
+"""Extract the assertions of a generated spec, one per `expect(` invocation.
 
-為什麼要獨立一支並且自帶驗證：主結果是「每條斷言歸到 P0–P4」，
-抽取器漏抓或多抓會直接改變分母。今天已經因為「拿文字比對當主張的代理」犯錯三次，
-所以這支只做**機械抽取**，不做任何語意判斷。
+Missed or spurious extractions change the denominator of the P0--P4 distribution, so this
+module is purely mechanical and carries its own self-test. An assertion spans from `expect`
+through its balanced parentheses and chained matchers to the end of the statement, including
+a leading `await`.
 
-一條斷言 = 一個 `expect(` 呼叫，從 `expect` 起算括號配對，再吃到該敘述的分號為止。
-`await` 前綴會一併帶入（它是同一個敘述）。
-
-用法：python3 harness/assertions.py <spec.ts> [...]
+Usage: python3 harness/assertions.py <spec.ts> [...]
        python3 harness/assertions.py --selftest
 """
 import re
 import sys
 from pathlib import Path
 
-# `expect(`、`expect.poll(`、`expect.soft(` 都算。少了修飾詞那一段，
-# `expect.poll` 會整條抓不到 —— 而抓不到跟「這支沒有斷言」在統計上長得一樣。
+# `expect(`, `expect.poll(`, and `expect.soft(` all count; a missed modifier would be
+# indistinguishable from a test without assertions.
 ASSERT_START = re.compile(r'\bexpect\s*(?:\.\s*\w+\s*)?\(')
 
 
 def _strip_noncode(src):
-    """把字串與註解換成等長空白，避免括號配對被它們騙到。位置保持不變。"""
+    """Blank out strings and comments with equal-length spaces so offsets are preserved."""
     out = list(src)
     i, n = 0, len(src)
     while i < n:
@@ -56,7 +54,7 @@ def _strip_noncode(src):
 
 
 def extract(src):
-    """回傳 [{'text': 原文, 'line': 行號}]，依出現順序。"""
+    """Return [{'text': source, 'line': lineno}] in order of appearance."""
     bare = _strip_noncode(src)
     found, pos = [], 0
     while True:
@@ -64,7 +62,7 @@ def extract(src):
         if not m:
             return found
         start = m.start()
-        # 敘述可能以 await 開頭，往前吃掉它
+        # Include a leading `await`.
         head = bare.rfind('\n', 0, start) + 1
         prefix = src[head:start]
         if prefix.strip() in ('await', 'return await', 'return'):
@@ -78,7 +76,7 @@ def extract(src):
                 if depth == 0:
                     break
             i += 1
-        # 括號收完之後還有鏈式 matcher，吃到分號或換行結尾
+        # Consume chained matchers up to the semicolon or line end.
         j = i + 1
         while j < len(bare) and bare[j] not in ';\n':
             if bare[j] == '(':
@@ -97,17 +95,17 @@ def extract(src):
 SELFTEST = [
     ("await expect(a).toBeVisible();", 1, "await expect(a).toBeVisible()"),
     ("expect(a).toBe(1);\nexpect(b).toBe(2);", 2, None),
-    # 字串裡的 expect( 不算
+    # expect( inside a string
     ("const s = 'expect(fake)';\nawait expect(a).toBe(1);", 1, "await expect(a).toBe(1)"),
-    # 註解裡的不算
+    # expect( inside a comment
     ("// expect(nope).toBe(1)\nexpect(a).toBe(1);", 1, "expect(a).toBe(1)"),
-    # 巢狀括號
+    # nested parentheses
     ("await expect(page.getByRole('button', { name: 'x' })).toBeVisible();", 1, None),
-    # 跨行
+    # multi-line
     ("await expect(\n  page.locator('a')\n).toHaveText('b');", 1, None),
-    # expect.poll 這種鏈式
+    # chained expect.poll
     ("await expect.poll(() => f()).toEqual([1, 2]);", 1, None),
-    # 一行兩個
+    # two on one line
     ("expect(a).toBe(1); expect(b).toBe(2);", 2, None),
 ]
 
@@ -122,7 +120,7 @@ def selftest():
             bad = 1
             for g in got:
                 print(f"       {g}")
-    # 反證：規則拿掉就要紅（確認不是恆真）
+    # Negative check: disabling masking must fail.
     if len(extract("const s = 'expect(fake)';")) != 0:
         print("FAIL 字串遮蔽失效")
         bad = 1

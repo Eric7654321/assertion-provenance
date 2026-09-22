@@ -1,13 +1,10 @@
 #!/usr/bin/env python3
-"""Gate 2：A 產 Gherkin → B 盲回譯 → 獨立裁決者判強度。
+"""Gate 2: A writes Gherkin -> B back-translates -> an independent judge compares strength.
 
-跟先前 group_probe.py 的差別（那份把裁決與改寫混成一次呼叫，所以產出是被改寫的文本）：
-  * 第三步是**裁決**不是改寫，輸出 per-item 判定 + over-claim ledger，不是新的 .feature
-  * 裁決者比對的是「B 的還原 vs OA 原文」，不是「Gherkin vs OA」—— 回譯是代理
-  * 判定是結構化的，所以量測不再依賴文字比對（換字不會被算成效果）
-
-裁決者拿到 OA 與 B 的還原，但**拿不到 B 是哪一組**（盲或非盲），避免裁決被條件暗示。
-用法：python3 harness/gate2_verdict.py [--group G1,G2] [--seeds 3]
+The judge emits a structured per-item verdict and an over-claim ledger rather than a rewritten
+.feature, and compares B's restatement with the requirement, so measurement does not depend on
+text diffs. The judge sees the requirement and B's restatement but not which arm produced it.
+Usage: python3 harness/gate2_verdict.py [--group G1,G2] [--seeds 3]
 """
 import argparse
 import json
@@ -20,10 +17,11 @@ import group_probe as gp
 
 ROOT = common.RUNS / "gate2-verdict"
 
-# 研究者 2026-09-21 定義：
-#   回譯（self）    A 自己跑出結果、A 自己翻譯、A 自己判斷 —— 球員兼裁判，這是不做盲回譯的預設狀態
-#   盲回譯（blind）  換一支新的 B 只看 .feature 還原（拿不到 OA），再由拿得到 OA 的裁決者比對
-# 兩臂的裁決都看得到 OA；差別在**還原那一步是不是 A 自己、有沒有被 OA 錨定**。
+# Operational verdict labels used by the study.
+#   self   A writes, restates, and judges its own Gherkin in the same conversation
+#   blind  a fresh B restates from the .feature alone, without the requirement
+# Both arms are judged against the requirement; they differ in who restates and whether
+# the restatement can be anchored on the requirement.
 ARMS = ("self", "blind")
 
 
@@ -53,7 +51,7 @@ def parse_verdicts(reply):
 
 
 def run(group, seed):
-    base, oa_block = gp.prepare(group, seed)      # 沿用同一份初始 .feature，三組配對
+    base, oa_block = gp.prepare(group, seed)      # All arms share the same initial .feature.
     folder = ROOT / f"{group}_s{seed}"
     folder.mkdir(parents=True, exist_ok=True)
     feature = base["feature"]
@@ -65,7 +63,7 @@ def run(group, seed):
         started, budget = time.monotonic(), common.Budget()
         rec = {"arm": arm}
         if arm == "self":
-            # A 的同一個對話接著跑：它手上有 OA、自己寫的 Gherkin，還有自己的推理過程。
+            # Continue A's conversation, which holds the requirement and A's own Gherkin.
             msgs = [{"role": "user", "text": base["prompt"]},
                     {"role": "model", "text": base["reply"]},
                     {"role": "user", "text": gp.group_translation_prompt(feature)}]
@@ -76,8 +74,8 @@ def run(group, seed):
         else:
             prompt = gp.group_translation_prompt(feature, None)
             rec["oa_leak_check"] = bp.assert_blind_prompt_is_clean(prompt, oa_block, feature)
-            rec["translation"] = bp.call(prompt, budget)   # 全新對話，只有 .feature
-            # 裁決者是乾淨的新對話，拿得到 OA，不知道自己在看哪一臂
+            rec["translation"] = bp.call(prompt, budget)   # Fresh conversation with the .feature only.
+            # Fresh judge with the requirement, blind to the arm.
             rec["judge_reply"] = bp.call(judge_prompt(oa_block, rec["translation"]), budget)
         verdicts = parse_verdicts(rec["judge_reply"])
         rec["verdicts"] = verdicts

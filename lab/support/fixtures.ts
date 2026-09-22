@@ -1,5 +1,5 @@
-// 測試共用 fixture：所有條件（含受測 agent 產出的測試）都用同一份，
-// 這樣量到的差別才是斷言品質，不是誰比較會寫登入樣板。
+// Shared fixtures used by every generated test, so differences reflect assertions,
+// not setup boilerplate.
 import { Page } from '@playwright/test';
 
 export const API = 'http://127.0.0.1:3001/api';
@@ -47,10 +47,10 @@ export async function newArticle(u: User, over: Partial<{ title: string; descrip
 
 export const apiCall = api;
 
-/** 把登入狀態直接塞進 localStorage，省掉每個測試都走一次登入表單。 */
+/** Log in by writing the session to localStorage instead of using the form. */
 export async function loginAs(page: Page, u: User) {
   await page.goto(UI + '/#/');
-  // 形狀要跟 services/userLogin.js 存的一致：{ headers, isAuth, loggedUser }
+  // Must match what services/userLogin.js stores: { headers, isAuth, loggedUser }
   await page.evaluate((state) => {
     localStorage.setItem('loggedUser', JSON.stringify(state));
   }, {

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""判生死測試：多子句 OA 上，Gate 2 到底會不會改動 Gherkin。
+"""Pilot: does Gate 2 change the Gherkin for multi-clause requirements?
 
-只跑 OA → initial Gherkin → 三組 Gate 2。不產測試碼、不碰 app、不碰缺陷。
-prompt 一律重用 bdd_pipeline 的函式，否則測到的不是正式管線那一條。
+Runs requirement -> initial Gherkin -> three Gate 2 variants only; no tests, app, or faults.
+Prompts come from bdd_pipeline so the pilot exercises the same pipeline.
 
-用法：python3 harness/gate2_probe.py [--seed N] [--oa H01,H02]
+Usage: python3 harness/gate2_probe.py [--seed N] [--oa H01,H02]
 """
 import argparse
 import json
@@ -16,8 +16,8 @@ import bdd_pipeline as bp
 
 ROOT = common.RUNS / "gate2-probe"
 
-# 多子句 OA v2，出處見 ../OA_DRAFT_V2.md（RealWorld SHA ebbcdeb8d5…）。
-# fault 是清單：一條 OA 可對到多個缺陷，正式管線要改 schema 才吃得下。
+# Multi-clause requirements derived from RealWorld @ ebbcdeb8d5.
+# `fault` is a list because one requirement can map to several faults.
 OA_V2 = {
     "H01": ("以三個標籤建立一篇文章後，會停在該文章頁：標題與輸入的標題相同，內文包含輸入的內容，"
             "三個標籤全部顯示。接著編輯這篇文章，把標題改成新的標題並清掉所有標籤，送出後"
@@ -35,12 +35,12 @@ OA_V2 = {
             ["F09"], 6),
 }
 
-# 對照組：現有的單句 OA，用來確認「沒改動」不是腳本壞掉而是材料太簡單。
+# Control: single-sentence requirements, to tell a broken script from trivial material.
 OA_V1_CONTROL = {"S06": (__import__("run").SCENARIOS["S06"][0], ["F06"], 1)}
 
 
 def steps_of(feature):
-    """Gherkin 的 Given/When/Then/And/But 步驟，拿來當粗略的主張顆粒度指標。"""
+    """Count Given/When/Then/And/But steps as a coarse claim-granularity measure."""
     keys = ("Given ", "When ", "Then ", "And ", "But ")
     return [ln.strip() for ln in feature.splitlines()
             if ln.strip().startswith(keys)]

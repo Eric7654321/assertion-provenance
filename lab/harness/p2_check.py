@@ -1,22 +1,17 @@
 #!/usr/bin/env python3
-"""P2／P4 核對：provisional P4 裡，哪些其實有公開 product contract 的依據。
+"""Check each provisional P4 against the pinned public references.
 
-背景：provenance.py 的判定器拿不到公開契約原文，只能標 `p2_candidate`。所以正式實驗報的 P4
-混了未核對的 P2，只能算上界。這支把每一條 P4 拿去對固定 commit 的公開契約。
+The judge in provenance.py does not see the references, so its P4 may include P2 cases.
+  1. The full reference set is provided, without retrieval, so a missed passage cannot inflate
+     P4. It is placed first in the prompt and kept byte-identical for prefix caching.
+  2. Citations are verified mechanically: file, line range, and verbatim quote must match the
+     cited lines (±2 lines, whitespace-normalized); otherwise the assertion is not P2.
+  3. Outcomes: `P2 confirmed`, `P4 confirmed` (checker declines), and `P2/P4 unresolved`
+     (checker cites a passage that fails verification).
+Only P4 -> P2 is possible; P0/P1/P3 are untouched. Runtime behavior is out of scope.
 
-三個設計決定：
-  1. **整份契約都給，不做檢索。** 檢索漏抓一段依據，那條就被誤判成 P4，而那個方向剛好有利於
-     本研究的假設。契約全文放在 prompt 最前面且逐字固定，讓前綴快取生效。
-  2. **引用由程式機械驗證。** 模型必須給檔名、起訖行號、逐字摘錄；摘錄必須真的出現在那個檔的
-     那幾行（容許 ±2 行、空白正規化）。對不上的一律不算 P2。
-  3. **三種結果**：`P2 confirmed`（有依據且引用驗證通過）、`P4 confirmed`（核對器說找不到依據）、
-     `P2/P4 unresolved`（核對器說有依據，但引用驗證不過）。
-
-只改 P4 → P2 這一個方向，不動 P0／P1／P3（那不是這一關的問題）。
-Runtime truth 是另一個維度，這裡不碰。
-
-用法：python3 harness/p2_check.py --selftest
-       python3 harness/p2_check.py            # 核對 runs/precision 全部 P4，可續跑
+Usage: python3 harness/p2_check.py --selftest
+       python3 harness/p2_check.py            # all P4 in runs/precision; resumable
 """
 import argparse
 import json
@@ -31,9 +26,9 @@ SHA = "ebbcdeb8d55b42a3a613c787560498b8ef10003f"
 CONTRACT = common.LAB / "contract" / SHA
 ROOT = common.RUNS / "precision"
 OUT = common.RUNS / "p2check"
-MODEL = "gemini-3.8-flash"          # 與主判定器同一個，量尺不跟著換
-SLACK = 2                            # 行號容許的偏差
-MIN_QUOTE = 8                        # 太短的摘錄（例如只有 "404"）不足以當依據
+MODEL = "gemini-3.8-flash"          # Same model as the primary judge.
+SLACK = 2                            # Allowed line offset.
+MIN_QUOTE = 8                        # Quotes this short (e.g. "404") are not evidence.
 
 
 def load_corpus():
@@ -57,7 +52,7 @@ def norm(s):
 
 
 def verify(files, cite):
-    """引用是否真的在那個檔的那幾行。回傳 (通過與否, 原因)。"""
+    """Verify that the quote occurs at the cited lines; return (ok, reason)."""
     path = cite.get("file", "")
     if path not in files:
         return False, f"沒有這個檔：{path!r}"
@@ -100,8 +95,8 @@ def check(files, corpus_text, oa_text, feature, assertion, context, budget):
     reply = common.generate(
         [{"role": "user", "text": check_prompt(corpus_text, oa_text, feature, assertion, context)}],
         budget, model=MODEL)
-    # 只取第一個完整的 JSON 物件。貪婪的 \{.*\} 會把 JSON 後面多吐的文字一起吞進來，
-    # 2026-09-22 就這樣在第 7 格之後整支當掉。解析失敗歸 unresolved，不可以讓整批中斷。
+    # Decode only the first complete JSON object; trailing text would break a greedy regex.
+    # Parse failures become unresolved instead of aborting the batch.
     start = reply.find("{")
     try:
         d, _ = json.JSONDecoder().raw_decode(reply[start:]) if start >= 0 else (None, 0)
@@ -117,9 +112,9 @@ def check(files, corpus_text, oa_text, feature, assertion, context, budget):
     return d
 
 
-# ---- 陽性對照：答案寫在契約裡的某一行，由 grep 事先確認過 ----
-# ⚠️ 每條控制要配**自己的情境**（OA、Gherkin、前後文）。核對規則要求「同樣的條件」，
-# 把刪除後查詢 404 的斷言放在收藏的情境裡，契約當然不支持 —— 第一版就是這樣自己打錯的。
+# Known-answer controls cite passages present in the pinned reference corpus.
+# Each control carries its own requirement, Gherkin, and context, because the checker
+# requires the same condition as the cited passage.
 FAV_FEATURE = """Feature: Conduit Acceptance Tests
 
   Scenario: Favorite an article

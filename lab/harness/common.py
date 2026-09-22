@@ -1,4 +1,4 @@
-"""Gemini 呼叫、token 計帳、路徑常數。"""
+"""Model calls, token accounting, and path constants."""
 import json
 import fcntl
 import os
@@ -19,7 +19,7 @@ APP_LOCK = LAB / ".app.lock"
 
 @contextmanager
 def app_lock():
-    """跨行程鎖：凡會讀寫共用 app/DB 的操作都須持有。"""
+    """Cross-process lock held by every operation that touches the shared app or database."""
     with APP_LOCK.open("a+") as lockfile:
         fcntl.flock(lockfile, fcntl.LOCK_EX)
         previous = os.environ.get("SE4_APP_LOCK_HELD")
@@ -32,12 +32,7 @@ def app_lock():
             else:
                 os.environ["SE4_APP_LOCK_HELD"] = previous
             fcntl.flock(lockfile, fcntl.LOCK_UN)
-MODEL = "gemini-3.8-flash"           # 固定版本，不用 -latest / -preview
-
-# ⚠️ 實驗設定，六個條件必須用同一個值，而且要寫進論文的設定表。
-# 實測（同一個瑣碎 prompt）：預設 434 秒 / 859 tokens；thinkingBudget=0 → 39 秒 / 300 tokens。
-# 差 11 倍，整個實驗跑不跑得完取決於這個。代價：關掉 thinking 會降低受測模型的能力，
-# 可能讓「gate 有用」這個結論被放大 —— 所以要另外用一小批（開 thinking）做穩健性檢查。
+MODEL = "gemini-3.8-flash"
 THINKING_BUDGET = 0
 ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/{m}:generateContent"
 _IPV4_DNS_LOCK = Lock()
@@ -47,9 +42,7 @@ _IPV4_DNS_LOCK = Lock()
 def force_ipv4(hostname):
     """This host resolves both API providers to IPv6 first, but its IPv6 route stalls.
 
-    Measured for Gemini first; api.openai.com hung the same way on 2026-09-21 (a test call
-    timed out with no output at all, and the identical call went through in 0.7s once forced
-    onto IPv4). Keep the override scoped to the synchronous API request. The lock prevents
+    Keep the override scoped to the synchronous API request. The lock prevents
     concurrent requests in this process from nesting the override.
     """
     with _IPV4_DNS_LOCK:
@@ -79,7 +72,7 @@ def api_key(name: str = "GEMINI_API_KEY") -> str:
 
 
 class Budget:
-    """一次 run 用掉的 token 與時間。budget 單位用 totalTokenCount（含 thinking）。"""
+    """Tokens and wall time used by one run (totalTokenCount, including thinking)."""
 
     def __init__(self):
         self.total_tokens = 0
@@ -89,18 +82,18 @@ class Budget:
         self.cached_prompt_tokens = 0
         self.calls = 0
         self.seconds = 0.0
-        # 回應裡回報的實際模型。未鎖版本的別名（gpt-5.6-terra）靠這一欄留下證據：
-        # 一次 run 裡出現兩個不同的值，就代表中途被換過。
+        # Model names reported in responses; more than one value within a run means an
+        # unversioned alias changed mid-run.
         self.resolved_models = set()
 
     def add(self, usage: dict, elapsed: float, resolved: str | None = None):
-        """Gemini 的 usageMetadata。"""
+        """Record Gemini usageMetadata."""
         self._count(usage.get("totalTokenCount", 0), usage.get("promptTokenCount", 0),
                     usage.get("candidatesTokenCount", 0), usage.get("thoughtsTokenCount", 0),
                     usage.get("cachedContentTokenCount", 0), elapsed, resolved)
 
     def add_openai(self, usage: dict, elapsed: float, resolved: str | None = None):
-        """OpenAI 的 usage。reasoning tokens 包含在 completion_tokens 裡，另外拆出來記。"""
+        """Record OpenAI usage; reasoning tokens are part of completion_tokens and kept separately."""
         self._count(usage.get("total_tokens", 0), usage.get("prompt_tokens", 0),
                     usage.get("completion_tokens", 0),
                     (usage.get("completion_tokens_details") or {}).get("reasoning_tokens", 0) or 0,
@@ -131,19 +124,17 @@ class Budget:
         }
 
 
-# 第二個 generator（2026-09-21）。研究者指定的檔次對應：luna=flash-lite、terra=flash、sol=pro，
-# 所以對 gemini-3.8-flash 的是 terra。⚠️ **沒有日期快照**：API 回報的 model 就是別名本身，
-# 鎖不住版本。兩道保險：每次呼叫記下回應的 model（Budget.resolved_models），
-# 以及 run 前後各打一次 canary() 比對輸出。論文要寫成「未鎖版本別名 ＋ 存取日期」。
+# The provider exposes this model through an unversioned alias. Resolved model names
+# and canary responses are recorded before and after each controlled run.
 OPENAI_MODEL = "gpt-5.6-terra"
 OPENAI_ENDPOINT = "https://api.openai.com/v1/chat/completions"
 
 
 def generate(messages: list, budget: Budget, temperature: float = 0.2, max_output: int = 8000,
              model: str | None = None) -> str:
-    """messages: [{'role': 'user'|'model', 'text': ...}]，回傳模型這一輪的文字。
+    """messages: [{'role': 'user'|'model', 'text': ...}]; returns the model's reply text.
 
-    model 省略時是 MODEL（Gemini），所以既有的呼叫點行為完全不變。
+    `model` defaults to MODEL (Gemini).
     """
     m = model or MODEL
     if m.startswith("gpt-"):
@@ -152,8 +143,8 @@ def generate(messages: list, budget: Budget, temperature: float = 0.2, max_outpu
 
 
 def _generate_openai(messages, budget, temperature, max_output, model):
-    # 對齊 Gemini 那邊的 thinkingBudget=0。這個模型只有在 reasoning_effort="none" 時
-    # 才接受非預設的 temperature（單獨設 0.2 會 HTTP 400）；`minimal` 它不吃。
+    # Counterpart of thinkingBudget=0. The model accepts a non-default temperature only
+    # with reasoning_effort="none".
     body = {
         "model": model,
         "messages": [{"role": "assistant" if m["role"] == "model" else m["role"],
@@ -175,7 +166,7 @@ def _generate_openai(messages, budget, temperature, max_output, model):
                     data = json.load(resp)
             break
         except urllib.error.HTTPError as e:
-            if e.code < 500 and e.code != 429:   # 參數錯誤不要重試，重試只會把錯誤藏起來
+            if e.code < 500 and e.code != 429:   # Do not retry client errors.
                 raise RuntimeError(f"OpenAI HTTP {e.code}: {e.read().decode()[:300]}")
             if attempt == 3:
                 raise
@@ -196,7 +187,7 @@ CANARY = ("逐字照抄下面這一行，不要加任何其他字：\n"
 
 
 def canary(model: str) -> dict:
-    """開跑前、跑完後各打一次，比對輸出。別名背後的模型被換掉時通常會露餡。"""
+    """Fixed prompt sent before and after a run to detect a change behind a model alias."""
     b = Budget()
     text = generate([{"role": "user", "text": CANARY}], b, model=model)
     return {"model": model, "text": text.strip(), "resolved": sorted(b.resolved_models)}
@@ -223,7 +214,7 @@ def _generate_gemini(messages, budget, temperature, max_output, model):
                 with urllib.request.urlopen(req, timeout=180) as resp:
                     data = json.load(resp)
             break
-        except Exception as e:  # 429／暫時性錯誤就退避重試
+        except Exception as e:  # Back off on 429 and transient errors.
             if attempt == 3:
                 raise
             time.sleep(4 * (attempt + 1))
@@ -236,22 +227,22 @@ def _generate_gemini(messages, budget, temperature, max_output, model):
 
 
 def snapshot(route: str, as_user: bool = False, click_name: str | None = None) -> str:
-    """走查介面：回傳該頁的無障礙樹。"""
+    """Return the accessibility tree of a page."""
     cmd = ["node", str(LAB / "tools/snapshot.js"), route]
     if as_user:
         cmd.append("--as-user")
     if click_name:
         cmd.extend(["--click", click_name])
     with app_lock():
-        ok, out = _run_to_file(cmd, 120, "snapshot")   # 同樣不能走管道：會開瀏覽器
+        ok, out = _run_to_file(cmd, 120, "snapshot")   # Opens a browser, so avoid pipes here as well.
     return out[:6000] if out else "SNAPSHOT_ERROR: 沒有輸出"
 
 
 def _run_to_file(cmd, timeout, tag, env=None):
-    """執行子行程，輸出寫檔不走管道。
+    """Run a subprocess with output redirected to a file.
 
-    ⚠️ 不要用 capture_output／PIPE：這些指令會留下背景行程（後端、瀏覽器），
-    它們繼承管道的寫入端之後，父行程會一直等不到 EOF，看起來像卡死。
+    Do not use capture_output or PIPE: these commands leave background processes (backend,
+    browser) that inherit the pipe's write end, so the parent never sees EOF.
     """
     log = pathlib.Path(tempfile.gettempdir()) / f"se4-{tag}.out"
     with log.open("w") as fh:
@@ -272,7 +263,7 @@ def _run_to_file(cmd, timeout, tag, env=None):
 
 
 def run_playwright(spec_path: pathlib.Path, timeout: int = 240):
-    """跑單一 spec，回傳 (passed, 輸出)。"""
+    """Run one spec and return (passed, output)."""
     ok, out = _run_to_file(
         ["npx", "playwright", "test", str(spec_path.relative_to(LAB)), "--reporter=line"],
         timeout, "pw")
@@ -285,8 +276,7 @@ def playwright_cli(session: str, command: list[str], timeout: int = 120):
     """Run Playwright CLI in a named session and return its compact raw output."""
     node = pathlib.Path.home() / ".nvm/versions/node/v24.20.0/bin/node"
     cli = LAB / "node_modules/playwright/cli.js"
-    # 這台機器只裝了 bundled chromium，沒有 branded Chrome；不指定會以 channel=chrome 開啟然後
-    # 死在「Chromium distribution 'chrome' is not found」。chromium 也是 oracle 與生成測試實際跑的引擎。
+    # Use the bundled Chromium build consistently for oracle and generated tests.
     return _run_to_file(
         [str(node), str(cli), "cli", f"-s={session}", "--raw", *command],
         timeout, "pwcli", env={"PLAYWRIGHT_MCP_BROWSER": "chromium"})
@@ -312,9 +302,7 @@ def open_probe_session(session: str, route: str, as_user: bool = False):
             route = route.replace('@mine', article.slug);
           }}
           await page.goto('{ui}/' + route.replace(/^\\//, ''));
-          // hash 換路由不會重新掛載 SPA，登入狀態是在第一次載入時讀 localStorage 的，
-          // 不 reload 的話頁面還是未登入（症狀：自己的文章頁上沒有 Edit/Delete，只有 Sign in）。
-          // 這跟 support/fixtures.ts 的 loginAs 一樣要 reload。
+          // Hash navigation does not remount the SPA; reload after updating localStorage.
           await page.reload();
           await page.waitForTimeout(700);
           return page.url();
@@ -329,11 +317,11 @@ def open_probe_session(session: str, route: str, as_user: bool = False):
 
 
 def close_probe_session(session: str):
-    """關掉具名的 CLI session。留著不關會累積 browser 行程，磁碟只剩幾 G 撐不住。"""
+    """Close a named CLI session so browser processes do not accumulate."""
     return playwright_cli(session, ["close"], 30)
 
 
 def fault(action: str, fid: str = ""):
-    """套用／還原注入缺陷（會重置 DB 並重啟後端）。"""
+    """Apply or revert an injected fault (resets the database and restarts the backend)."""
     cmd = ["bash", str(LAB / "tools/fault.sh"), action] + ([fid] if fid else [])
     return _run_to_file(cmd, 240, f"fault-{action}")

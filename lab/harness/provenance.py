@@ -1,18 +1,9 @@
 #!/usr/bin/env python3
-"""把生成測試裡的每一條斷言歸到 P0–P4（斷言溯源）。
+"""Classify generated test assertions using the frozen P0--P4 protocol.
 
-判準與兩個難判形狀的規則見 ../../docs/assertion-provenance.md。這支只負責執行判定，
-不重抄判準（同一件事寫兩份，兩份一定會漂）。
-
-三個設計決定，都是今天踩出來的：
-  1. **不給裁決者公開契約原文** —— 給了它會編引用。它只能標 `p2_candidate`，
-     說「我認為有公開契約支持但你沒給我」，由第二關拿官方規格核。
-  2. **裁決者是全新對話，一次只看一條斷言**，拿不到產生這支測試的過程，
-     也拿不到其他條的判定結果。
-  3. **模稜兩可一律判有依據（P0/P2），另計 borderline** —— 反方向會灌水本研究的假設。
-
-用法：python3 harness/provenance.py --selftest        # 陽性對照，先驗判定器會不會動
-       python3 harness/provenance.py --spec <f.ts> --oa <id> --feature <f.feature>
+The normative criteria are maintained in ``docs/assertion-provenance.md``.
+Each assertion is judged in a fresh context. Public product references are withheld
+from this stage and checked separately, and borderline cases default to supported.
 """
 import argparse
 import json
@@ -28,8 +19,7 @@ CLASSES = ("P0", "P1", "P2", "P3", "P4")
 
 
 def context_window(src, line, radius=6):
-    """斷言前後各 radius 行，目標行標 ▶。判準第 3 條要看「在觸發動作之前或之後」，
-    只給一行斷言的話判定器只能用猜的（2026-09-21：兩個判定器對同一條猜了相反的方向）。"""
+    """Return surrounding lines so the judge can distinguish guards from outcomes."""
     lines = src.splitlines()
     lo, hi = max(0, line - 1 - radius), min(len(lines), line + radius)
     return "\n".join(("▶ " if i == line - 1 else "  ") + lines[i] for i in range(lo, hi))
@@ -83,9 +73,7 @@ def classify(oa_text, feature_text, assertion, budget, model=None, context=None)
     return d
 
 
-# ---- 陽性對照：四條已知答案的斷言，判定器連這個都判不對就不能用 ----
-# 答案卷是照**精簡版** S10 設計的（expect 只說「按鈕與計數反映這次操作」）。必須明寫，
-# 不能吃 render() 的預設 —— 預設一改，答案卷就在沒人注意的時候失效（2026-09-21 實際發生）。
+# Known-answer controls use an explicit requirement variant to prevent fixture drift.
 CONTROL_OA = oa_items.render("S10", "terse")
 CONTROL_FEATURE = """Feature: Conduit Acceptance Tests
 
@@ -97,8 +85,7 @@ CONTROL_FEATURE = """Feature: Conduit Acceptance Tests
     And the profile favorites tab shows one article
     And the unfavorite control is no longer hidden
 """
-# 陽性對照用的測試本體。每條控制斷言都在這支裡，位置是確定的 ——
-# 守衛那條在 click 之前，其餘在 click 之後。
+# The visibility guard precedes the click; the outcome assertions follow it.
 CONTROL_SPEC = """test('Favorite an article', async ({ page }) => {
   await page.goto(articleUrl);
   await expect(favoriteBtn).toBeVisible();
@@ -112,19 +99,14 @@ CONTROL_SPEC = """test('Favorite an article', async ({ page }) => {
 });"""
 
 CONTROL = [
-    # 要求的 expect 逐字寫了「按鈕與計數反映這次操作」＋ note 固定初始值 0
     ("await expect(favoriteBtn).toContainText('1');", "P0",
      "初始 0 ＋ 收藏一次 → 1，被要求陳述的前置條件蘊含"),
-    # 只在 Gherkin 裡的數值主張，要求沒有；刻意不用可見性寫法以免跟守衛混淆
     ("await expect(profileFavorites).toHaveCount(1);", "P1",
      "只有 .feature 的 `the profile favorites tab shows one article` 提到"),
-    # 可見性，但 Gherkin 有一句在講它 → 是行為主張不是守衛
     ("await expect(unfavoriteControl).toBeVisible();", "P1",
      "Gherkin 的 `the unfavorite control is no longer hidden` 在講它的可見性"),
-    # 可見性，兩邊都沒講它，而且在觸發動作之前 → 守衛
     ("await expect(favoriteBtn).toBeVisible();", "P3",
      "點之前確認元素在，要求與 Gherkin 都沒主張它的可見性"),
-    # 兩邊都沒有、也不是蘊含
     ("expect(res.headers['x-ratelimit-remaining']).toBe('99');", "P4",
      "速率限制標頭，要求與 Gherkin 皆未提及"),
 ]

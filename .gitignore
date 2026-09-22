@@ -5,9 +5,10 @@
 !/.gitignore
 !/README.md
 !/LICENSE
-!/ASSERTION_PROVENANCE.md
-!/RELATED_WORK_EVIDENCE.md
-!/BROWSER_CONTROL_PROTOCOL.md
+!/docs/
+/docs/*
+!/docs/assertion-provenance.md
+!/docs/browser-disabled-control.md
 !/audit/
 
 !/lab/

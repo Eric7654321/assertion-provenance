@@ -109,7 +109,7 @@ def main():
         for tag in generators
     }
     summary = {
-        "protocol": "BROWSER_CONTROL_PROTOCOL.md",
+        "protocol": "docs/browser-disabled-control.md",
         "condition": CONDITION,
         "planned_cells": args.seeds * len(items) * len(generators),
         "records": manifest,

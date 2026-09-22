@@ -1,6 +1,6 @@
-# Cross-Stage Assertion Provenance in Agentic BDD Pipelines — Data and Code
+# Assertion Provenance in Agentic BDD Pipelines
 
-Replication and audit package for the regular paper
+This repository contains the code, generated tests, model outputs, and audit data for the paper
 **"What Do Test Assertions Rest On? Measuring Cross-Stage Provenance in Agentic BDD Pipelines"**
 (SE4AgenticAI 2026, IEEE BigData 2026 workshop; under review).
 
@@ -35,16 +35,17 @@ not necessary for the measured phenomenon.
 P4 means *unsupported by the artifacts we examined*, not *hallucinated* and not *wrong*: we measure
 artifact-level support, not where a generator actually took an assertion from, and not correctness.
 
-## Layout
+## Repository structure
 
 ```
-ASSERTION_PROVENANCE.md        P0–P4 criterion (frozen before measurement) and its positive controls
-RELATED_WORK_EVIDENCE.md       literature checked for the paper, with links
+docs/
+  assertion-provenance.md      frozen P0–P4 criterion and positive controls
+  browser-disabled-control.md  controlled-extension protocol
 audit/
   P4_audit.md / .csv           all 55 P4: requirement, Gherkin, assertion in context, both judgments,
                                nearest public passages (keyword grep, navigation only)
   P2_audit.md / .csv           all 143 P2: citation (file, lines, commit), model quote, and the raw cited lines
-lab/
+lab/                           experiment implementation and stored outputs
   harness/                     generation, judging, P2 checking, and report scripts (Python)
   support/fixtures.ts          shared test fixtures the generated tests import
   generated/PR_*.spec.ts       the 120 generated Playwright tests
@@ -59,7 +60,7 @@ lab/
   tools/fetch_contract.sh      re-creates the pinned public reference set (36 RealWorld files)
 ```
 
-The manuscript itself is not included in this artifact repository.
+The manuscript and internal research notes are not included in this artifact repository.
 
 ## Pinned versions
 

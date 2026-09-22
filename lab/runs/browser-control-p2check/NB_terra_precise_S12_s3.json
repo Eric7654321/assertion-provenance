@@ -1,0 +1,31 @@
+{
+  "source": "NB_terra_precise_S12_s3.json",
+  "gen": "terra",
+  "arm": "precise",
+  "item": "S12",
+  "seed": 3,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/SELECTORS.md",
+      "line_start": 209,
+      "line_end": 213,
+      "quote": "## Button State Conventions\n\n- **Favorite**: Uses `.btn-outline-primary` when not favorited, switches to `.btn-primary` when favorited.\n- **Follow**: Button text toggles between `Follow {username}` and `Unfollow {username}`.\n- **Pagination active**: The current page's `.page-item` has the CSS class `active`.",
+      "why": "契約明確規定了分頁按鈕處於當前頁（active）狀態時的 CSS class 約定。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 2,
+      "assertion": "await expect(pageTwo).toHaveClass(/active/)",
+      "line": 30,
+      "p2_candidate": false
+    },
+    {
+      "status": "P4 confirmed",
+      "why": "公開材料中未規定首頁分頁切換到第 2 頁時文章數量必須剛好為 1 篇，該數字取決於特定測試預先建立的資料量。",
+      "row": 3,
+      "assertion": "await expect(articlePreviews).toHaveCount(1)",
+      "line": 31,
+      "p2_candidate": false
+    }
+  ]
+}

@@ -1,0 +1,316 @@
+{
+  "source": "NB_gem_precise_H02_s3.json",
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "precise",
+  "condition": "C0-none",
+  "item": "H02",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H02\n    Scenario: Article page visibility and permissions\n      Given an author creates an article and posts a comment on it\n      When an unauthenticated visitor opens the article page\n      Then the visitor can see the article but cannot post a comment\n      When another logged-in user who is not the author opens the article page\n      Then the user does not see the controls to edit or delete the article\n      And the user does not see the delete control for the author's comment\n      When this user posts a comment on the article\n      Then the user sees the delete control only for their own comment\n",
+  "spec": "generated/NB_gem_precise_H02_s3.spec.ts",
+  "rows": [
+    {
+      "class": "P0",
+      "citation": "訪客看得到文章但不能留言",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出「訪客看得到文章」，檢查文章標題顯示在頁面上屬於直接落實此主張。",
+      "assertion": "await expect(page.locator('h1')).toHaveText(article.title)",
+      "line": 22
+    },
+    {
+      "class": "P0",
+      "citation": "訪客看得到文章但不能留言",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出訪客看得到文章，斷言內文包含 article.body 是對該要求的直接驗證。",
+      "assertion": "await expect(page.locator('.article-content')).toContainText(article.body)",
+      "line": 23
+    },
+    {
+      "class": "P0",
+      "citation": "訪客看得到文章但不能留言",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出訪客不能留言，且 note 說明只驗畫面上看得到什麼，因此斷言留言輸入框不存在（count 為 0）是其畫面上不能留言的直接操作化。",
+      "assertion": "await expect(page.locator('textarea[placeholder=\"Write a comment...\"]')).toHaveCount(0)",
+      "line": 25
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅規定訪客「不能留言」，未指定必須出現特定的提示文字「Sign in or sign up to add comments on this article」。",
+      "assertion": "await expect(page.locator('text=Sign in or sign up to add comments on this article')).toBeVisible()",
+      "line": 26
+    },
+    {
+      "class": "P0",
+      "citation": "非作者看不到編輯與刪除文章的控制項",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出非作者看不到編輯控制項，斷言以數量為0驗證 Edit Article 連結未出現。",
+      "assertion": "await expect(page.locator('a:has-text(\"Edit Article\")')).toHaveCount(0)",
+      "line": 34
+    },
+    {
+      "class": "P0",
+      "citation": "非作者看不到編輯與刪除文章的控制項",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出非作者看不到刪除文章的控制項，斷言驗證 Delete Article 按鈕數量為 0 符合要求。",
+      "assertion": "await expect(page.locator('button:has-text(\"Delete Article\")')).toHaveCount(0)",
+      "line": 35
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅主張留言的刪除控制項不可見，此斷言是在檢查刪除按鈕不存在前，確認作者留言卡片本身已渲染就緒的可見性守衛。",
+      "assertion": "await expect(authorCommentCard).toBeVisible()",
+      "line": 39
+    },
+    {
+      "class": "P0",
+      "citation": "留言的刪除控制項只對該留言的作者出現。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出留言的刪除控制項只對該留言的作者出現，非該留言作者的使用者看不到刪除圖示直接被此規則蘊含。",
+      "assertion": "await expect(authorCommentCard.locator('.mod-options i, .ion-trash-a, [aria-label=\"Delete Comment\"]')).toHaveCount(0)",
+      "line": 40
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此斷言是在檢查發布的留言卡片出現，作為後續檢查該卡片內刪除控制項的前置守衛，規格與 Gherkin 僅主張刪除控制項的可見性。",
+      "assertion": "await expect(readerCommentCard).toBeVisible()",
+      "line": 49
+    },
+    {
+      "class": "P0",
+      "citation": "留言的刪除控制項只對該留言的作者出現。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出留言的刪除控制項只對該留言作者出現，使用者作為自己留言的作者應看見該刪除控制項（count 1）。",
+      "assertion": "await expect( readerCommentCard.locator('.mod-options i, .ion-trash-a, [aria-label=\"Delete Comment\"]') ).toHaveCount(1)",
+      "line": 50
+    },
+    {
+      "class": "P0",
+      "citation": "留言的刪除控制項只對該留言的作者出現。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確規範留言的刪除控制項只對該留言作者出現，故登入的讀者發文後仍不應在原作者的留言上看到刪除按鈕。",
+      "assertion": "await expect( authorCommentCard.locator('.mod-options i, .ion-trash-a, [aria-label=\"Delete Comment\"]') ).toHaveCount(0)",
+      "line": 55
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P0",
+        "citation": "訪客看得到文章但不能留言",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出「訪客看得到文章」，檢查文章標題顯示在頁面上屬於直接落實此主張。",
+        "assertion": "await expect(page.locator('h1')).toHaveText(article.title)",
+        "line": 22
+      },
+      {
+        "class": "P0",
+        "citation": "訪客看得到文章但不能留言",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出訪客看得到文章，斷言內文包含 article.body 是對該要求的直接驗證。",
+        "assertion": "await expect(page.locator('.article-content')).toContainText(article.body)",
+        "line": 23
+      },
+      {
+        "class": "P0",
+        "citation": "訪客看得到文章但不能留言",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出訪客不能留言，且 note 說明只驗畫面上看得到什麼，因此斷言留言輸入框不存在（count 為 0）是其畫面上不能留言的直接操作化。",
+        "assertion": "await expect(page.locator('textarea[placeholder=\"Write a comment...\"]')).toHaveCount(0)",
+        "line": 25
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅規定訪客「不能留言」，未指定必須出現特定的提示文字「Sign in or sign up to add comments on this article」。",
+        "assertion": "await expect(page.locator('text=Sign in or sign up to add comments on this article')).toBeVisible()",
+        "line": 26
+      },
+      {
+        "class": "P0",
+        "citation": "非作者看不到編輯與刪除文章的控制項",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出非作者看不到編輯控制項，斷言以數量為0驗證 Edit Article 連結未出現。",
+        "assertion": "await expect(page.locator('a:has-text(\"Edit Article\")')).toHaveCount(0)",
+        "line": 34
+      },
+      {
+        "class": "P0",
+        "citation": "非作者看不到編輯與刪除文章的控制項",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出非作者看不到刪除文章的控制項，斷言驗證 Delete Article 按鈕數量為 0 符合要求。",
+        "assertion": "await expect(page.locator('button:has-text(\"Delete Article\")')).toHaveCount(0)",
+        "line": 35
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅主張留言的刪除控制項不可見，此斷言是在檢查刪除按鈕不存在前，確認作者留言卡片本身已渲染就緒的可見性守衛。",
+        "assertion": "await expect(authorCommentCard).toBeVisible()",
+        "line": 39
+      },
+      {
+        "class": "P0",
+        "citation": "留言的刪除控制項只對該留言的作者出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出留言的刪除控制項只對該留言的作者出現，非該留言作者的使用者看不到刪除圖示直接被此規則蘊含。",
+        "assertion": "await expect(authorCommentCard.locator('.mod-options i, .ion-trash-a, [aria-label=\"Delete Comment\"]')).toHaveCount(0)",
+        "line": 40
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言是在檢查發布的留言卡片出現，作為後續檢查該卡片內刪除控制項的前置守衛，規格與 Gherkin 僅主張刪除控制項的可見性。",
+        "assertion": "await expect(readerCommentCard).toBeVisible()",
+        "line": 49
+      },
+      {
+        "class": "P0",
+        "citation": "留言的刪除控制項只對該留言的作者出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出留言的刪除控制項只對該留言作者出現，使用者作為自己留言的作者應看見該刪除控制項（count 1）。",
+        "assertion": "await expect( readerCommentCard.locator('.mod-options i, .ion-trash-a, [aria-label=\"Delete Comment\"]') ).toHaveCount(1)",
+        "line": 50
+      },
+      {
+        "class": "P0",
+        "citation": "留言的刪除控制項只對該留言的作者出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確規範留言的刪除控制項只對該留言作者出現，故登入的讀者發文後仍不應在原作者的留言上看到刪除按鈕。",
+        "assertion": "await expect( authorCommentCard.locator('.mod-options i, .ion-trash-a, [aria-label=\"Delete Comment\"]') ).toHaveCount(0)",
+        "line": 55
+      }
+    ],
+    "terra": [
+      {
+        "class": "P0",
+        "citation": "訪客看得到文章但不能留言；非作者看不到編輯與刪除文章的控制項；留言的刪除控制項只對該留言的作者出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "訪客開啟文章頁後，h1 顯示該文章標題是「訪客看得到文章」的直接畫面驗證。",
+        "assertion": "await expect(page.locator('h1')).toHaveText(article.title)",
+        "line": 22
+      },
+      {
+        "class": "P0",
+        "citation": "訪客看得到文章但不能留言；",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在訪客開啟文章頁後確認文章本文內容可見，是「訪客看得到文章」的直接具體化。",
+        "assertion": "await expect(page.locator('.article-content')).toContainText(article.body)",
+        "line": 23
+      },
+      {
+        "class": "P0",
+        "citation": "訪客看得到文章但不能留言；非作者看不到編輯與刪除文章的控制項；留言的刪除控制項只對該留言的作者出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "訪客不能留言蘊含留言輸入框不應出現，且此斷言是在訪客開啟文章頁後對該行為結果的檢查。",
+        "assertion": "await expect(page.locator('textarea[placeholder=\"Write a comment...\"]')).toHaveCount(0)",
+        "line": 25
+      },
+      {
+        "class": "P0",
+        "citation": "訪客看得到文章但不能留言；非作者看不到編輯與刪除文章的控制項；留言的刪除控制項只對該留言的作者出現。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "登入提示是訪客不能留言的畫面層具體呈現，雖未逐字指定提示文案但可視為該要求的有依據實作。",
+        "assertion": "await expect(page.locator('text=Sign in or sign up to add comments on this article')).toBeVisible()",
+        "line": 26
+      },
+      {
+        "class": "P0",
+        "citation": "訪客看得到文章但不能留言；非作者看不到編輯與刪除文章的控制項；留言的刪除控制項只對該留言的作者出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言非作者開啟文章頁後看不到「Edit Article」控制項，直接對應驗收要求中非作者看不到編輯控制項。",
+        "assertion": "await expect(page.locator('a:has-text(\"Edit Article\")')).toHaveCount(0)",
+        "line": 34
+      },
+      {
+        "class": "P0",
+        "citation": "非作者看不到編輯與刪除文章的控制項；",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言直接驗證非作者看不到刪除文章控制項，與驗收要求一致。",
+        "assertion": "await expect(page.locator('button:has-text(\"Delete Article\")')).toHaveCount(0)",
+        "line": 35
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此可見性斷言位於後續檢查作者留言刪除控制項之前，僅用來確認操作／查找對象存在；需求與 Gherkin 均未主張該留言卡在此時的可見性。",
+        "assertion": "await expect(authorCommentCard).toBeVisible()",
+        "line": 39
+      },
+      {
+        "class": "P0",
+        "citation": "留言的刪除控制項只對該留言的作者出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言驗證非作者看不到作者留言的刪除控制項，與驗收要求直接一致。",
+        "assertion": "await expect(authorCommentCard.locator('.mod-options i, .ion-trash-a, [aria-label=\"Delete Comment\"]')).toHaveCount(0)",
+        "line": 40
+      },
+      {
+        "class": "P0",
+        "citation": "留言的刪除控制項只對該留言的作者出現。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "在使用者成功留下自己的留言後，該留言卡片可見是驗證其刪除控制項僅對作者出現的必要且合理的畫面前提。",
+        "assertion": "await expect(readerCommentCard).toBeVisible()",
+        "line": 49
+      },
+      {
+        "class": "P0",
+        "citation": "Then the user sees the delete control only for their own comment",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在使用者發表留言後確認其自己的留言卡片恰有一個刪除控制項，直接對應 Gherkin 與驗收要求的作者專屬刪除控制項主張。",
+        "assertion": "await expect( readerCommentCard.locator('.mod-options i, .ion-trash-a, [aria-label=\"Delete Comment\"]') ).toHaveCount(1)",
+        "line": 50
+      },
+      {
+        "class": "P0",
+        "citation": "留言的刪除控制項只對該留言的作者出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "作者留言卡片沒有刪除控制項，直接符合刪除控制項僅對該留言作者出現的要求。",
+        "assertion": "await expect( authorCommentCard.locator('.mod-options i, .ion-trash-a, [aria-label=\"Delete Comment\"]') ).toHaveCount(0)",
+        "line": 55
+      }
+    ]
+  }
+}

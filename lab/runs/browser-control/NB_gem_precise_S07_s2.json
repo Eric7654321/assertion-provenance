@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_gem_precise_S07_s2",
+  "condition": "C0-none",
+  "generator": "gem",
+  "model": "gemini-3.8-flash",
+  "item": "S07",
+  "seed": 2,
+  "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:S07\n    Scenario: Author deletes own article\n      Given an author opens their own article page\n      When the author deletes the article\n      Then the article should no longer appear in the article list on the home page\n",
+  "complete": true,
+  "spec": "generated/NB_gem_precise_S07_s2.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Criteria', () => {\n  test('Author deletes own article (@item:S07)', async ({ page }) => {\n    // Given an author opens their own article page\n    const author = await newUser();\n    const article = await newArticle(author);\n\n    await loginAs(page, author);\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    await expect(page.getByRole('heading', { name: article.title })).toBeVisible();\n\n    // 處理可能出現的確認彈窗 (window.confirm)\n    page.on('dialog', dialog => dialog.accept());\n\n    // When the author deletes the article\n    const deleteButton = page.getByRole('button', { name: /delete article/i }).first();\n    await deleteButton.click();\n\n    // 刪除後通常導向首頁\n    await page.waitForURL(`${UI}/#/`);\n\n    // Then the article should no longer appear in the article list on the home page\n    const globalFeedTab = page.getByRole('button', { name: /global feed/i }).or(page.getByText(/global feed/i));\n    if (await globalFeedTab.isVisible()) {\n      await globalFeedTab.click();\n    }\n\n    await expect(page.getByRole('heading', { name: article.title })).not.toBeVisible();\n    await expect(page.getByText(article.title)).not.toBeVisible();\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 6.0,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

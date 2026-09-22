@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_gem_precise_S07_s1",
+  "condition": "C0-none",
+  "generator": "gem",
+  "model": "gemini-3.8-flash",
+  "item": "S07",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S07\n    Scenario: Author deletes their own article\n      Given I am on my own article page as the author\n      When I choose to delete the article\n      Then the article no longer appears in the article list on the home page\n",
+  "complete": true,
+  "spec": "generated/NB_gem_precise_S07_s1.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('@item:S07 Author deletes their own article', async ({ page }) => {\n    // 建立作者使用者並發布一篇文章\n    const author = await newUser();\n    const article = await newArticle(author);\n\n    // 以作者身分登入\n    await loginAs(page, author);\n\n    // 瀏覽至該文章頁面 (hash routing)\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    // 等待文章載入確認\n    await expect(page.locator('h1')).toHaveText(article.title);\n\n    // 點擊刪除按鈕 (Conduit 標準按鈕：包含 \"Delete Article\" 或 .btn-outline-danger)\n    const deleteButton = page.getByRole('button', { name: /delete article/i }).first();\n    await deleteButton.click();\n\n    // 刪除後導回首頁或全域動態列表\n    await page.waitForURL(`${UI}/#/`);\n\n    // 切換至 Global Feed 確保文章列表載入（若預設為 Your Feed）\n    const globalFeedTab = page.getByRole('button', { name: /global feed/i }).or(page.getByText('Global Feed'));\n    if (await globalFeedTab.isVisible()) {\n      await globalFeedTab.click();\n    }\n\n    // 驗證首頁文章列表中不再出現該文章標題\n    await expect(page.getByRole('heading', { name: article.title })).not.toBeVisible();\n    await expect(page.locator('.article-preview').filter({ hasText: article.title })).toHaveCount(0);\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 2.6,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

@@ -1,0 +1,17 @@
+{
+  "source": "NB_terra_precise_H03_s2.json",
+  "gen": "terra",
+  "arm": "precise",
+  "item": "H03",
+  "seed": 2,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約中切回 Global Feed 的測試僅驗證 URL 回到 '/' 並載入文章列表，並未明確斷言切回後 Global Feed 的文章數量必須為 10。",
+      "row": 9,
+      "assertion": "await expect(articlePreviews).toHaveCount(10)",
+      "line": 63,
+      "p2_candidate": true
+    }
+  ]
+}

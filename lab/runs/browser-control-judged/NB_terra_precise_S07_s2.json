@@ -1,0 +1,100 @@
+{
+  "source": "NB_terra_precise_S07_s2.json",
+  "gen": "terra",
+  "gen_model": "gpt-5.6-terra",
+  "arm": "precise",
+  "condition": "C0-none",
+  "item": "S07",
+  "seed": 2,
+  "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:S07\n    Scenario: Author deletes own article\n      Given an author opens their own article page\n      When the author deletes the article\n      Then the article should no longer appear in the article list on the home page\n",
+  "spec": "generated/NB_terra_precise_S07_s2.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此可見性斷言位於點選刪除按鈕之前，用於確保操作對象存在，屬於動作前的可見性守衛。",
+      "assertion": "await expect(page.getByRole('button', { name: /delete article/i })).toBeVisible()",
+      "line": 12
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求刪除後文章不再出現在首頁列表，並未提及刪除後應導向首頁 URL。",
+      "assertion": "await expect(page).toHaveURL(new RegExp(`${UI.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}/#/?$`))",
+      "line": 15
+    },
+    {
+      "class": "P0",
+      "citation": "刪除後該文章不再出現在首頁的文章列表。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "斷言在跳轉回首頁後驗證該文章標題不可見，直接對應驗收要求中刪除後不再出現在首頁列表的主張。",
+      "assertion": "await expect(page.getByText(article.title)).not.toBeVisible()",
+      "line": 16
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此可見性斷言位於點選刪除按鈕之前，用於確保操作對象存在，屬於動作前的可見性守衛。",
+        "assertion": "await expect(page.getByRole('button', { name: /delete article/i })).toBeVisible()",
+        "line": 12
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求刪除後文章不再出現在首頁列表，並未提及刪除後應導向首頁 URL。",
+        "assertion": "await expect(page).toHaveURL(new RegExp(`${UI.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}/#/?$`))",
+        "line": 15
+      },
+      {
+        "class": "P0",
+        "citation": "刪除後該文章不再出現在首頁的文章列表。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在跳轉回首頁後驗證該文章標題不可見，直接對應驗收要求中刪除後不再出現在首頁列表的主張。",
+        "assertion": "await expect(page.getByText(article.title)).not.toBeVisible()",
+        "line": 16
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於刪除動作之前，且驗收要求與 Gherkin 都未主張刪除按鈕在此時可見，僅作為點擊操作的可見性守衛。",
+        "assertion": "await expect(page.getByRole('button', { name: /delete article/i })).toBeVisible()",
+        "line": 12
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只主張文章不再出現在首頁列表，未主張刪除後瀏覽器 URL 必須導向首頁。",
+        "assertion": "await expect(page).toHaveURL(new RegExp(`${UI.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}/#/?$`))",
+        "line": 15
+      },
+      {
+        "class": "P0",
+        "citation": "刪除後該文章不再出現在首頁的文章列表。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在刪除後且已回到首頁時確認文章標題不可見，直接驗證文章不再出現在首頁文章列表。",
+        "assertion": "await expect(page.getByText(article.title)).not.toBeVisible()",
+        "line": 16
+      }
+    ]
+  }
+}

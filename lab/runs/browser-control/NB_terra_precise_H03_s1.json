@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_terra_precise_H03_s1",
+  "condition": "C0-none",
+  "generator": "terra",
+  "model": "gpt-5.6-terra",
+  "item": "H03",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H03\n    Scenario: Pagination under tag filter\n      Given there are 15 articles under a specific tag\n      When I filter by this tag on the home page\n      Then the number of articles per page matches the pagination setting\n      When I select page 2 in the pagination bar\n      Then the second page displays the consecutive articles\n      And the URL reflects the current page number\n      When I open a new page directly with the URL containing page=2\n      Then I arrive at the same page\n      When I switch back to the all articles list\n      Then the list returns to the first page\n",
+  "complete": true,
+  "spec": "generated/NB_terra_precise_H03_s1.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('@item:H03 Pagination under tag filter', async ({ page }) => {\n    const user = await newUser();\n    const tag = `pagination-tag-${Date.now()}`;\n\n    const articles = await Promise.all(\n      Array.from({ length: 15 }, (_, index) =>\n        newArticle(user, {\n          title: `Pagination article ${index + 1}`,\n          description: `Description for pagination article ${index + 1}`,\n          body: `Body for pagination article ${index + 1}`,\n          tagList: [tag],\n        }),\n      ),\n    );\n\n    await loginAs(page, user);\n\n    await page.goto(`${UI}/#/`);\n    await page.getByRole('link', { name: tag, exact: true }).click();\n\n    const articlePreviews = page.locator('app-article-list .article-preview');\n    await expect(articlePreviews).toHaveCount(10);\n\n    await page.getByRole('link', { name: '2', exact: true }).click();\n\n    await expect(articlePreviews).toHaveCount(5);\n    await expect(page).toHaveURL(new RegExp(`tag=${encodeURIComponent(tag)}.*page=2|page=2.*tag=${encodeURIComponent(tag)}`));\n\n    const secondPageTitles = await articlePreviews.locator('h1').allTextContents();\n    const expectedSecondPageTitles = articles\n      .slice(10)\n      .reverse()\n      .map((article) => article.title);\n\n    expect(secondPageTitles).toEqual(expectedSecondPageTitles);\n\n    await page.goto(`${UI}/#/?tag=${encodeURIComponent(tag)}&page=2`);\n\n    await expect(articlePreviews).toHaveCount(5);\n    await expect(articlePreviews.locator('h1').allTextContents()).resolves.toEqual(\n      expectedSecondPageTitles,\n    );\n\n    await page.getByRole('link', { name: 'Global Feed', exact: true }).click();\n\n    await expect(articlePreviews).toHaveCount(10);\n    await expect(page).not.toHaveURL(/page=2/);\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 6.0,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

@@ -1,0 +1,23 @@
+{
+  "source": "NB_gem_precise_S12_s3.json",
+  "gen": "gem",
+  "arm": "precise",
+  "item": "S12",
+  "seed": 3,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/url-navigation.spec.ts",
+      "line_start": 133,
+      "line_end": 134,
+      "quote": "    // Page 2 should be active\n    await expect(page.locator('.pagination .page-item:has(.page-link:has-text(\"2\"))')).toHaveClass(/active/);",
+      "why": "公開契約的 E2E 測試明確斷言點擊第 2 頁後，包含文字 '2' 的分頁項（.page-item）應具備 active 狀態。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 2,
+      "assertion": "await expect(activePageItem).toHaveText('2')",
+      "line": 44,
+      "p2_candidate": true
+    }
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "source": "NB_gem_precise_S09_s2.json",
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "precise",
+  "condition": "C0-none",
+  "item": "S09",
+  "seed": 2,
+  "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:S09\n    Scenario: Comment deletion control visibility\n      Given user A leaves a comment on an article\n      When user B opens the same article and leaves their own comment\n      Then user B should not see the delete control for user A's comment\n      And user B should see the delete control for their own comment\n",
+  "spec": "generated/NB_gem_precise_S09_s2.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求只關注刪除控制項的可見性，檢查留言卡片本身可見是為了確保後續尋找控制項之測試目標已渲染的可見性守衛。",
+      "assertion": "await expect(commentCardB).toBeVisible()",
+      "line": 33
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此斷言是在檢查刪除按鈕前確認留言 A 卡片已載入呈現的守衛性檢查，並非規格中對刪除控制項可見性的核心行為主張。",
+      "assertion": "await expect(commentCardA).toBeVisible()",
+      "line": 34
+    },
+    {
+      "class": "P0",
+      "citation": "B 看不到 A 那則留言的刪除控制項，只看得到自己那則的。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出使用者 B 看不到使用者 A 留言的刪除控制項，斷言其數量為 0 是該要求的直接對應。",
+      "assertion": "await expect(commentCardA.locator(deleteControlSelector)).toHaveCount(0)",
+      "line": 39
+    },
+    {
+      "class": "P0",
+      "citation": "只看得到自己那則的。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出使用者 B 只看得到自己那則留言的刪除控制項，斷言驗證 B 留言的刪除控制項可見，完全對應要求。",
+      "assertion": "await expect(commentCardB.locator(deleteControlSelector)).toBeVisible()",
+      "line": 42
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求只關注刪除控制項的可見性，檢查留言卡片本身可見是為了確保後續尋找控制項之測試目標已渲染的可見性守衛。",
+        "assertion": "await expect(commentCardB).toBeVisible()",
+        "line": 33
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言是在檢查刪除按鈕前確認留言 A 卡片已載入呈現的守衛性檢查，並非規格中對刪除控制項可見性的核心行為主張。",
+        "assertion": "await expect(commentCardA).toBeVisible()",
+        "line": 34
+      },
+      {
+        "class": "P0",
+        "citation": "B 看不到 A 那則留言的刪除控制項，只看得到自己那則的。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出使用者 B 看不到使用者 A 留言的刪除控制項，斷言其數量為 0 是該要求的直接對應。",
+        "assertion": "await expect(commentCardA.locator(deleteControlSelector)).toHaveCount(0)",
+        "line": 39
+      },
+      {
+        "class": "P0",
+        "citation": "只看得到自己那則的。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出使用者 B 只看得到自己那則留言的刪除控制項，斷言驗證 B 留言的刪除控制項可見，完全對應要求。",
+        "assertion": "await expect(commentCardB.locator(deleteControlSelector)).toBeVisible()",
+        "line": 42
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言在後續檢查刪除控制項前確認 B 的留言卡片已出現，驗收要求與 Gherkin 都未主張該卡片在此時間點的可見性。",
+        "assertion": "await expect(commentCardB).toBeVisible()",
+        "line": 33
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言僅在檢查留言卡片存在以便後續定位其刪除控制項；需求與 Gherkin 都未主張 A 的留言卡片在此時是否可見。",
+        "assertion": "await expect(commentCardA).toBeVisible()",
+        "line": 34
+      },
+      {
+        "class": "P0",
+        "citation": "B 看不到 A 那則留言的刪除控制項，只看得到自己那則的。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言直接驗證使用者 B 看不到使用者 A 留言的刪除控制項。",
+        "assertion": "await expect(commentCardA.locator(deleteControlSelector)).toHaveCount(0)",
+        "line": 39
+      },
+      {
+        "class": "P0",
+        "citation": "B 看不到 A 那則留言的刪除控制項，只看得到自己那則的。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言直接驗證使用者 B 看得到自己留言的刪除控制項。",
+        "assertion": "await expect(commentCardB.locator(deleteControlSelector)).toBeVisible()",
+        "line": 42
+      }
+    ]
+  }
+}

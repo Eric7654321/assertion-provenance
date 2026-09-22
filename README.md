@@ -1,6 +1,6 @@
 # Cross-Stage Assertion Provenance in Agentic BDD Pipelines — Data and Code
 
-Replication and audit package for the short paper
+Replication and audit package for the regular paper
 **"What Do Test Assertions Rest On? Measuring Cross-Stage Provenance in Agentic BDD Pipelines"**
 (SE4AgenticAI 2026, IEEE BigData 2026 workshop; under review).
 
@@ -20,6 +20,11 @@ Behavioral assertions only (P3 = test infrastructure, excluded).
 | gemini-3.8-flash | concise (exploratory) | 148 | 76 | 1 | 58 | 13 | 8.8% |
 | gpt-5.6-terra | concise (exploratory) | 161 | 77 | 3 | 59 | 22 | 13.7% |
 | **Total** | | **589** | **387** | **4** | **143** | **55** | **9.3%** |
+
+In the controlled browser-disabled extension, the two generators produced 60 additional tests with
+273 behavioral assertions. The primary judging pipeline found 20 final P4 assertions; a complete
+second-judge pipeline found P4 assertions for both generators as well. Thus runtime observation is
+not necessary for the measured phenomenon.
 
 - **P0** stated by the requirement or entailed by its stated preconditions
 - **P1** absent from the requirement, stated by the Gherkin
@@ -43,12 +48,17 @@ lab/
   harness/                     generation, judging, P2 checking, and report scripts (Python)
   support/fixtures.ts          shared test fixtures the generated tests import
   generated/PR_*.spec.ts       the 120 generated Playwright tests
+  generated/NB_*.spec.ts       the 60 browser-disabled controlled tests
   runs/group-probe/G5_*, G4_*  Gherkin written by model A (G5 = precise, G4 = concise), 3 runs each
   runs/gate2-verdict/G5_*, G4_*  gate verdicts for those Gherkin (self-review and blind)
   runs/precision/PR_*.json     per-assertion classification by the judge (and by the second model)
   runs/p2check/PR_*.json       public-reference check of every provisional P4
+  runs/browser-control*/       controlled generation, both judges, and full-reference checks
+  runs/provenance-benchmark.json  balanced 20-case known-answer judge benchmark
   conduit-setup.patch          our only change to the application under test (SQLite backend etc.)
   tools/fetch_contract.sh      re-creates the pinned public reference set (36 RealWorld files)
+paper/main.tex, refs.bib       paper source
+SE4AgenticAI.pdf               compiled eight-page manuscript
 ```
 
 ## Pinned versions
@@ -84,6 +94,7 @@ stored runs are the ones reported in the paper.
 
 See the paper's threats to validity. In short: the judge and the reference checker are LLMs (the
 script verifies that each citation exists at the cited lines, not that it supports the assertion);
-the judge is the same model as one generator; generator identity is confounded with tool use
-(gemini-3.8-flash explored the running application in 59 of 60 runs, gpt-5.6-terra in none);
-exploration transcripts were not retained; one testbed and ten requirements.
+the primary judge is the same model as one generator; model aliases may change; exploration
+transcripts from the baseline were not retained; and the study covers one testbed and ten
+requirements. The controlled extension removes runtime access for both generators, but does not
+identify their internal causal source.

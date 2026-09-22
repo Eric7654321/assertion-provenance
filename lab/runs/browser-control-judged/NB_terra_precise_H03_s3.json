@@ -1,0 +1,235 @@
+{
+  "source": "NB_terra_precise_H03_s3.json",
+  "gen": "terra",
+  "gen_model": "gpt-5.6-terra",
+  "arm": "precise",
+  "condition": "C0-none",
+  "item": "H03",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H03\n    Scenario: Pagination with tag filter\n      Given there are 15 articles under a specific tag\n      When a user filters articles by this tag on the home page\n      Then the number of displayed articles matches the pagination setting\n      When the user selects page 2 from the pagination controls\n      Then the second page shows the subsequent articles\n      And the URL reflects page 2\n      When the user directly opens the URL with page 2\n      Then the user arrives at the same page\n      When the user switches back to the all articles list\n      Then the list returns to the first page\n",
+  "spec": "generated/NB_terra_precise_H03_s3.spec.ts",
+  "rows": [
+    {
+      "class": "P0",
+      "citation": "每頁的文章數符合分頁設定，第二頁是接續的文章；網址會反映目前頁碼；直接輸入網址可以到達同一頁；切回全部文章時回到第一頁。",
+      "p2_candidate": false,
+      "borderline": true,
+      "why": "驗收要求已指定共 15 篇文章且每頁文章數符合分頁設定（note 說明每頁筆數以產品預設為準，RealWorld 預設為 10 篇），因此第一頁應有 10 篇為要求的操作化體現。",
+      "assertion": "await expect(articlePreviews).toHaveCount(10)",
+      "line": 26
+    },
+    {
+      "class": "P0",
+      "citation": "每頁的文章數符合分頁設定，第二頁是接續的文章",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "前置條件已設定共15篇且預設每頁10篇，第二頁顯示剩餘接續的5篇符合驗收要求。",
+      "assertion": "await expect(articlePreviews).toHaveCount(5)",
+      "line": 30
+    },
+    {
+      "class": "P0",
+      "citation": "網址會反映目前頁碼",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出點選分頁後「網址會反映目前頁碼」，斷言檢查當前 URL 包含 page=2 及對應標籤符合該需求。",
+      "assertion": "await expect(page).toHaveURL(new RegExp(`/#/\\\\?tag=${tag}&page=2|/#/\\\\?page=2&tag=${tag}`))",
+      "line": 31
+    },
+    {
+      "class": "P0",
+      "citation": "第二頁是接續的文章",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確寫出「第二頁是接續的文章」，斷言透過比對後續文章（articles.slice(10)）標題操作化該主張。",
+      "assertion": "expect(secondPageTitles).toEqual( expect.arrayContaining(articles.slice(10).map((article) => article.title)), )",
+      "line": 34
+    },
+    {
+      "class": "P0",
+      "citation": "直接輸入網址可以到達同一頁",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求已陳述15篇文章且直接輸入網址可到達第二頁，在每頁預設10筆下蘊含第二頁應有剩餘的5篇文章。",
+      "assertion": "await expect(articlePreviews).toHaveCount(5)",
+      "line": 40
+    },
+    {
+      "class": "P0",
+      "citation": "直接輸入網址可以到達同一頁",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "直接輸入網址到達第二頁後，驗收要求明確指出「直接輸入網址可以到達同一頁」，即顯示第二頁接續的文章內容（第 11-15 篇）。",
+      "assertion": "await expect(articlePreviews.locator('h1')).toHaveText( expect.arrayContaining(articles.slice(10).map((article) => article.title)), )",
+      "line": 41
+    },
+    {
+      "class": "P0",
+      "citation": "切回全部文章時回到第一頁。",
+      "p2_candidate": false,
+      "borderline": true,
+      "why": "驗收要求規定切回全部文章時回到第一頁，結合預設分頁大小10筆，驗證首頁文章預覽數量為10篇被此要求蘊含。",
+      "assertion": "await expect(articlePreviews).toHaveCount(10)",
+      "line": 47
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求只要求『切回全部文章時回到第一頁』，未規範切回全部文章後的 URL 格式。",
+      "assertion": "await expect(page).toHaveURL(`${UI}/#/`)",
+      "line": 48
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P0",
+        "citation": "每頁的文章數符合分頁設定，第二頁是接續的文章；網址會反映目前頁碼；直接輸入網址可以到達同一頁；切回全部文章時回到第一頁。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "驗收要求已指定共 15 篇文章且每頁文章數符合分頁設定（note 說明每頁筆數以產品預設為準，RealWorld 預設為 10 篇），因此第一頁應有 10 篇為要求的操作化體現。",
+        "assertion": "await expect(articlePreviews).toHaveCount(10)",
+        "line": 26
+      },
+      {
+        "class": "P0",
+        "citation": "每頁的文章數符合分頁設定，第二頁是接續的文章",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "前置條件已設定共15篇且預設每頁10篇，第二頁顯示剩餘接續的5篇符合驗收要求。",
+        "assertion": "await expect(articlePreviews).toHaveCount(5)",
+        "line": 30
+      },
+      {
+        "class": "P0",
+        "citation": "網址會反映目前頁碼",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出點選分頁後「網址會反映目前頁碼」，斷言檢查當前 URL 包含 page=2 及對應標籤符合該需求。",
+        "assertion": "await expect(page).toHaveURL(new RegExp(`/#/\\\\?tag=${tag}&page=2|/#/\\\\?page=2&tag=${tag}`))",
+        "line": 31
+      },
+      {
+        "class": "P0",
+        "citation": "第二頁是接續的文章",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確寫出「第二頁是接續的文章」，斷言透過比對後續文章（articles.slice(10)）標題操作化該主張。",
+        "assertion": "expect(secondPageTitles).toEqual( expect.arrayContaining(articles.slice(10).map((article) => article.title)), )",
+        "line": 34
+      },
+      {
+        "class": "P0",
+        "citation": "直接輸入網址可以到達同一頁",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求已陳述15篇文章且直接輸入網址可到達第二頁，在每頁預設10筆下蘊含第二頁應有剩餘的5篇文章。",
+        "assertion": "await expect(articlePreviews).toHaveCount(5)",
+        "line": 40
+      },
+      {
+        "class": "P0",
+        "citation": "直接輸入網址可以到達同一頁",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "直接輸入網址到達第二頁後，驗收要求明確指出「直接輸入網址可以到達同一頁」，即顯示第二頁接續的文章內容（第 11-15 篇）。",
+        "assertion": "await expect(articlePreviews.locator('h1')).toHaveText( expect.arrayContaining(articles.slice(10).map((article) => article.title)), )",
+        "line": 41
+      },
+      {
+        "class": "P0",
+        "citation": "切回全部文章時回到第一頁。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "驗收要求規定切回全部文章時回到第一頁，結合預設分頁大小10筆，驗證首頁文章預覽數量為10篇被此要求蘊含。",
+        "assertion": "await expect(articlePreviews).toHaveCount(10)",
+        "line": 47
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求只要求『切回全部文章時回到第一頁』，未規範切回全部文章後的 URL 格式。",
+        "assertion": "await expect(page).toHaveURL(`${UI}/#/`)",
+        "line": 48
+      }
+    ],
+    "terra": [
+      {
+        "class": "P0",
+        "citation": "每頁的文章數符合分頁設定",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "標籤篩選後首頁第一頁顯示 10 篇文章，是每頁文章數符合產品分頁設定的具體驗證。",
+        "assertion": "await expect(articlePreviews).toHaveCount(10)",
+        "line": 26
+      },
+      {
+        "class": "P0",
+        "citation": "每頁的文章數符合分頁設定，第二頁是接續的文章；網址會反映目前頁碼；直接輸入網址可以到達同一頁；切回全部文章時回到第一頁。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "第 2 頁顯示 5 篇是 15 篇文章依產品每頁預設 10 篇分頁後，第二頁文章數符合分頁設定的具體結果。",
+        "assertion": "await expect(articlePreviews).toHaveCount(5)",
+        "line": 30
+      },
+      {
+        "class": "P0",
+        "citation": "網址會反映目前頁碼；",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "點選第 2 頁後斷言網址包含 page=2，直接對應驗收要求中網址反映目前頁碼的主張。",
+        "assertion": "await expect(page).toHaveURL(new RegExp(`/#/\\\\?tag=${tag}&page=2|/#/\\\\?page=2&tag=${tag}`))",
+        "line": 31
+      },
+      {
+        "class": "P0",
+        "citation": "每頁的文章數符合分頁設定，第二頁是接續的文章；網址會反映目前頁碼；直接輸入網址可以到達同一頁；切回全部文章時回到第一頁。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在點選第 2 頁後確認該頁包含第 11 篇起的文章標題，直接驗證「第二頁是接續的文章」。",
+        "assertion": "expect(secondPageTitles).toEqual( expect.arrayContaining(articles.slice(10).map((article) => article.title)), )",
+        "line": 34
+      },
+      {
+        "class": "P0",
+        "citation": "每頁的文章數符合分頁設定，第二頁是接續的文章；網址會反映目前頁碼；直接輸入網址可以到達同一頁；切回全部文章時回到第一頁。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "直接開啟 page=2 網址後斷言顯示 5 篇文章，是「每頁的文章數符合分頁設定」在產品預設每頁 5 篇下的具體驗證。",
+        "assertion": "await expect(articlePreviews).toHaveCount(5)",
+        "line": 40
+      },
+      {
+        "class": "P0",
+        "citation": "直接輸入網址可以到達同一頁；",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "直接開啟 page=2 網址後，斷言顯示第 2 頁接續文章的標題，屬於到達同一頁的具體驗證。",
+        "assertion": "await expect(articlePreviews.locator('h1')).toHaveText( expect.arrayContaining(articles.slice(10).map((article) => article.title)), )",
+        "line": 41
+      },
+      {
+        "class": "P0",
+        "citation": "每頁的文章數符合分頁設定，第二頁是接續的文章；網址會反映目前頁碼；直接輸入網址可以到達同一頁；切回全部文章時回到第一頁。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "切回全部文章列表後斷言顯示 10 篇文章，是「每頁的文章數符合分頁設定」在產品預設每頁 10 筆下的具體驗證。",
+        "assertion": "await expect(articlePreviews).toHaveCount(10)",
+        "line": 47
+      },
+      {
+        "class": "P0",
+        "citation": "切回全部文章時回到第一頁。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "點擊 Global Feed 切回全部文章列表後，URL 為首頁根路徑是回到第一頁的直接表現。",
+        "assertion": "await expect(page).toHaveURL(`${UI}/#/`)",
+        "line": 48
+      }
+    ]
+  }
+}

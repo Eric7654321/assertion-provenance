@@ -1,0 +1,1329 @@
+{
+  "protocol": "BROWSER_CONTROL_PROTOCOL.md",
+  "condition": "C0-none",
+  "planned_cells": 60,
+  "records": [
+    {
+      "run_id": "NB_gem_precise_H01_s1",
+      "condition": "C0-none",
+      "generator": "gem",
+      "model": "gemini-3.8-flash",
+      "item": "H01",
+      "seed": 1,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H01\n    Scenario: Article tags and editing\n      Given I am a logged-in user on the new article page\n      When I publish an article with a title, body, and three tags\n      Then the article page shows content matching what was entered\n      When I choose to edit the article on its page\n      And I change the title to a different string, remove all tags, and submit\n      Then the article title is updated\n      And the tags no longer appear\n",
+      "complete": true,
+      "spec": "generated/NB_gem_precise_H01_s1.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('Article tags and editing', async ({ page }) => {\n    const user = await newUser();\n    await loginAs(page, user);\n\n    // Given I am a logged-in user on the new article page\n    await page.goto(`${UI}/#/editor`);\n\n    const title = `Article Title ${Date.now()}`;\n    const description = 'Article Description';\n    const body = 'Article Body Content';\n    const tags = ['tag-one', 'tag-two', 'tag-three'];\n\n    // When I publish an article with a title, body, and three tags\n    await page.locator('input[placeholder=\"Article Title\"]').fill(title);\n    await page.locator('input[placeholder*=\"about\"]').fill(description);\n    await page.locator('textarea[placeholder*=\"markdown\"]').fill(body);\n\n    const tagInput = page.locator('input[placeholder*=\"tags\"]');\n    for (const tag of tags) {\n      await tagInput.fill(tag);\n      await tagInput.press('Enter');\n    }\n\n    await page.locator('button:has-text(\"Publish Article\")').click();\n\n    // Then the article page shows content matching what was entered\n    await expect(page.locator('h1')).toHaveText(title);\n    await expect(page.locator('.article-content')).toContainText(body);\n    for (const tag of tags) {\n      await expect(page.locator('.tag-list')).toContainText(tag);\n    }\n\n    // When I choose to edit the article on its page\n    await page.locator('a:has-text(\"Edit Article\")').first().click();\n\n    // And I change the title to a different string, remove all tags, and submit\n    const updatedTitle = `Updated Title ${Date.now()}`;\n    const titleInput = page.locator('input[placeholder=\"Article Title\"]');\n    await titleInput.fill('');\n    await titleInput.fill(updatedTitle);\n\n    // Remove all tags\n    const removeTagIcons = page.locator('.tag-default i, .tag-pill i');\n    while (await removeTagIcons.count() > 0) {\n      await removeTagIcons.first().click();\n    }\n\n    await page.locator('button:has-text(\"Publish Article\")').click();\n\n    // Then the article title is updated\n    await expect(page.locator('h1')).toHaveText(updatedTitle);\n\n    // And the tags no longer appear\n    for (const tag of tags) {\n      await expect(page.locator('.tag-list')).not.toContainText(tag);\n    }\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 6.2,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_terra_precise_H01_s1",
+      "condition": "C0-none",
+      "generator": "terra",
+      "model": "gpt-5.6-terra",
+      "item": "H01",
+      "seed": 1,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H01\n    Scenario: Article tags and editing\n      Given I am a logged-in user on the new article page\n      When I publish an article with a title, body, and three tags\n      Then the article page shows content matching what was entered\n      When I choose to edit the article on its page\n      And I change the title to a different string, remove all tags, and submit\n      Then the article title is updated\n      And the tags no longer appear\n",
+      "complete": true,
+      "spec": "generated/NB_terra_precise_H01_s1.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('H01 - Article tags and editing', async ({ page }) => {\n    const user = await newUser();\n    const originalTitle = `Article title ${Date.now()}`;\n    const updatedTitle = `Updated article title ${Date.now()}`;\n    const body = 'This is the article body.';\n    const tags = ['playwright', 'typescript', 'conduit'];\n\n    await loginAs(page, user);\n    await page.goto(`${UI}/#/editor`);\n\n    await page.getByPlaceholder('Article Title').fill(originalTitle);\n    await page.getByPlaceholder(\"What's this article about?\").fill('Article description');\n    await page.getByPlaceholder('Write your article (in markdown)').fill(body);\n\n    const tagInput = page.getByPlaceholder('Enter tags');\n    for (const tag of tags) {\n      await tagInput.fill(tag);\n      await tagInput.press('Enter');\n    }\n\n    await page.getByRole('button', { name: 'Publish Article' }).click();\n\n    await expect(page).toHaveURL(/#\\/article\\//);\n    await expect(page.getByRole('heading', { name: originalTitle })).toBeVisible();\n    await expect(page.locator('.article-content')).toContainText(body);\n\n    for (const tag of tags) {\n      await expect(page.locator('.tag-list')).toContainText(tag);\n    }\n\n    await page.getByRole('button', { name: 'Edit Article' }).click();\n\n    await expect(page).toHaveURL(/#\\/editor\\//);\n    await page.getByPlaceholder('Article Title').fill(updatedTitle);\n\n    const tagPills = page.locator('.tag-list .tag-pill');\n    while (await tagPills.count()) {\n      await tagPills.first().locator('i').click();\n    }\n\n    await page.getByRole('button', { name: 'Publish Article' }).click();\n\n    await expect(page).toHaveURL(/#\\/article\\//);\n    await expect(page.getByRole('heading', { name: updatedTitle })).toBeVisible();\n\n    for (const tag of tags) {\n      await expect(page.locator('.tag-list')).not.toContainText(tag);\n    }\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 5.8,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_gem_precise_S02_s1",
+      "condition": "C0-none",
+      "generator": "gem",
+      "model": "gemini-3.8-flash",
+      "item": "S02",
+      "seed": 1,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S02\n    Scenario: Registration with duplicate email\n      Given a user has completed registration with an unused email and logged out\n      When someone attempts to register again with the same email\n      Then the registration fails with an error displayed\n      And the user is not logged in\n",
+      "complete": true,
+      "spec": "generated/NB_gem_precise_S02_s1.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('Registration with duplicate email (@item:S02)', async ({ page }) => {\n    // Given a user has completed registration with an unused email and logged out\n    const existingUser = await newUser();\n\n    // When someone attempts to register again with the same email\n    await page.goto(`${UI}/#/register`);\n\n    await page.getByPlaceholder('Username').fill(`dup_${Date.now()}`);\n    await page.getByPlaceholder('Email').fill(existingUser.email);\n    await page.getByPlaceholder('Password').fill('password123');\n\n    await page.getByRole('button', { name: 'Sign up' }).click();\n\n    // Then the registration fails with an error displayed\n    const errorMessages = page.locator('.error-messages');\n    await expect(errorMessages).toBeVisible();\n    await expect(errorMessages).toContainText(/email.*has already been taken|email/i);\n\n    // And the user is not logged in\n    await expect(page.getByRole('link', { name: 'Sign in' })).toBeVisible();\n    await expect(page.getByRole('link', { name: 'Sign up' })).toBeVisible();\n    await expect(page).toHaveURL(/#\\/register/);\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 1.9,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_terra_precise_S02_s1",
+      "condition": "C0-none",
+      "generator": "terra",
+      "model": "gpt-5.6-terra",
+      "item": "S02",
+      "seed": 1,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S02\n    Scenario: Registration with duplicate email\n      Given a user has completed registration with an unused email and logged out\n      When someone attempts to register again with the same email\n      Then the registration fails with an error displayed\n      And the user is not logged in\n",
+      "complete": true,
+      "spec": "generated/NB_terra_precise_S02_s1.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, apiCall, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('@item:S02 Registration with duplicate email', async ({ page }) => {\n    const user = await newUser();\n\n    await page.goto(`${UI}/#/register`);\n\n    await page.getByPlaceholder('Username').fill(`${user.username}-duplicate`);\n    await page.getByPlaceholder('Email').fill(user.email);\n    await page.getByPlaceholder('Password').fill('password123');\n\n    await page.getByRole('button', { name: 'Sign up' }).click();\n\n    await expect(page.locator('.error-messages')).toBeVisible();\n    await expect(page.locator('.error-messages')).toContainText(/email.*already|already.*email/i);\n\n    await expect(page).toHaveURL(/#\\/register$/);\n    await expect(page.getByRole('link', { name: 'Sign in' })).toBeVisible();\n\n    const currentUser = await apiCall('/user', 'GET');\n    expect(currentUser.status).toBe(401);\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 4.3,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_gem_precise_H03_s1",
+      "condition": "C0-none",
+      "generator": "gem",
+      "model": "gemini-3.8-flash",
+      "item": "H03",
+      "seed": 1,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H03\n    Scenario: Pagination under tag filter\n      Given there are 15 articles under a specific tag\n      When I filter by this tag on the home page\n      Then the number of articles per page matches the pagination setting\n      When I select page 2 in the pagination bar\n      Then the second page displays the consecutive articles\n      And the URL reflects the current page number\n      When I open a new page directly with the URL containing page=2\n      Then I arrive at the same page\n      When I switch back to the all articles list\n      Then the list returns to the first page\n",
+      "complete": true,
+      "spec": "generated/NB_gem_precise_H03_s1.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('Pagination under tag filter (@item:H03)', async ({ page, context }) => {\n    const author = await newUser();\n    const tagName = `tag-${Date.now()}`;\n\n    // Given there are 15 articles under a specific tag\n    for (let i = 1; i <= 15; i++) {\n      await newArticle(author, {\n        title: `Tag Article ${i.toString().padStart(2, '0')} - ${Date.now()}`,\n        tagList: [tagName],\n      });\n    }\n\n    // Go to home page\n    await page.goto(`${UI}/#/`);\n\n    // When I filter by this tag on the home page\n    const tagButton = page.locator('.tag-list, .tag-default').filter({ hasText: tagName }).first();\n    await expect(tagButton).toBeVisible();\n    await tagButton.click();\n\n    // Then the number of articles per page matches the pagination setting (typically 10 per page in Conduit)\n    const articlePreviews = page.locator('.article-preview');\n    await expect(articlePreviews.first()).toBeVisible();\n    await expect(articlePreviews).toHaveCount(10);\n\n    const firstPageFirstArticleTitle = await articlePreviews.first().locator('h1').textContent();\n\n    // When I select page 2 in the pagination bar\n    const page2Button = page.locator('.pagination .page-item, .pagination li').filter({ hasText: '2' }).first();\n    await expect(page2Button).toBeVisible();\n    await page2Button.click();\n\n    // Then the second page displays the consecutive articles\n    await expect(articlePreviews).toHaveCount(5);\n    const secondPageFirstArticleTitle = await articlePreviews.first().locator('h1').textContent();\n    expect(secondPageFirstArticleTitle).not.toEqual(firstPageFirstArticleTitle);\n\n    // And the URL reflects the current page number\n    await expect(page).toHaveURL(/page=2/);\n    const page2Url = page.url();\n\n    // When I open a new page directly with the URL containing page=2\n    const newPage = await context.newPage();\n    await newPage.goto(page2Url);\n\n    // Then I arrive at the same page\n    const newPageArticlePreviews = newPage.locator('.article-preview');\n    await expect(newPageArticlePreviews.first()).toBeVisible();\n    await expect(newPageArticlePreviews).toHaveCount(5);\n    const newPageFirstArticleTitle = await newPageArticlePreviews.first().locator('h1').textContent();\n    expect(newPageFirstArticleTitle).toEqual(secondPageFirstArticleTitle);\n    await newPage.close();\n\n    // When I switch back to the all articles list\n    const globalFeedTab = page.locator('.feed-toggle a, .nav-link').filter({ hasText: /Global Feed|All/i }).first();\n    await globalFeedTab.click();\n\n    // Then the list returns to the first page\n    await expect(articlePreviews.first()).toBeVisible();\n    await expect(page).not.toHaveURL(/page=2/);\n    const activePageItem = page.locator('.pagination .page-item.active, .pagination li.active');\n    if (await activePageItem.count() > 0) {\n      await expect(activePageItem.first()).toHaveText('1');\n    }\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 4.2,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_terra_precise_H03_s1",
+      "condition": "C0-none",
+      "generator": "terra",
+      "model": "gpt-5.6-terra",
+      "item": "H03",
+      "seed": 1,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H03\n    Scenario: Pagination under tag filter\n      Given there are 15 articles under a specific tag\n      When I filter by this tag on the home page\n      Then the number of articles per page matches the pagination setting\n      When I select page 2 in the pagination bar\n      Then the second page displays the consecutive articles\n      And the URL reflects the current page number\n      When I open a new page directly with the URL containing page=2\n      Then I arrive at the same page\n      When I switch back to the all articles list\n      Then the list returns to the first page\n",
+      "complete": true,
+      "spec": "generated/NB_terra_precise_H03_s1.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('@item:H03 Pagination under tag filter', async ({ page }) => {\n    const user = await newUser();\n    const tag = `pagination-tag-${Date.now()}`;\n\n    const articles = await Promise.all(\n      Array.from({ length: 15 }, (_, index) =>\n        newArticle(user, {\n          title: `Pagination article ${index + 1}`,\n          description: `Description for pagination article ${index + 1}`,\n          body: `Body for pagination article ${index + 1}`,\n          tagList: [tag],\n        }),\n      ),\n    );\n\n    await loginAs(page, user);\n\n    await page.goto(`${UI}/#/`);\n    await page.getByRole('link', { name: tag, exact: true }).click();\n\n    const articlePreviews = page.locator('app-article-list .article-preview');\n    await expect(articlePreviews).toHaveCount(10);\n\n    await page.getByRole('link', { name: '2', exact: true }).click();\n\n    await expect(articlePreviews).toHaveCount(5);\n    await expect(page).toHaveURL(new RegExp(`tag=${encodeURIComponent(tag)}.*page=2|page=2.*tag=${encodeURIComponent(tag)}`));\n\n    const secondPageTitles = await articlePreviews.locator('h1').allTextContents();\n    const expectedSecondPageTitles = articles\n      .slice(10)\n      .reverse()\n      .map((article) => article.title);\n\n    expect(secondPageTitles).toEqual(expectedSecondPageTitles);\n\n    await page.goto(`${UI}/#/?tag=${encodeURIComponent(tag)}&page=2`);\n\n    await expect(articlePreviews).toHaveCount(5);\n    await expect(articlePreviews.locator('h1').allTextContents()).resolves.toEqual(\n      expectedSecondPageTitles,\n    );\n\n    await page.getByRole('link', { name: 'Global Feed', exact: true }).click();\n\n    await expect(articlePreviews).toHaveCount(10);\n    await expect(page).not.toHaveURL(/page=2/);\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 6.0,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_gem_precise_S07_s1",
+      "condition": "C0-none",
+      "generator": "gem",
+      "model": "gemini-3.8-flash",
+      "item": "S07",
+      "seed": 1,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S07\n    Scenario: Author deletes their own article\n      Given I am on my own article page as the author\n      When I choose to delete the article\n      Then the article no longer appears in the article list on the home page\n",
+      "complete": true,
+      "spec": "generated/NB_gem_precise_S07_s1.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('@item:S07 Author deletes their own article', async ({ page }) => {\n    // 建立作者使用者並發布一篇文章\n    const author = await newUser();\n    const article = await newArticle(author);\n\n    // 以作者身分登入\n    await loginAs(page, author);\n\n    // 瀏覽至該文章頁面 (hash routing)\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    // 等待文章載入確認\n    await expect(page.locator('h1')).toHaveText(article.title);\n\n    // 點擊刪除按鈕 (Conduit 標準按鈕：包含 \"Delete Article\" 或 .btn-outline-danger)\n    const deleteButton = page.getByRole('button', { name: /delete article/i }).first();\n    await deleteButton.click();\n\n    // 刪除後導回首頁或全域動態列表\n    await page.waitForURL(`${UI}/#/`);\n\n    // 切換至 Global Feed 確保文章列表載入（若預設為 Your Feed）\n    const globalFeedTab = page.getByRole('button', { name: /global feed/i }).or(page.getByText('Global Feed'));\n    if (await globalFeedTab.isVisible()) {\n      await globalFeedTab.click();\n    }\n\n    // 驗證首頁文章列表中不再出現該文章標題\n    await expect(page.getByRole('heading', { name: article.title })).not.toBeVisible();\n    await expect(page.locator('.article-preview').filter({ hasText: article.title })).toHaveCount(0);\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 2.6,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_terra_precise_S07_s1",
+      "condition": "C0-none",
+      "generator": "terra",
+      "model": "gpt-5.6-terra",
+      "item": "S07",
+      "seed": 1,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S07\n    Scenario: Author deletes their own article\n      Given I am on my own article page as the author\n      When I choose to delete the article\n      Then the article no longer appears in the article list on the home page\n",
+      "complete": true,
+      "spec": "generated/NB_terra_precise_S07_s1.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('@item:S07 Author deletes their own article', async ({ page }) => {\n    const user = await newUser();\n    const article = await newArticle(user);\n\n    await loginAs(page, user);\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    await expect(page.getByRole('button', { name: /delete article/i })).toBeVisible();\n    await page.getByRole('button', { name: /delete article/i }).click();\n\n    await page.waitForURL(/#\\/?$/);\n\n    await expect(page.getByRole('link', { name: article.title })).not.toBeVisible();\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 2.7,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_gem_precise_H02_s1",
+      "condition": "C0-none",
+      "generator": "gem",
+      "model": "gemini-3.8-flash",
+      "item": "H02",
+      "seed": 1,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H02\n    Scenario: Article page visibility and permissions\n      Given an author creates an article and posts a comment on it\n      When an unauthenticated guest views the article page\n      Then the guest can view the article but cannot post comments\n      When another logged-in user who is not the author views the same article page\n      Then this user does not see controls to edit or delete the article\n      When this user posts their own comment on the article\n      Then delete controls for comments only appear to the respective authors of those comments\n",
+      "complete": true,
+      "spec": "generated/NB_gem_precise_H02_s1.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, apiCall, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('Article page visibility and permissions', async ({ page }) => {\n    // Given an author creates an article and posts a comment on it\n    const author = await newUser();\n    const article = await newArticle(author);\n\n    const authorCommentBody = 'Author comment ' + Date.now();\n    await apiCall(`/articles/${article.slug}/comments`, 'POST', {\n      comment: { body: authorCommentBody }\n    }, author.token);\n\n    // When an unauthenticated guest views the article page\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    // Then the guest can view the article but cannot post comments\n    await expect(page.locator('h1')).toContainText(article.title);\n    await expect(page.locator('.article-content')).toContainText(article.body);\n    await expect(page.locator('textarea[placeholder=\"Write a comment...\"]')).toHaveCount(0);\n    await expect(page.locator('text=Sign in or sign up to add comments on this article.')).toBeVisible();\n\n    // When another logged-in user who is not the author views the same article page\n    const reader = await newUser();\n    await loginAs(page, reader);\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    // Then this user does not see controls to edit or delete the article\n    await expect(page.locator('h1')).toContainText(article.title);\n    await expect(page.locator('a[href*=\"/editor/\"]')).toHaveCount(0);\n    await expect(page.locator('button:has-text(\"Delete Article\")')).toHaveCount(0);\n\n    // When this user posts their own comment on the article\n    const readerCommentBody = 'Reader comment ' + Date.now();\n    await page.locator('textarea[placeholder=\"Write a comment...\"]').fill(readerCommentBody);\n    await page.locator('button:has-text(\"Post Comment\")').click();\n\n    // Then delete controls for comments only appear to the respective authors of those comments\n    const authorCommentCard = page.locator('.card', { hasText: authorCommentBody });\n    const readerCommentCard = page.locator('.card', { hasText: readerCommentBody });\n\n    await expect(authorCommentCard).toBeVisible();\n    await expect(readerCommentCard).toBeVisible();\n\n    // The reader should not see the delete button (trash icon / mod-options) on the author's comment\n    await expect(authorCommentCard.locator('.mod-options')).toHaveCount(0);\n\n    // The reader should see the delete button on their own comment\n    await expect(readerCommentCard.locator('.mod-options')).toBeVisible();\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 4.8,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_terra_precise_H02_s1",
+      "condition": "C0-none",
+      "generator": "terra",
+      "model": "gpt-5.6-terra",
+      "item": "H02",
+      "seed": 1,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H02\n    Scenario: Article page visibility and permissions\n      Given an author creates an article and posts a comment on it\n      When an unauthenticated guest views the article page\n      Then the guest can view the article but cannot post comments\n      When another logged-in user who is not the author views the same article page\n      Then this user does not see controls to edit or delete the article\n      When this user posts their own comment on the article\n      Then delete controls for comments only appear to the respective authors of those comments\n",
+      "complete": true,
+      "spec": "generated/NB_terra_precise_H02_s1.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport {\n  newUser,\n  newArticle,\n  loginAs,\n  apiCall,\n  UI,\n} from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('@item:H02 Article page visibility and permissions', async ({ page }) => {\n    const author = await newUser();\n    const otherUser = await newUser();\n    const article = await newArticle(author);\n\n    const authorCommentBody = 'Comment written by the article author';\n    const otherCommentBody = 'Comment written by another user';\n\n    const authorCommentResponse = await apiCall(\n      `/articles/${article.slug}/comments`,\n      'POST',\n      { comment: { body: authorCommentBody } },\n      author.token,\n    );\n\n    expect(authorCommentResponse.status).toBe(200);\n\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    await expect(page.getByRole('heading', { name: article.title })).toBeVisible();\n    await expect(page.getByText(authorCommentBody)).toBeVisible();\n\n    await expect(page.locator('textarea[placeholder=\"Write a comment...\"]')).toHaveCount(0);\n    await expect(page.getByRole('button', { name: /post comment/i })).toHaveCount(0);\n\n    await loginAs(page, otherUser);\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    await expect(page.getByRole('heading', { name: article.title })).toBeVisible();\n    await expect(page.getByRole('link', { name: /edit article/i })).toHaveCount(0);\n    await expect(page.getByRole('button', { name: /delete article/i })).toHaveCount(0);\n\n    const commentBox = page.locator('textarea[placeholder=\"Write a comment...\"]');\n    await expect(commentBox).toBeVisible();\n\n    await commentBox.fill(otherCommentBody);\n    await page.getByRole('button', { name: /post comment/i }).click();\n\n    const authorComment = page.locator('.card', {\n      hasText: authorCommentBody,\n    });\n    const otherUserComment = page.locator('.card', {\n      hasText: otherCommentBody,\n    });\n\n    await expect(authorComment).toBeVisible();\n    await expect(otherUserComment).toBeVisible();\n\n    await expect(authorComment.locator('button')).toHaveCount(0);\n    await expect(otherUserComment.locator('button')).toHaveCount(1);\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 5.5,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_gem_precise_S09_s1",
+      "condition": "C0-none",
+      "generator": "gem",
+      "model": "gemini-3.8-flash",
+      "item": "S09",
+      "seed": 1,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S09\n    Scenario: Visibility of comment deletion control\n      Given User A has posted a comment on an article\n      When User B views the same article and posts their own comment\n      Then User B does not see the delete control for User A's comment\n      And User B sees the delete control for their own comment\n",
+      "complete": true,
+      "spec": "generated/NB_gem_precise_S09_s1.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, apiCall, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('Visibility of comment deletion control', async ({ page }) => {\n    // Given User A has posted a comment on an article\n    const userA = await newUser();\n    const userB = await newUser();\n\n    const article = await newArticle(userA);\n\n    await apiCall(\n      `/articles/${article.slug}/comments`,\n      'POST',\n      { comment: { body: \"Comment by User A\" } },\n      userA.token\n    );\n\n    // When User B views the same article and posts their own comment\n    await loginAs(page, userB);\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    const userAComment = page.locator('.card', { hasText: \"Comment by User A\" });\n    await expect(userAComment).toBeVisible();\n\n    await page.fill('textarea[placeholder*=\"comment\" i]', \"Comment by User B\");\n    await page.click('button:has-text(\"Post Comment\")');\n\n    const userBComment = page.locator('.card', { hasText: \"Comment by User B\" });\n    await expect(userBComment).toBeVisible();\n\n    // Then User B does not see the delete control for User A's comment\n    await expect(userAComment.locator('.mod-options, .ion-trash-a, [data-testid=\"delete-comment\"]')).not.toBeVisible();\n\n    // And User B sees the delete control for their own comment\n    await expect(userBComment.locator('.mod-options, .ion-trash-a, [data-testid=\"delete-comment\"]')).toBeVisible();\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 4.6,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_terra_precise_S09_s1",
+      "condition": "C0-none",
+      "generator": "terra",
+      "model": "gpt-5.6-terra",
+      "item": "S09",
+      "seed": 1,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S09\n    Scenario: Visibility of comment deletion control\n      Given User A has posted a comment on an article\n      When User B views the same article and posts their own comment\n      Then User B does not see the delete control for User A's comment\n      And User B sees the delete control for their own comment\n",
+      "complete": true,
+      "spec": "generated/NB_terra_precise_S09_s1.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport {\n  newUser,\n  newArticle,\n  loginAs,\n  apiCall,\n  UI,\n} from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('@item:S09 User B only sees deletion control for their own comment', async ({\n    page,\n  }) => {\n    const userA = await newUser();\n    const userB = await newUser();\n    const article = await newArticle(userA);\n\n    const commentA = await apiCall(\n      `/articles/${article.slug}/comments`,\n      'POST',\n      { comment: { body: 'Comment written by User A' } },\n      userA.token,\n    );\n\n    expect(commentA.status).toBe(200);\n\n    await loginAs(page, userB);\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    const commentInput = page.locator('textarea[placeholder=\"Write a comment...\"]');\n    await expect(commentInput).toBeVisible();\n\n    await commentInput.fill('Comment written by User B');\n    await page.getByRole('button', { name: 'Post Comment' }).click();\n\n    const userAComment = page.locator('.card', {\n      hasText: 'Comment written by User A',\n    });\n    const userBComment = page.locator('.card', {\n      hasText: 'Comment written by User B',\n    });\n\n    await expect(userAComment).toBeVisible();\n    await expect(userBComment).toBeVisible();\n\n    await expect(userAComment.locator('button')).toHaveCount(0);\n    await expect(userBComment.locator('button')).toHaveCount(1);\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 4.2,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_gem_precise_H04_s1",
+      "condition": "C0-none",
+      "generator": "gem",
+      "model": "gemini-3.8-flash",
+      "item": "H04",
+      "seed": 1,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H04\n    Scenario: Follow and unfollow\n      Given User B views Author A's profile page\n      When User B chooses to follow Author A\n      Then the follow button changes to an unfollow state\n      When User B goes to the home page and switches to \"Your Feed\"\n      Then Author A's articles appear in \"Your Feed\"\n      When User B returns to Author A's profile page and chooses to unfollow Author A\n      Then the button returns to its original state\n      When User B switches to \"Your Feed\" again\n      Then Author A's articles no longer appear\n      And an empty state is displayed when there are no articles in \"Your Feed\"\n",
+      "complete": true,
+      "spec": "generated/NB_gem_precise_H04_s1.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('Follow and unfollow (@item:H04)', async ({ page }) => {\n    // Background / Setup:\n    // Create Author A and User B\n    const authorA = await newUser();\n    const userB = await newUser();\n\n    // Author A creates an article\n    const articleA = await newArticle(authorA);\n\n    // Given User B views Author A's profile page\n    await loginAs(page, userB);\n    await page.goto(`${UI}/#/profile/${encodeURIComponent(authorA.username)}`);\n\n    // Locate the follow button on Author A's profile\n    // Typically contains \"+ Follow <username>\" or \"Follow <username>\"\n    const followButton = page.locator('button.action-btn', { hasText: authorA.username });\n    await expect(followButton).toBeVisible();\n    await expect(followButton).toContainText(`Follow ${authorA.username}`);\n\n    // When User B chooses to follow Author A\n    await followButton.click();\n\n    // Then the follow button changes to an unfollow state\n    await expect(followButton).toContainText(`Unfollow ${authorA.username}`);\n\n    // When User B goes to the home page and switches to \"Your Feed\"\n    await page.goto(`${UI}/#/`);\n    const yourFeedTab = page.getByRole('link', { name: 'Your Feed' });\n    await yourFeedTab.click();\n\n    // Then Author A's articles appear in \"Your Feed\"\n    await expect(page.locator('.article-preview').first()).toBeVisible();\n    await expect(page.locator('.article-preview')).toContainText(articleA.title);\n\n    // When User B returns to Author A's profile page and chooses to unfollow Author A\n    await page.goto(`${UI}/#/profile/${encodeURIComponent(authorA.username)}`);\n    await expect(followButton).toContainText(`Unfollow ${authorA.username}`);\n    await followButton.click();\n\n    // Then the button returns to its original state\n    await expect(followButton).toContainText(`Follow ${authorA.username}`);\n\n    // When User B switches to \"Your Feed\" again\n    await page.goto(`${UI}/#/`);\n    await yourFeedTab.click();\n\n    // Then Author A's articles no longer appear\n    await expect(page.getByText(articleA.title)).not.toBeVisible();\n\n    // And an empty state is displayed when there are no articles in \"Your Feed\"\n    await expect(page.getByText('No articles are here... yet.')).toBeVisible();\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 3.1,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_terra_precise_H04_s1",
+      "condition": "C0-none",
+      "generator": "terra",
+      "model": "gpt-5.6-terra",
+      "item": "H04",
+      "seed": 1,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H04\n    Scenario: Follow and unfollow\n      Given User B views Author A's profile page\n      When User B chooses to follow Author A\n      Then the follow button changes to an unfollow state\n      When User B goes to the home page and switches to \"Your Feed\"\n      Then Author A's articles appear in \"Your Feed\"\n      When User B returns to Author A's profile page and chooses to unfollow Author A\n      Then the button returns to its original state\n      When User B switches to \"Your Feed\" again\n      Then Author A's articles no longer appear\n      And an empty state is displayed when there are no articles in \"Your Feed\"\n",
+      "complete": true,
+      "spec": "generated/NB_terra_precise_H04_s1.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport {\n  newUser,\n  newArticle,\n  loginAs,\n  UI,\n} from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('@item:H04 Follow and unfollow', async ({ page }) => {\n    const author = await newUser();\n    const follower = await newUser();\n    const article = await newArticle(author);\n\n    await loginAs(page, follower);\n\n    await page.goto(`${UI}/#/profile/${author.username}`);\n\n    const followButton = page.getByRole('button', {\n      name: new RegExp(`Follow\\\\s+${author.username}`, 'i'),\n    });\n\n    await expect(followButton).toBeVisible();\n    await followButton.click();\n\n    const unfollowButton = page.getByRole('button', {\n      name: new RegExp(`Unfollow\\\\s+${author.username}`, 'i'),\n    });\n\n    await expect(unfollowButton).toBeVisible();\n\n    await page.goto(`${UI}/#/`);\n    await page.getByRole('link', { name: 'Your Feed' }).click();\n\n    await expect(page.getByRole('link', { name: article.title })).toBeVisible();\n\n    await page.goto(`${UI}/#/profile/${author.username}`);\n\n    await expect(unfollowButton).toBeVisible();\n    await unfollowButton.click();\n\n    await expect(followButton).toBeVisible();\n\n    await page.goto(`${UI}/#/`);\n    await page.getByRole('link', { name: 'Your Feed' }).click();\n\n    await expect(page.getByRole('link', { name: article.title })).not.toBeVisible();\n    await expect(page.getByText('No articles are here... yet.')).toBeVisible();\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 4.3,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_gem_precise_S10_s1",
+      "condition": "C0-none",
+      "generator": "gem",
+      "model": "gemini-3.8-flash",
+      "item": "S10",
+      "seed": 1,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S10\n    Scenario: Favorite an article\n      Given I view an un-favorited article with an initial favorite count of 0\n      When I choose to favorite the article\n      Then the favorite button changes to an un-favorite state\n      And the favorite count changes from 0 to 1\n",
+      "complete": true,
+      "spec": "generated/NB_gem_precise_S10_s1.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('Favorite an article', async ({ page }) => {\n    // 建立文章作者與閱讀者（按讚者）\n    const author = await newUser();\n    const reader = await newUser();\n    const article = await newArticle(author);\n\n    // 以 reader 身份登入\n    await loginAs(page, reader);\n\n    // 瀏覽未收藏且收藏數為 0 的文章頁面 (Hash router: /#/article/:slug)\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    // 定位收藏按鈕（在 article-actions 或 article-meta 中）\n    const favoriteButton = page.locator('.article-actions button, .article-meta button').filter({\n      hasText: /Favorite/i,\n    }).first();\n\n    // 確認初始狀態收藏數為 0\n    await expect(favoriteButton).toContainText('(0)');\n\n    // 點擊收藏按鈕\n    await favoriteButton.click();\n\n    // 驗證按鈕變為 Unfavorite 狀態且計數從 0 變為 1\n    const unfavoriteButton = page.locator('.article-actions button, .article-meta button').filter({\n      hasText: /Unfavorite/i,\n    }).first();\n\n    await expect(unfavoriteButton).toBeVisible();\n    await expect(unfavoriteButton).toContainText('(1)');\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 2.6,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_terra_precise_S10_s1",
+      "condition": "C0-none",
+      "generator": "terra",
+      "model": "gpt-5.6-terra",
+      "item": "S10",
+      "seed": 1,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S10\n    Scenario: Favorite an article\n      Given I view an un-favorited article with an initial favorite count of 0\n      When I choose to favorite the article\n      Then the favorite button changes to an un-favorite state\n      And the favorite count changes from 0 to 1\n",
+      "complete": true,
+      "spec": "generated/NB_terra_precise_S10_s1.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('@item:S10 Favorite an article', async ({ page }) => {\n    const author = await newUser();\n    const viewer = await newUser();\n    const article = await newArticle(author, { favoritesCount: 0 });\n\n    await loginAs(page, viewer);\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    const favoriteButton = page.getByRole('button', {\n      name: /favorite article/i,\n    });\n\n    await expect(favoriteButton).toContainText('0');\n    await expect(favoriteButton).toHaveClass(/btn-outline-primary/);\n\n    await favoriteButton.click();\n\n    await expect(favoriteButton).toContainText('1');\n    await expect(favoriteButton).toHaveClass(/btn-primary/);\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 3.4,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_gem_precise_S03_s1",
+      "condition": "C0-none",
+      "generator": "gem",
+      "model": "gemini-3.8-flash",
+      "item": "S03",
+      "seed": 1,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S03\n    Scenario: Login with incorrect password\n      Given I am on the login page\n      When I submit a registered email with an incorrect password\n      Then I remain on the login page\n      And an error message is displayed\n",
+      "complete": true,
+      "spec": "generated/NB_gem_precise_S03_s1.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('Login with incorrect password', async ({ page }) => {\n    // Given I am on the login page\n    const user = await newUser();\n    await page.goto(`${UI}/#/login`);\n\n    // When I submit a registered email with an incorrect password\n    await page.getByPlaceholder('Email').fill(user.email);\n    await page.getByPlaceholder('Password').fill('incorrect-password-12345');\n    await page.getByRole('button', { name: 'Sign in' }).click();\n\n    // Then I remain on the login page\n    await expect(page).toHaveURL(`${UI}/#/login`);\n\n    // And an error message is displayed\n    const errorMessages = page.locator('.error-messages');\n    await expect(errorMessages).toBeVisible();\n    await expect(errorMessages).not.toBeEmpty();\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 3.1,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_terra_precise_S03_s1",
+      "condition": "C0-none",
+      "generator": "terra",
+      "model": "gpt-5.6-terra",
+      "item": "S03",
+      "seed": 1,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S03\n    Scenario: Login with incorrect password\n      Given I am on the login page\n      When I submit a registered email with an incorrect password\n      Then I remain on the login page\n      And an error message is displayed\n",
+      "complete": true,
+      "spec": "generated/NB_terra_precise_S03_s1.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('S03 - Login with incorrect password', async ({ page }) => {\n    const user = await newUser();\n\n    await page.goto(`${UI}/#/login`);\n\n    await page.getByPlaceholder('Email').fill(user.email);\n    await page.getByPlaceholder('Password').fill('incorrect-password');\n    await page.getByRole('button', { name: /sign in/i }).click();\n\n    await expect(page).toHaveURL(/#\\/login$/);\n    await expect(page.locator('.error-messages')).toBeVisible();\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 2.5,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_gem_precise_S12_s1",
+      "condition": "C0-none",
+      "generator": "gem",
+      "model": "gemini-3.8-flash",
+      "item": "S12",
+      "seed": 1,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S12\n    Scenario: Article list pagination\n      Given I scroll to the pagination bar in the article list on the home page\n      When I select page 2\n      Then the list displays the consecutive articles\n",
+      "complete": true,
+      "spec": "generated/NB_gem_precise_S12_s1.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('Article list pagination', async ({ page }) => {\n    // 確保有足夠文章觸發分頁（Conduit 預設一頁 10 篇，建立 11 篇）\n    const user = await newUser();\n    for (let i = 1; i <= 11; i++) {\n      await newArticle(user, {\n        title: `Pagination Test Article ${i} ${Date.now()}`,\n        description: `Description ${i}`,\n        body: `Body content ${i}`,\n        tagList: ['pagination-test'],\n      });\n    }\n\n    // 瀏覽首頁\n    await page.goto(`${UI}/#/`);\n\n    // 確保切換至 Global Feed\n    const globalFeedTab = page.locator('.feed-toggle').getByText('Global Feed');\n    if (await globalFeedTab.isVisible()) {\n      await globalFeedTab.click();\n    }\n\n    // 等待文章列表加載完成\n    await expect(page.locator('.article-preview').first()).toBeVisible();\n\n    // 取得第一頁顯示的第一篇文章標題作為比對基準\n    const firstPageArticleTitle = await page.locator('.article-preview h1').first().textContent();\n\n    // 捲動至分頁列\n    const pagination = page.locator('.pagination');\n    await pagination.scrollIntoViewIfNeeded();\n    await expect(pagination).toBeVisible();\n\n    // 點選第 2 頁\n    const page2Button = pagination.locator('.page-item, li').filter({ hasText: '2' }).locator('a, button');\n    await page2Button.click();\n\n    // 驗證分頁狀態變為 active\n    const activePage = pagination.locator('.page-item.active, li.active');\n    await expect(activePage).toContainText('2');\n\n    // 驗證列表顯示出接續的文章（文章已換頁，第一篇標題不同且有文章顯示）\n    await expect(page.locator('.article-preview').first()).toBeVisible();\n    const secondPageArticleTitle = await page.locator('.article-preview h1').first().textContent();\n    expect(secondPageArticleTitle).not.toBe(firstPageArticleTitle);\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 7.0,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_terra_precise_S12_s1",
+      "condition": "C0-none",
+      "generator": "terra",
+      "model": "gpt-5.6-terra",
+      "item": "S12",
+      "seed": 1,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S12\n    Scenario: Article list pagination\n      Given I scroll to the pagination bar in the article list on the home page\n      When I select page 2\n      Then the list displays the consecutive articles\n",
+      "complete": true,
+      "spec": "generated/NB_terra_precise_S12_s1.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newArticle, newUser, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('@item:S12 Article list pagination', async ({ page }) => {\n    const user = await newUser();\n\n    // Create enough articles to require a second page (Conduit displays 10 per page).\n    const articles = [];\n    for (let i = 0; i < 11; i++) {\n      articles.push(\n        await newArticle(user, {\n          title: `Pagination article ${i + 1}`,\n          description: `Description for pagination article ${i + 1}`,\n          body: `Body for pagination article ${i + 1}`,\n        }),\n      );\n    }\n\n    await loginAs(page, user);\n    await page.goto(`${UI}/#/`);\n\n    const articleList = page.locator('.article-preview');\n    await expect(articleList).toHaveCount(10);\n\n    const firstPageTitles = await articleList.locator('h1').allTextContents();\n\n    const pagination = page.locator('ul.pagination');\n    await pagination.scrollIntoViewIfNeeded();\n\n    await pagination.getByRole('link', { name: '2', exact: true }).click();\n\n    await expect(page).toHaveURL(/#\\/\\?(?:.*&)?page=2(?:&.*)?$/);\n    await expect(articleList).toHaveCount(1);\n\n    const secondPageTitles = await articleList.locator('h1').allTextContents();\n\n    expect(secondPageTitles).not.toEqual(firstPageTitles);\n    expect(secondPageTitles).toContain(articles[0].title);\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 4.9,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_gem_precise_H01_s2",
+      "condition": "C0-none",
+      "generator": "gem",
+      "model": "gemini-3.8-flash",
+      "item": "H01",
+      "seed": 2,
+      "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:H01\n    Scenario: Article tags and editing\n      Given a logged-in user is on the new article page\n      When the user fills in a title and body, adds three tags, and publishes the article\n      Then the article page should display content matching the input\n      When the user edits the article from the article page\n      And changes the title to another string, removes all tags, and submits\n      Then the updated title should be displayed\n      And the tags should no longer appear\n",
+      "complete": true,
+      "spec": "generated/NB_gem_precise_H01_s2.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Criteria', () => {\n  test('@item:H01 Article tags and editing', async ({ page }) => {\n    const user = await newUser();\n    await loginAs(page, user);\n\n    // Given a logged-in user is on the new article page\n    await page.goto(`${UI}/#/editor`);\n\n    // When the user fills in a title and body, adds three tags, and publishes the article\n    const originalTitle = `Title ${Date.now()}`;\n    const description = 'Article Description';\n    const body = 'Article Body Content';\n    const tags = ['tag1', 'tag2', 'tag3'];\n\n    await page.getByPlaceholder('Article Title').fill(originalTitle);\n    await page.getByPlaceholder(\"What's this article about?\").fill(description);\n    await page.getByPlaceholder('Write your article (in markdown)').fill(body);\n\n    const tagInput = page.getByPlaceholder('Enter tags');\n    for (const tag of tags) {\n      await tagInput.fill(tag);\n      await tagInput.press('Enter');\n    }\n\n    await page.getByRole('button', { name: 'Publish Article' }).click();\n\n    // Then the article page should display content matching the input\n    await expect(page.getByRole('heading', { name: originalTitle, level: 1 })).toBeVisible();\n    await expect(page.getByText(body)).toBeVisible();\n    for (const tag of tags) {\n      await expect(page.getByRole('list').getByText(tag, { exact: true })).toBeVisible();\n    }\n\n    // When the user edits the article from the article page\n    await page.getByRole('link', { name: /Edit Article/i }).first().click();\n\n    // And changes the title to another string, removes all tags, and submits\n    const updatedTitle = `Updated Title ${Date.now()}`;\n    await page.getByPlaceholder('Article Title').fill(updatedTitle);\n\n    // Remove all tags\n    const removeTagIcons = page.locator('.tag-list i.ion-close-round, .tag-list [class*=\"ion-close\"], .tag-list button, .tag-default i');\n    while (await removeTagIcons.count() > 0) {\n      await removeTagIcons.first().click();\n    }\n\n    await page.getByRole('button', { name: /Publish Article|Update Article/i }).click();\n\n    // Then the updated title should be displayed\n    await expect(page.getByRole('heading', { name: updatedTitle, level: 1 })).toBeVisible();\n\n    // And the tags should no longer appear\n    for (const tag of tags) {\n      await expect(page.locator('.tag-list').getByText(tag, { exact: true })).not.toBeVisible();\n    }\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 2.6,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_terra_precise_H01_s2",
+      "condition": "C0-none",
+      "generator": "terra",
+      "model": "gpt-5.6-terra",
+      "item": "H01",
+      "seed": 2,
+      "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:H01\n    Scenario: Article tags and editing\n      Given a logged-in user is on the new article page\n      When the user fills in a title and body, adds three tags, and publishes the article\n      Then the article page should display content matching the input\n      When the user edits the article from the article page\n      And changes the title to another string, removes all tags, and submits\n      Then the updated title should be displayed\n      And the tags should no longer appear\n",
+      "complete": true,
+      "spec": "generated/NB_terra_precise_H01_s2.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Criteria', () => {\n  test('H01 - Article tags and editing', async ({ page }) => {\n    const user = await newUser();\n    const originalTitle = `Article title ${Date.now()}`;\n    const updatedTitle = `Updated article title ${Date.now()}`;\n    const body = 'This is the article body content.';\n    const tags = ['playwright', 'typescript', 'conduit'];\n\n    await loginAs(page, user);\n    await page.goto(`${UI}/#/editor`);\n\n    await page.getByPlaceholder('Article Title').fill(originalTitle);\n    await page.getByPlaceholder(\"What's this article about?\").fill('Article description');\n    await page.getByPlaceholder('Write your article (in markdown)').fill(body);\n\n    for (const tag of tags) {\n      const tagInput = page.getByPlaceholder('Enter tags');\n      await tagInput.fill(tag);\n      await tagInput.press('Enter');\n    }\n\n    await page.getByRole('button', { name: 'Publish Article' }).click();\n\n    await expect(page.getByRole('heading', { name: originalTitle })).toBeVisible();\n    await expect(page.locator('.article-content')).toContainText(body);\n\n    for (const tag of tags) {\n      await expect(page.getByText(tag, { exact: true })).toBeVisible();\n    }\n\n    await page.getByRole('link', { name: 'Edit Article' }).click();\n\n    await expect(page.getByPlaceholder('Article Title')).toHaveValue(originalTitle);\n\n    await page.getByPlaceholder('Article Title').fill(updatedTitle);\n\n    const tagDeleteButtons = page.locator('.tag-list i');\n    while (await tagDeleteButtons.count()) {\n      await tagDeleteButtons.first().click();\n    }\n\n    await page.getByRole('button', { name: 'Publish Article' }).click();\n\n    await expect(page.getByRole('heading', { name: updatedTitle })).toBeVisible();\n\n    for (const tag of tags) {\n      await expect(page.getByText(tag, { exact: true })).toHaveCount(0);\n    }\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 5.0,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_gem_precise_S02_s2",
+      "condition": "C0-none",
+      "generator": "gem",
+      "model": "gemini-3.8-flash",
+      "item": "S02",
+      "seed": 2,
+      "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:S02\n    Scenario: Registration with duplicate email\n      Given a user has registered with an unused email\n      And has logged out\n      When the user attempts to register again with the same email\n      Then the registration should fail with an error displayed\n      And the user should not be logged in\n",
+      "complete": true,
+      "spec": "generated/NB_gem_precise_S02_s2.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Criteria', () => {\n  test('Registration with duplicate email', async ({ page }) => {\n    // Given a user has registered with an unused email\n    const existingUser = await newUser();\n\n    // And has logged out (new page context starts logged out)\n    await page.goto(`${UI}/#/register`);\n\n    // When the user attempts to register again with the same email\n    await page.locator('input[placeholder=\"Username\"]').fill(`user_${Date.now()}`);\n    await page.locator('input[placeholder=\"Email\"]').fill(existingUser.email);\n    await page.locator('input[placeholder=\"Password\"]').fill('Password123!');\n    await page.locator('button[type=\"submit\"], button:has-text(\"Sign up\")').click();\n\n    // Then the registration should fail with an error displayed\n    const errorMessage = page.locator('.error-messages');\n    await expect(errorMessage).toBeVisible();\n    await expect(errorMessage).toContainText(/email/i);\n\n    // And the user should not be logged in\n    await expect(page).toHaveURL(/#\\/register/);\n    await expect(page.locator('a[href=\"#/login\"], a:has-text(\"Sign in\")')).toBeVisible();\n    await expect(page.locator('a[href=\"#/register\"], a:has-text(\"Sign up\")')).toBeVisible();\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 3.2,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_terra_precise_S02_s2",
+      "condition": "C0-none",
+      "generator": "terra",
+      "model": "gpt-5.6-terra",
+      "item": "S02",
+      "seed": 2,
+      "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:S02\n    Scenario: Registration with duplicate email\n      Given a user has registered with an unused email\n      And has logged out\n      When the user attempts to register again with the same email\n      Then the registration should fail with an error displayed\n      And the user should not be logged in\n",
+      "complete": true,
+      "spec": "generated/NB_terra_precise_S02_s2.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Criteria', () => {\n  test('S02 - Registration with duplicate email', async ({ page }) => {\n    const user = await newUser();\n\n    await page.goto(`${UI}/#/register`);\n\n    await page.getByPlaceholder('Username').fill(`${user.username}-duplicate`);\n    await page.getByPlaceholder('Email').fill(user.email);\n    await page.getByPlaceholder('Password').fill('password123');\n    await page.getByRole('button', { name: /sign up/i }).click();\n\n    await expect(page.locator('.error-messages')).toBeVisible();\n    await expect(page.locator('.error-messages')).not.toBeEmpty();\n\n    await expect(page).toHaveURL(/#\\/register$/);\n    await expect(page.getByRole('link', { name: /sign in/i })).toBeVisible();\n    await expect(page.getByRole('link', { name: /sign up/i })).toBeVisible();\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 3.1,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_gem_precise_H03_s2",
+      "condition": "C0-none",
+      "generator": "gem",
+      "model": "gemini-3.8-flash",
+      "item": "H03",
+      "seed": 2,
+      "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:H03\n    Scenario: Tag-filtered pagination\n      Given there are 15 articles under a specific tag\n      When the user filters by that tag on the home page\n      Then the number of articles per page should match the pagination settings\n      When the user selects page 2 from the pagination controls\n      Then the articles displayed should be the continuation of the list\n      And the URL should reflect the current page number\n      When the user directly navigates to the URL with page=2 in a new page\n      Then the user should arrive at the same page\n      When the user switches back to the all articles list\n      Then the list should return to page 1\n",
+      "complete": true,
+      "spec": "generated/NB_gem_precise_H03_s2.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Criteria', () => {\n  test('@item:H03 Tag-filtered pagination', async ({ page, context }) => {\n    // Given there are 15 articles under a specific tag\n    const user = await newUser();\n    const specificTag = `tag_${Date.now()}`;\n    const totalArticles = 15;\n\n    // Create 15 articles with the specific tag\n    for (let i = 1; i <= totalArticles; i++) {\n      await newArticle(user, {\n        title: `Tag Article ${i} ${Date.now()}_${i}`,\n        description: `Description ${i}`,\n        body: `Body ${i}`,\n        tagList: [specificTag],\n      });\n    }\n\n    // Navigate to Home page\n    await page.goto(`${UI}/#/`);\n\n    // When the user filters by that tag on the home page\n    const tagSelector = page.locator('.sidebar, .tag-list').locator('text=' + specificTag).first();\n    await expect(tagSelector).toBeVisible();\n    await tagSelector.click();\n\n    // Verify tag tab is active\n    await expect(page.locator('.feed-toggle .nav-link.active')).toContainText(specificTag);\n\n    // Then the number of articles per page should match the pagination settings (standard Conduit page size is 10)\n    const articlePreviews = page.locator('.article-preview');\n    await expect(articlePreviews.first()).toBeVisible();\n    await expect(articlePreviews).toHaveCount(10);\n\n    // Get the title of the first article on page 1 for later continuation check\n    const page1FirstTitle = await articlePreviews.first().locator('h1').textContent();\n\n    // When the user selects page 2 from the pagination controls\n    const pagination = page.locator('.pagination');\n    const page2Button = pagination.locator('.page-item').filter({ hasText: '2' }).locator('.page-link');\n    await expect(page2Button).toBeVisible();\n    await page2Button.click();\n\n    // Then the articles displayed should be the continuation of the list (page 2 should have 5 articles)\n    await expect(articlePreviews).toHaveCount(5);\n    const page2FirstTitle = await articlePreviews.first().locator('h1').textContent();\n    expect(page2FirstTitle).not.toEqual(page1FirstTitle);\n\n    // And the URL should reflect the current page number\n    expect(page.url()).toContain('page=2');\n    const page2Url = page.url();\n\n    // When the user directly navigates to the URL with page=2 in a new page\n    const newPage = await context.newPage();\n    await newPage.goto(page2Url);\n\n    // Then the user should arrive at the same page\n    await expect(newPage.locator('.feed-toggle .nav-link.active')).toContainText(specificTag);\n    const newPagePreviews = newPage.locator('.article-preview');\n    await expect(newPagePreviews).toHaveCount(5);\n    const newPageFirstTitle = await newPagePreviews.first().locator('h1').textContent();\n    expect(newPageFirstTitle).toEqual(page2FirstTitle);\n    await newPage.close();\n\n    // When the user switches back to the all articles list (Global Feed)\n    const globalFeedTab = page.locator('.feed-toggle').locator('text=Global Feed');\n    await globalFeedTab.click();\n    await expect(globalFeedTab).toHaveClass(/active/);\n\n    // Then the list should return to page 1\n    const activePageItem = page.locator('.pagination .page-item.active');\n    // If pagination exists, page 1 should be active, and URL should not point to page=2\n    if (await activePageItem.isVisible()) {\n      await expect(activePageItem).toContainText('1');\n    }\n    expect(page.url()).not.toContain('page=2');\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 4.1,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_terra_precise_H03_s2",
+      "condition": "C0-none",
+      "generator": "terra",
+      "model": "gpt-5.6-terra",
+      "item": "H03",
+      "seed": 2,
+      "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:H03\n    Scenario: Tag-filtered pagination\n      Given there are 15 articles under a specific tag\n      When the user filters by that tag on the home page\n      Then the number of articles per page should match the pagination settings\n      When the user selects page 2 from the pagination controls\n      Then the articles displayed should be the continuation of the list\n      And the URL should reflect the current page number\n      When the user directly navigates to the URL with page=2 in a new page\n      Then the user should arrive at the same page\n      When the user switches back to the all articles list\n      Then the list should return to page 1\n",
+      "complete": true,
+      "spec": "generated/NB_terra_precise_H03_s2.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport {\n  newUser,\n  newArticle,\n  loginAs,\n  UI,\n} from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Criteria', () => {\n  test('H03 - Tag-filtered pagination', async ({ page, context }) => {\n    const user = await newUser();\n    const tag = `pagination-tag-${Date.now()}`;\n\n    const articles = await Promise.all(\n      Array.from({ length: 15 }, (_, index) =>\n        newArticle(user, {\n          title: `Pagination article ${index + 1} ${Date.now()}`,\n          tagList: [tag],\n        }),\n      ),\n    );\n\n    await loginAs(page, user);\n    await page.goto(`${UI}/#/`);\n\n    await page.getByRole('link', { name: tag, exact: true }).click();\n\n    const articlePreviews = page.locator('.article-preview');\n    await expect(articlePreviews).toHaveCount(10);\n\n    const firstPageTitles = await articlePreviews\n      .locator('h1')\n      .allTextContents();\n\n    await page.getByRole('link', { name: '2', exact: true }).click();\n\n    await expect(page).toHaveURL(/[#?&]page=2/);\n    await expect(articlePreviews).toHaveCount(5);\n\n    const secondPageTitles = await articlePreviews\n      .locator('h1')\n      .allTextContents();\n\n    expect(secondPageTitles).not.toEqual(firstPageTitles);\n    expect(secondPageTitles).toEqual(\n      articles.slice(10).map((article) => article.title),\n    );\n\n    const pageTwoUrl = page.url();\n    const directPage = await context.newPage();\n\n    await directPage.goto(pageTwoUrl);\n\n    await expect(directPage).toHaveURL(/[#?&]page=2/);\n    await expect(directPage.locator('.article-preview')).toHaveCount(5);\n    await expect(\n      directPage.locator('.article-preview').locator('h1'),\n    ).toHaveText(secondPageTitles);\n\n    await page.getByRole('link', { name: 'Global Feed', exact: true }).click();\n\n    await expect(page).not.toHaveURL(/[#?&]page=2/);\n    await expect(articlePreviews).toHaveCount(10);\n\n    await directPage.close();\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 5.1,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_gem_precise_S07_s2",
+      "condition": "C0-none",
+      "generator": "gem",
+      "model": "gemini-3.8-flash",
+      "item": "S07",
+      "seed": 2,
+      "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:S07\n    Scenario: Author deletes own article\n      Given an author opens their own article page\n      When the author deletes the article\n      Then the article should no longer appear in the article list on the home page\n",
+      "complete": true,
+      "spec": "generated/NB_gem_precise_S07_s2.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Criteria', () => {\n  test('Author deletes own article (@item:S07)', async ({ page }) => {\n    // Given an author opens their own article page\n    const author = await newUser();\n    const article = await newArticle(author);\n\n    await loginAs(page, author);\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    await expect(page.getByRole('heading', { name: article.title })).toBeVisible();\n\n    // 處理可能出現的確認彈窗 (window.confirm)\n    page.on('dialog', dialog => dialog.accept());\n\n    // When the author deletes the article\n    const deleteButton = page.getByRole('button', { name: /delete article/i }).first();\n    await deleteButton.click();\n\n    // 刪除後通常導向首頁\n    await page.waitForURL(`${UI}/#/`);\n\n    // Then the article should no longer appear in the article list on the home page\n    const globalFeedTab = page.getByRole('button', { name: /global feed/i }).or(page.getByText(/global feed/i));\n    if (await globalFeedTab.isVisible()) {\n      await globalFeedTab.click();\n    }\n\n    await expect(page.getByRole('heading', { name: article.title })).not.toBeVisible();\n    await expect(page.getByText(article.title)).not.toBeVisible();\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 6.0,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_terra_precise_S07_s2",
+      "condition": "C0-none",
+      "generator": "terra",
+      "model": "gpt-5.6-terra",
+      "item": "S07",
+      "seed": 2,
+      "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:S07\n    Scenario: Author deletes own article\n      Given an author opens their own article page\n      When the author deletes the article\n      Then the article should no longer appear in the article list on the home page\n",
+      "complete": true,
+      "spec": "generated/NB_terra_precise_S07_s2.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Criteria', () => {\n  test('S07: Author deletes own article', async ({ page }) => {\n    const author = await newUser();\n    const article = await newArticle(author);\n\n    await loginAs(page, author);\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    await expect(page.getByRole('button', { name: /delete article/i })).toBeVisible();\n    await page.getByRole('button', { name: /delete article/i }).click();\n\n    await expect(page).toHaveURL(new RegExp(`${UI.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}/#/?$`));\n    await expect(page.getByText(article.title)).not.toBeVisible();\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 2.6,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_gem_precise_H02_s2",
+      "condition": "C0-none",
+      "generator": "gem",
+      "model": "gemini-3.8-flash",
+      "item": "H02",
+      "seed": 2,
+      "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:H02\n    Scenario: Article page visibility and permissions\n      Given an author creates an article and leaves a comment on it\n      When an unauthenticated visitor opens the article page\n      Then the visitor can see the article but cannot leave a comment\n      When another logged-in user who is not the author opens the article page\n      Then the user should not see the edit and delete controls for the article\n      When this user leaves their own comment on the article page\n      Then the delete control for a comment should only appear to the author of that comment\n",
+      "complete": true,
+      "spec": "generated/NB_gem_precise_H02_s2.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, apiCall, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Criteria', () => {\n  test('Article page visibility and permissions (@item:H02)', async ({ page }) => {\n    // Given an author creates an article and leaves a comment on it\n    const author = await newUser();\n    const article = await newArticle(author);\n\n    const authorCommentBody = 'Author original comment ' + Date.now();\n    await apiCall(`/articles/${article.slug}/comments`, 'POST', {\n      comment: { body: authorCommentBody }\n    }, author.token);\n\n    const articleUrl = `${UI}/#/article/${article.slug}`;\n\n    // When an unauthenticated visitor opens the article page\n    await page.goto(articleUrl);\n\n    // Then the visitor can see the article but cannot leave a comment\n    await expect(page.getByRole('heading', { name: article.title })).toBeVisible();\n    await expect(page.getByText(article.body)).toBeVisible();\n    // Unauthenticated user sees prompt to sign in / sign up instead of the comment form\n    await expect(page.locator('form.comment-form')).toHaveCount(0);\n    await expect(page.getByText(/sign in.*or.*sign up.*to add comments/i)).toBeVisible();\n\n    // When another logged-in user who is not the author opens the article page\n    const reader = await newUser();\n    await loginAs(page, reader);\n    await page.goto(articleUrl);\n\n    // Then the user should not see the edit and delete controls for the article\n    await expect(page.locator('.article-actions, .banner').locator('a[href*=\"#/editor/\"]')).toHaveCount(0);\n    await expect(page.locator('.article-actions, .banner').getByRole('button', { name: /delete article/i })).toHaveCount(0);\n\n    // When this user leaves their own comment on the article page\n    const readerCommentBody = 'Reader comment ' + Date.now();\n    await page.locator('form.comment-form textarea').fill(readerCommentBody);\n    await page.locator('form.comment-form button[type=\"submit\"]').click();\n\n    // Ensure reader's comment is visible\n    const readerCommentCard = page.locator('.card', { hasText: readerCommentBody });\n    await expect(readerCommentCard).toBeVisible();\n\n    // Then the delete control for a comment should only appear to the author of that comment\n    const authorCommentCard = page.locator('.card', { hasText: authorCommentBody });\n    await expect(authorCommentCard).toBeVisible();\n\n    // Delete control (.mod-options or trash icon) should be visible on reader's comment, but NOT on author's comment\n    await expect(readerCommentCard.locator('.mod-options, .ion-trash-a, i.ion-trash-b, button:has-text(\"Delete\")')).toBeVisible();\n    await expect(authorCommentCard.locator('.mod-options, .ion-trash-a, i.ion-trash-b, button:has-text(\"Delete\")')).toHaveCount(0);\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 3.7,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_terra_precise_H02_s2",
+      "condition": "C0-none",
+      "generator": "terra",
+      "model": "gpt-5.6-terra",
+      "item": "H02",
+      "seed": 2,
+      "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:H02\n    Scenario: Article page visibility and permissions\n      Given an author creates an article and leaves a comment on it\n      When an unauthenticated visitor opens the article page\n      Then the visitor can see the article but cannot leave a comment\n      When another logged-in user who is not the author opens the article page\n      Then the user should not see the edit and delete controls for the article\n      When this user leaves their own comment on the article page\n      Then the delete control for a comment should only appear to the author of that comment\n",
+      "complete": true,
+      "spec": "generated/NB_terra_precise_H02_s2.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport {\n  newUser,\n  newArticle,\n  loginAs,\n  apiCall,\n  UI,\n} from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Criteria', () => {\n  test('H02: Article page visibility and permissions', async ({ page }) => {\n    const author = await newUser();\n    const article = await newArticle(author);\n    const visitor = await newUser();\n\n    const authorComment = await apiCall(\n      `/articles/${article.slug}/comments`,\n      'POST',\n      { comment: { body: 'Comment written by the article author' } },\n      author.token,\n    );\n\n    expect(authorComment.status).toBe(200);\n\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    await expect(page.getByRole('heading', { name: article.title })).toBeVisible();\n    await expect(page.locator('textarea[placeholder=\"Write a comment...\"]')).toHaveCount(0);\n    await expect(page.getByText('Sign in or sign up to add comments on this article.')).toBeVisible();\n\n    await loginAs(page, visitor);\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    await expect(page.getByRole('heading', { name: article.title })).toBeVisible();\n    await expect(page.getByRole('button', { name: /edit article/i })).toHaveCount(0);\n    await expect(page.getByRole('button', { name: /delete article/i })).toHaveCount(0);\n\n    const visitorCommentBody = 'Comment written by another user';\n    await page.locator('textarea[placeholder=\"Write a comment...\"]').fill(visitorCommentBody);\n    await page.getByRole('button', { name: /post comment/i }).click();\n\n    const authorCommentCard = page.locator('.card', {\n      hasText: 'Comment written by the article author',\n    });\n    const visitorCommentCard = page.locator('.card', {\n      hasText: visitorCommentBody,\n    });\n\n    await expect(authorCommentCard).toBeVisible();\n    await expect(visitorCommentCard).toBeVisible();\n\n    await expect(authorCommentCard.locator('button')).toHaveCount(0);\n    await expect(visitorCommentCard.locator('button')).toHaveCount(1);\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 5.0,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_gem_precise_S09_s2",
+      "condition": "C0-none",
+      "generator": "gem",
+      "model": "gemini-3.8-flash",
+      "item": "S09",
+      "seed": 2,
+      "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:S09\n    Scenario: Comment deletion control visibility\n      Given user A leaves a comment on an article\n      When user B opens the same article and leaves their own comment\n      Then user B should not see the delete control for user A's comment\n      And user B should see the delete control for their own comment\n",
+      "complete": true,
+      "spec": "generated/NB_gem_precise_S09_s2.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, apiCall, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Criteria', () => {\n  test('Comment deletion control visibility', async ({ page }) => {\n    // Given user A leaves a comment on an article\n    const userA = await newUser();\n    const article = await newArticle(userA);\n\n    const commentABody = `Comment by user A ${Date.now()}`;\n    await apiCall(\n      `articles/${article.slug}/comments`,\n      'POST',\n      { comment: { body: commentABody } },\n      userA.token\n    );\n\n    // User B setup\n    const userB = await newUser();\n\n    // When user B opens the same article and leaves their own comment\n    await loginAs(page, userB);\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    const commentBBody = `Comment by user B ${Date.now()}`;\n    await page.locator('textarea').fill(commentBBody);\n    await page.locator('button:has-text(\"Post Comment\")').click();\n\n    const commentCardA = page.locator('.card', { hasText: commentABody });\n    const commentCardB = page.locator('.card', { hasText: commentBBody });\n\n    // Wait for user B's comment to appear\n    await expect(commentCardB).toBeVisible();\n    await expect(commentCardA).toBeVisible();\n\n    const deleteControlSelector = '.ion-trash-a, .mod-options, button:has-text(\"Delete\")';\n\n    // Then user B should not see the delete control for user A's comment\n    await expect(commentCardA.locator(deleteControlSelector)).toHaveCount(0);\n\n    // And user B should see the delete control for their own comment\n    await expect(commentCardB.locator(deleteControlSelector)).toBeVisible();\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 6.6,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_terra_precise_S09_s2",
+      "condition": "C0-none",
+      "generator": "terra",
+      "model": "gpt-5.6-terra",
+      "item": "S09",
+      "seed": 2,
+      "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:S09\n    Scenario: Comment deletion control visibility\n      Given user A leaves a comment on an article\n      When user B opens the same article and leaves their own comment\n      Then user B should not see the delete control for user A's comment\n      And user B should see the delete control for their own comment\n",
+      "complete": true,
+      "spec": "generated/NB_terra_precise_S09_s2.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport {\n  newUser,\n  newArticle,\n  loginAs,\n  apiCall,\n  UI,\n} from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Criteria', () => {\n  test('S09 - Comment deletion control visibility', async ({ page }) => {\n    const userA = await newUser();\n    const userB = await newUser();\n    const article = await newArticle(userA);\n\n    const commentBodyA = 'Comment written by user A';\n    const commentBodyB = 'Comment written by user B';\n\n    const createComment = await apiCall(\n      `/articles/${article.slug}/comments`,\n      'POST',\n      { comment: { body: commentBodyA } },\n      userA.token,\n    );\n\n    expect(createComment.status).toBe(200);\n\n    await loginAs(page, userB);\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    await expect(page.locator('.comment-card').filter({ hasText: commentBodyA })).toBeVisible();\n\n    await page.locator('textarea[placeholder=\"Write a comment...\"]').fill(commentBodyB);\n    await page.getByRole('button', { name: /post comment/i }).click();\n\n    const userAComment = page.locator('.comment-card').filter({ hasText: commentBodyA });\n    const userBComment = page.locator('.comment-card').filter({ hasText: commentBodyB });\n\n    await expect(userBComment).toBeVisible();\n\n    await expect(userAComment.locator('button')).toHaveCount(0);\n    await expect(userBComment.locator('button')).toHaveCount(1);\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 4.0,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_gem_precise_H04_s2",
+      "condition": "C0-none",
+      "generator": "gem",
+      "model": "gemini-3.8-flash",
+      "item": "H04",
+      "seed": 2,
+      "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:H04\n    Scenario: Follow and unfollow author\n      Given user B opens author A's profile page\n      When user B follows author A\n      Then the follow button should change to an unfollow state\n      When user B returns to the home page and switches to Your Feed\n      Then author A's articles should appear in Your Feed\n      When user B returns to author A's profile page and unfollows author A\n      Then the button should return to its original state\n      When user B switches to Your Feed again\n      Then author A's articles should no longer appear\n      And Your Feed should display an empty state when there are no articles\n",
+      "complete": true,
+      "spec": "generated/NB_gem_precise_H04_s2.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Criteria', () => {\n  test('@item:H04 Follow and unfollow author', async ({ page }) => {\n    // 建立作者 A 及使用者 B，並讓作者 A 發佈一篇文章\n    const authorA = await newUser();\n    const userB = await newUser();\n    const articleA = await newArticle(authorA);\n\n    // 使用者 B 登入並進入作者 A 的個人檔案頁面\n    await loginAs(page, userB);\n    await page.goto(`${UI}/#/profile/${encodeURIComponent(authorA.username)}`);\n\n    // 找到追蹤按鈕，驗證初始狀態為 Follow\n    const followButton = page.getByRole('button', { name: new RegExp(`Follow ${authorA.username}`, 'i') });\n    const unfollowButton = page.getByRole('button', { name: new RegExp(`Unfollow ${authorA.username}`, 'i') });\n    await expect(followButton).toBeVisible();\n\n    // When user B follows author A\n    await followButton.click();\n\n    // Then the follow button should change to an unfollow state\n    await expect(unfollowButton).toBeVisible();\n\n    // When user B returns to the home page and switches to Your Feed\n    await page.goto(`${UI}/#/`);\n    const yourFeedTab = page.getByRole('button', { name: /Your Feed/i });\n    await yourFeedTab.click();\n\n    // Then author A's articles should appear in Your Feed\n    await expect(page.getByText(articleA.title)).toBeVisible();\n\n    // When user B returns to author A's profile page and unfollows author A\n    await page.goto(`${UI}/#/profile/${encodeURIComponent(authorA.username)}`);\n    await expect(unfollowButton).toBeVisible();\n    await unfollowButton.click();\n\n    // Then the button should return to its original state\n    await expect(followButton).toBeVisible();\n\n    // When user B switches to Your Feed again\n    await page.goto(`${UI}/#/`);\n    await yourFeedTab.click();\n\n    // Then author A's articles should no longer appear\n    await expect(page.getByText(articleA.title)).not.toBeVisible();\n\n    // And Your Feed should display an empty state when there are no articles\n    await expect(page.getByText(/No articles are here\\.\\.\\. yet\\./i)).toBeVisible();\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 2.3,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_terra_precise_H04_s2",
+      "condition": "C0-none",
+      "generator": "terra",
+      "model": "gpt-5.6-terra",
+      "item": "H04",
+      "seed": 2,
+      "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:H04\n    Scenario: Follow and unfollow author\n      Given user B opens author A's profile page\n      When user B follows author A\n      Then the follow button should change to an unfollow state\n      When user B returns to the home page and switches to Your Feed\n      Then author A's articles should appear in Your Feed\n      When user B returns to author A's profile page and unfollows author A\n      Then the button should return to its original state\n      When user B switches to Your Feed again\n      Then author A's articles should no longer appear\n      And Your Feed should display an empty state when there are no articles\n",
+      "complete": true,
+      "spec": "generated/NB_terra_precise_H04_s2.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Criteria', () => {\n  test('H04 - Follow and unfollow author', async ({ page }) => {\n    const author = await newUser();\n    const follower = await newUser();\n    const article = await newArticle(author);\n\n    await loginAs(page, follower);\n\n    await page.goto(`${UI}/#/profile/${author.username}`);\n    await expect(page.getByRole('button', { name: new RegExp(`Follow ${author.username}`) })).toBeVisible();\n\n    await page.getByRole('button', { name: new RegExp(`Follow ${author.username}`) }).click();\n    await expect(page.getByRole('button', { name: new RegExp(`Unfollow ${author.username}`) })).toBeVisible();\n\n    await page.goto(`${UI}/#/`);\n    await page.getByRole('link', { name: 'Your Feed' }).click();\n\n    await expect(page.getByRole('link', { name: article.title })).toBeVisible();\n\n    await page.goto(`${UI}/#/profile/${author.username}`);\n    await page.getByRole('button', { name: new RegExp(`Unfollow ${author.username}`) }).click();\n\n    await expect(page.getByRole('button', { name: new RegExp(`Follow ${author.username}`) })).toBeVisible();\n\n    await page.goto(`${UI}/#/`);\n    await page.getByRole('link', { name: 'Your Feed' }).click();\n\n    await expect(page.getByText('No articles are here... yet.')).toBeVisible();\n    await expect(page.getByRole('link', { name: article.title })).not.toBeVisible();\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 3.7,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_gem_precise_S10_s2",
+      "condition": "C0-none",
+      "generator": "gem",
+      "model": "gemini-3.8-flash",
+      "item": "S10",
+      "seed": 2,
+      "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:S10\n    Scenario: Favorite an article\n      Given a user opens an article that has not been favorited and has an initial favorite count of 0\n      When the user favorites the article\n      Then the favorite button should change to an unfavorite state\n      And the favorite count should change from 0 to 1\n",
+      "complete": true,
+      "spec": "generated/NB_gem_precise_S10_s2.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Criteria', () => {\n  test('Favorite an article', async ({ page }) => {\n    // 建立文章作者與文章\n    const author = await newUser();\n    const article = await newArticle(author);\n\n    // 建立另一位讀者使用者並登入（非作者才能看到 Favorite 按鈕）\n    const reader = await newUser();\n    await loginAs(page, reader);\n\n    // 前往該文章頁面\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    // 定位文章頁面上的 Favorite 按鈕\n    const favoriteButton = page.getByRole('button', { name: /Favorite/i }).first();\n\n    // 驗證初始狀態：尚未收藏且計數為 0\n    await expect(favoriteButton).toContainText('Favorite');\n    await expect(favoriteButton).not.toContainText('Unfavorite');\n    await expect(favoriteButton).toContainText('(0)');\n\n    // 點擊收藏按鈕\n    await favoriteButton.click();\n\n    // 驗證收藏後狀態：變為 Unfavorite 且計數變為 1\n    await expect(favoriteButton).toContainText('Unfavorite');\n    await expect(favoriteButton).toContainText('(1)');\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 5.2,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_terra_precise_S10_s2",
+      "condition": "C0-none",
+      "generator": "terra",
+      "model": "gpt-5.6-terra",
+      "item": "S10",
+      "seed": 2,
+      "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:S10\n    Scenario: Favorite an article\n      Given a user opens an article that has not been favorited and has an initial favorite count of 0\n      When the user favorites the article\n      Then the favorite button should change to an unfavorite state\n      And the favorite count should change from 0 to 1\n",
+      "complete": true,
+      "spec": "generated/NB_terra_precise_S10_s2.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Criteria', () => {\n  test('S10 - Favorite an article', async ({ page }) => {\n    const author = await newUser();\n    const article = await newArticle(author);\n\n    const user = await newUser();\n    await loginAs(page, user);\n\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    const favoriteButton = page.locator('button').filter({\n      hasText: /Favorite Article/i,\n    });\n\n    await expect(favoriteButton).toBeVisible();\n    await expect(favoriteButton).toContainText('0');\n\n    await favoriteButton.click();\n\n    const unfavoriteButton = page.locator('button').filter({\n      hasText: /Unfavorite Article/i,\n    });\n\n    await expect(unfavoriteButton).toBeVisible();\n    await expect(unfavoriteButton).toContainText('1');\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 2.9,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_gem_precise_S03_s2",
+      "condition": "C0-none",
+      "generator": "gem",
+      "model": "gemini-3.8-flash",
+      "item": "S03",
+      "seed": 2,
+      "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:S03\n    Scenario: Login with incorrect password\n      Given a user is on the login page\n      When the user enters a registered email and an incorrect password, and submits\n      Then the user should remain on the login page\n      And an error message should be displayed\n",
+      "complete": true,
+      "spec": "generated/NB_gem_precise_S03_s2.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Criteria', () => {\n  test('@item:S03 Login with incorrect password', async ({ page }) => {\n    // 建立一筆已註冊的使用者\n    const user = await newUser();\n\n    // Given a user is on the login page\n    await page.goto(`${UI}/#/login`);\n\n    // When the user enters a registered email and an incorrect password, and submits\n    await page.getByPlaceholder('Email').fill(user.email);\n    await page.getByPlaceholder('Password').fill('incorrect-password');\n    await page.getByRole('button', { name: 'Sign in' }).click();\n\n    // Then the user should remain on the login page\n    await expect(page).toHaveURL(/#\\/login/);\n\n    // And an error message should be displayed\n    const errorMessage = page.locator('.error-messages');\n    await expect(errorMessage).toBeVisible();\n    await expect(errorMessage).not.toBeEmpty();\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 1.8,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_terra_precise_S03_s2",
+      "condition": "C0-none",
+      "generator": "terra",
+      "model": "gpt-5.6-terra",
+      "item": "S03",
+      "seed": 2,
+      "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:S03\n    Scenario: Login with incorrect password\n      Given a user is on the login page\n      When the user enters a registered email and an incorrect password, and submits\n      Then the user should remain on the login page\n      And an error message should be displayed\n",
+      "complete": true,
+      "spec": "generated/NB_terra_precise_S03_s2.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Criteria', () => {\n  test('S03 - Login with incorrect password', async ({ page }) => {\n    const user = await newUser();\n\n    await page.goto(`${UI}/#/login`);\n\n    await page.getByPlaceholder('Email').fill(user.email);\n    await page.getByPlaceholder('Password').fill('incorrect-password');\n    await page.getByRole('button', { name: /sign in/i }).click();\n\n    await expect(page).toHaveURL(/#\\/login$/);\n    await expect(page.locator('.error-messages')).toBeVisible();\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 2.7,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_gem_precise_S12_s2",
+      "condition": "C0-none",
+      "generator": "gem",
+      "model": "gemini-3.8-flash",
+      "item": "S12",
+      "seed": 2,
+      "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:S12\n    Scenario: Article list pagination\n      Given a user scrolls to the pagination controls on the home page article list\n      When the user selects page 2\n      Then the articles displayed should be the continuation of the list\n",
+      "complete": true,
+      "spec": "generated/NB_gem_precise_S12_s2.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { UI, newUser, newArticle } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Criteria', () => {\n  test('@item:S12 Scenario: Article list pagination', async ({ page }) => {\n    // 確保有足夠文章可供分頁（RealWorld Conduit 每頁通常為 10 篇）\n    // 建立使用者並發布文章以確保文章數超過一頁門檻\n    const author = await newUser();\n    const createdArticles: string[] = [];\n    for (let i = 1; i <= 11; i++) {\n      const art = await newArticle(author, {\n        title: `Pagination Test Article ${Date.now()}-${i}`,\n        description: `Description ${i}`,\n        body: `Body ${i}`,\n        tagList: ['pagination-test'],\n      });\n      createdArticles.push(art.title);\n    }\n\n    // 瀏覽至首頁（hash 路由）\n    await page.goto(`${UI}/#/`);\n\n    // 確保切換至 Global Feed\n    const globalFeedTab = page.locator('button, a', { hasText: 'Global Feed' });\n    if (await globalFeedTab.isVisible()) {\n      await globalFeedTab.click();\n    }\n\n    // 等待文章列表與分頁元件載入\n    await page.waitForSelector('.article-preview', { state: 'visible' });\n\n    // 記錄第一頁顯示的文章標題\n    const firstPageArticles = await page\n      .locator('.article-preview h1, .article-preview h2, .preview-link h1')\n      .allTextContents();\n    expect(firstPageArticles.length).toBeGreaterThan(0);\n\n    // Given a user scrolls to the pagination controls on the home page article list\n    const pagination = page.locator('.pagination, ul.pagination');\n    await expect(pagination).toBeVisible();\n    await pagination.scrollIntoViewIfNeeded();\n\n    // When the user selects page 2\n    const page2Button = pagination.locator('.page-item, li', { hasText: '2' }).locator('a, button');\n    await expect(page2Button).toBeVisible();\n    await page2Button.click();\n\n    // 等待分頁按鈕 2 變為 active 狀態\n    const page2Item = pagination.locator('.page-item', { hasText: '2' });\n    await expect(page2Item).toHaveClass(/active/);\n\n    // 等待第二頁文章載入\n    await page.waitForSelector('.article-preview', { state: 'visible' });\n\n    // Then the articles displayed should be the continuation of the list\n    const secondPageArticles = await page\n      .locator('.article-preview h1, .article-preview h2, .preview-link h1')\n      .allTextContents();\n    expect(secondPageArticles.length).toBeGreaterThan(0);\n\n    // 第二頁的第一篇文章不應出現在第一頁的第一篇，證明是清單的延續\n    expect(secondPageArticles[0]).not.toBe(firstPageArticles[0]);\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 4.7,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_terra_precise_S12_s2",
+      "condition": "C0-none",
+      "generator": "terra",
+      "model": "gpt-5.6-terra",
+      "item": "S12",
+      "seed": 2,
+      "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:S12\n    Scenario: Article list pagination\n      Given a user scrolls to the pagination controls on the home page article list\n      When the user selects page 2\n      Then the articles displayed should be the continuation of the list\n",
+      "complete": true,
+      "spec": "generated/NB_terra_precise_S12_s2.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newArticle, newUser, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Criteria', () => {\n  test('S12: Article list pagination shows the continuation of the list', async ({\n    page,\n  }) => {\n    const user = await newUser();\n\n    const articles = [];\n    for (let index = 0; index < 12; index += 1) {\n      articles.push(\n        await newArticle(user, {\n          title: `Pagination article ${index + 1}`,\n          description: `Description for pagination article ${index + 1}`,\n          body: `Body for pagination article ${index + 1}`,\n        }),\n      );\n    }\n\n    await loginAs(page, user);\n    await page.goto(`${UI}/#/`);\n\n    const articlePreviews = page.locator('app-article-list .article-preview');\n    await expect(articlePreviews).toHaveCount(10);\n\n    const firstPageTitles = await articlePreviews.locator('h1').allTextContents();\n\n    const pagination = page.locator('ul.pagination');\n    await pagination.scrollIntoViewIfNeeded();\n\n    const pageTwo = pagination.getByRole('link', { name: '2', exact: true });\n    await expect(pageTwo).toBeVisible();\n    await pageTwo.click();\n\n    await expect(page).toHaveURL(/#\\/\\?page=2/);\n    await expect(articlePreviews).toHaveCount(2);\n\n    const secondPageTitles = await articlePreviews.locator('h1').allTextContents();\n\n    expect(secondPageTitles).not.toEqual(firstPageTitles);\n    expect(secondPageTitles).toEqual(\n      expect.arrayContaining([\n        articles[0].title,\n        articles[1].title,\n      ]),\n    );\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 4.2,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_gem_precise_H01_s3",
+      "condition": "C0-none",
+      "generator": "gem",
+      "model": "gemini-3.8-flash",
+      "item": "H01",
+      "seed": 3,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H01\n    Scenario: Article tags and editing\n      Given a logged-in user is on the new article page\n      When the user publishes an article with a title, body, and three tags\n      Then the article page displays content matching the input\n      When the user edits the article from the article page\n      And changes the title to another string, removes all tags, and submits\n      Then the article page displays the updated title\n      And no tags appear on the article page\n",
+      "complete": true,
+      "spec": "generated/NB_gem_precise_H01_s3.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('Article tags and editing', async ({ page }) => {\n    // Given a logged-in user is on the new article page\n    const user = await newUser();\n    await loginAs(page, user);\n\n    await page.goto(`${UI}/#/editor`);\n    await expect(page.locator('input[placeholder=\"Article Title\"]')).toBeVisible();\n\n    // When the user publishes an article with a title, body, and three tags\n    const initialTitle = `Article Title ${Date.now()}`;\n    const initialDescription = 'Article description test';\n    const initialBody = 'This is the initial body content of the test article.';\n    const tags = ['tag1', 'tag2', 'tag3'];\n\n    await page.locator('input[placeholder=\"Article Title\"]').fill(initialTitle);\n    await page.locator('input[placeholder=\"What\\'s this article about?\"]').fill(initialDescription);\n    await page.locator('textarea[placeholder=\"Write your article (in markdown)\"]').fill(initialBody);\n\n    const tagInput = page.locator('input[placeholder=\"Enter tags\"]');\n    for (const tag of tags) {\n      await tagInput.fill(tag);\n      await tagInput.press('Enter');\n    }\n\n    const publishButton = page.locator('button', { hasText: /Publish Article/i });\n    await publishButton.click();\n\n    // Then the article page displays content matching the input\n    await expect(page.locator('h1')).toHaveText(initialTitle);\n    await expect(page.locator('.article-content')).toContainText(initialBody);\n    for (const tag of tags) {\n      await expect(page.locator('.tag-list')).toContainText(tag);\n    }\n\n    // When the user edits the article from the article page\n    const editArticleButton = page.getByRole('link', { name: /Edit Article/i }).first();\n    await editArticleButton.click();\n\n    await expect(page.locator('input[placeholder=\"Article Title\"]')).toBeVisible();\n\n    // And changes the title to another string, removes all tags, and submits\n    const updatedTitle = `Updated Title ${Date.now()}`;\n    await page.locator('input[placeholder=\"Article Title\"]').fill(updatedTitle);\n\n    // Remove all tags in editor\n    const tagRemoveIcons = page.locator('.tag-list .tag-default i, .tag-list .tag-pill i');\n    while (await tagRemoveIcons.count() > 0) {\n      await tagRemoveIcons.first().click();\n    }\n\n    const submitEditButton = page.locator('button[type=\"submit\"], button:has-text(\"Publish Article\"), button:has-text(\"Update Article\")').first();\n    await submitEditButton.click();\n\n    // Then the article page displays the updated title\n    await expect(page.locator('h1')).toHaveText(updatedTitle);\n\n    // And no tags appear on the article page\n    await expect(page.locator('.tag-list .tag-pill, .tag-list .tag-default')).toHaveCount(0);\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 7.1,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_terra_precise_H01_s3",
+      "condition": "C0-none",
+      "generator": "terra",
+      "model": "gpt-5.6-terra",
+      "item": "H01",
+      "seed": 3,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H01\n    Scenario: Article tags and editing\n      Given a logged-in user is on the new article page\n      When the user publishes an article with a title, body, and three tags\n      Then the article page displays content matching the input\n      When the user edits the article from the article page\n      And changes the title to another string, removes all tags, and submits\n      Then the article page displays the updated title\n      And no tags appear on the article page\n",
+      "complete": true,
+      "spec": "generated/NB_terra_precise_H01_s3.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('@item:H01 Article tags and editing', async ({ page }) => {\n    const user = await newUser();\n\n    const originalTitle = `Article with tags ${Date.now()}`;\n    const updatedTitle = `Updated article title ${Date.now()}`;\n    const body = 'This is the article body used to verify publishing and editing.';\n    const tags = ['playwright', 'typescript', 'acceptance'];\n\n    await loginAs(page, user);\n    await page.goto(`${UI}/#/editor`);\n\n    await page.getByPlaceholder('Article Title').fill(originalTitle);\n    await page.getByPlaceholder(\"What's this article about?\").fill('A test article');\n    await page.getByPlaceholder('Write your article (in markdown)').fill(body);\n\n    const tagInput = page.getByPlaceholder('Enter tags');\n    for (const tag of tags) {\n      await tagInput.fill(tag);\n      await tagInput.press('Enter');\n    }\n\n    await page.getByRole('button', { name: 'Publish Article' }).click();\n\n    await expect(page).toHaveURL(/#\\/article\\//);\n    await expect(page.getByRole('heading', { name: originalTitle })).toBeVisible();\n    await expect(page.getByText(body)).toBeVisible();\n\n    for (const tag of tags) {\n      await expect(page.getByText(tag, { exact: true })).toBeVisible();\n    }\n\n    await page.getByRole('link', { name: 'Edit Article' }).click();\n\n    await expect(page).toHaveURL(/#\\/editor\\//);\n    await page.getByPlaceholder('Article Title').fill(updatedTitle);\n\n    const removeTagButtons = page.locator('.tag-list i');\n    while (await removeTagButtons.count()) {\n      await removeTagButtons.first().click();\n    }\n\n    await page.getByRole('button', { name: 'Publish Article' }).click();\n\n    await expect(page).toHaveURL(/#\\/article\\//);\n    await expect(page.getByRole('heading', { name: updatedTitle })).toBeVisible();\n\n    for (const tag of tags) {\n      await expect(page.getByText(tag, { exact: true })).not.toBeVisible();\n    }\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 5.0,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_gem_precise_S02_s3",
+      "condition": "C0-none",
+      "generator": "gem",
+      "model": "gemini-3.8-flash",
+      "item": "S02",
+      "seed": 3,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S02\n    Scenario: Registration with duplicate email\n      Given a user completes registration with an unused email\n      And logs out\n      When the user registers again with the same email\n      Then the registration fails with an error displayed\n      And the user is not logged in\n",
+      "complete": true,
+      "spec": "generated/NB_gem_precise_S02_s3.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('Registration with duplicate email', async ({ page }) => {\n    // Given a user completes registration with an unused email\n    // And logs out\n    const existingUser = await newUser();\n\n    // When the user registers again with the same email\n    await page.goto(`${UI}/#/register`);\n\n    // Use a different username to isolate email conflict\n    const newUsername = `user_${Date.now()}`;\n    await page.fill('input[placeholder=\"Username\"]', newUsername);\n    await page.fill('input[placeholder=\"Email\"]', existingUser.email);\n    await page.fill('input[placeholder=\"Password\"]', 'ValidPassword123!');\n    await page.click('button[type=\"submit\"]');\n\n    // Then the registration fails with an error displayed\n    const errorMessages = page.locator('.error-messages');\n    await expect(errorMessages).toBeVisible();\n    await expect(errorMessages).toContainText('email has already been taken');\n\n    // And the user is not logged in\n    await expect(page).toHaveURL(/#\\/register/);\n    await expect(page.locator('a[href=\"#/login\"]')).toBeVisible();\n    await expect(page.locator('a[href=\"#/register\"]')).toBeVisible();\n    await expect(page.locator(`a[href=\"#/@${newUsername}\"]`)).not.toBeVisible();\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 2.4,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_terra_precise_S02_s3",
+      "condition": "C0-none",
+      "generator": "terra",
+      "model": "gpt-5.6-terra",
+      "item": "S02",
+      "seed": 3,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S02\n    Scenario: Registration with duplicate email\n      Given a user completes registration with an unused email\n      And logs out\n      When the user registers again with the same email\n      Then the registration fails with an error displayed\n      And the user is not logged in\n",
+      "complete": true,
+      "spec": "generated/NB_terra_precise_S02_s3.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('@item:S02 Registration with duplicate email', async ({ page }) => {\n    const user = await newUser();\n\n    await page.goto(`${UI}/#/login`);\n    await page.getByRole('link', { name: /sign up/i }).click();\n\n    await page.getByPlaceholder('Username').fill(`${user.username}-duplicate`);\n    await page.getByPlaceholder('Email').fill(user.email);\n    await page.getByPlaceholder('Password').fill(user.password);\n    await page.getByRole('button', { name: /sign up/i }).click();\n\n    await expect(page).toHaveURL(/#\\/register/);\n    await expect(page.locator('.error-messages')).toBeVisible();\n    await expect(page.locator('.error-messages')).toContainText(/email/i);\n\n    await expect(page.getByRole('link', { name: /sign in/i })).toBeVisible();\n    await expect(page.getByRole('link', { name: /new article/i })).toHaveCount(0);\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 3.0,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_gem_precise_H03_s3",
+      "condition": "C0-none",
+      "generator": "gem",
+      "model": "gemini-3.8-flash",
+      "item": "H03",
+      "seed": 3,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H03\n    Scenario: Pagination with tag filter\n      Given there are 15 articles under a specific tag\n      When a user filters articles by this tag on the home page\n      Then the number of displayed articles matches the pagination setting\n      When the user selects page 2 from the pagination controls\n      Then the second page shows the subsequent articles\n      And the URL reflects page 2\n      When the user directly opens the URL with page 2\n      Then the user arrives at the same page\n      When the user switches back to the all articles list\n      Then the list returns to the first page\n",
+      "complete": true,
+      "spec": "generated/NB_gem_precise_H03_s3.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('Pagination with tag filter', async ({ page }) => {\n    const user = await newUser();\n    const specificTag = `tag_${Date.now()}`;\n\n    // Given there are 15 articles under a specific tag\n    for (let i = 1; i <= 15; i++) {\n      await newArticle(user, {\n        title: `Tag Article ${String(i).padStart(2, '0')} ${Date.now()}_${i}`,\n        description: `Description ${i}`,\n        body: `Body content for article ${i}`,\n        tagList: [specificTag],\n      });\n    }\n\n    // Go to home page\n    await page.goto(`${UI}/#/`);\n\n    // When a user filters articles by this tag on the home page\n    const tagButton = page.locator(`.tag-list, .sidebar`).getByText(specificTag, { exact: true });\n    await expect(tagButton).toBeVisible();\n    await tagButton.click();\n\n    // Verify tag tab is active\n    const activeTab = page.locator('.feed-toggle .nav-link.active');\n    await expect(activeTab).toContainText(specificTag);\n\n    // Then the number of displayed articles matches the pagination setting (Conduit default is 10)\n    const articles = page.locator('.article-preview');\n    await expect(articles).toHaveCount(10);\n\n    // When the user selects page 2 from the pagination controls\n    const page2Button = page.locator('.pagination .page-item').getByText('2', { exact: true });\n    await expect(page2Button).toBeVisible();\n    await page2Button.click();\n\n    // Then the second page shows the subsequent articles (15 total - 10 = 5 articles)\n    await expect(articles).toHaveCount(5);\n\n    // And the URL reflects page 2\n    await expect(page).toHaveURL(/page=2/);\n    const page2Url = page.url();\n\n    // When the user directly opens the URL with page 2\n    await page.goto(page2Url);\n\n    // Then the user arrives at the same page\n    await expect(page.locator('.feed-toggle .nav-link.active')).toContainText(specificTag);\n    await expect(articles).toHaveCount(5);\n    const activePageItem = page.locator('.pagination .page-item.active');\n    await expect(activePageItem).toContainText('2');\n\n    // When the user switches back to the all articles list\n    const globalFeedTab = page.locator('.feed-toggle').getByRole('link', { name: 'Global Feed' });\n    await globalFeedTab.click();\n\n    // Then the list returns to the first page\n    await expect(page.locator('.feed-toggle .nav-link.active')).toContainText('Global Feed');\n    await expect(page.locator('.pagination .page-item.active')).toContainText('1');\n    expect(page.url()).not.toContain('page=2');\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 5.4,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_terra_precise_H03_s3",
+      "condition": "C0-none",
+      "generator": "terra",
+      "model": "gpt-5.6-terra",
+      "item": "H03",
+      "seed": 3,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H03\n    Scenario: Pagination with tag filter\n      Given there are 15 articles under a specific tag\n      When a user filters articles by this tag on the home page\n      Then the number of displayed articles matches the pagination setting\n      When the user selects page 2 from the pagination controls\n      Then the second page shows the subsequent articles\n      And the URL reflects page 2\n      When the user directly opens the URL with page 2\n      Then the user arrives at the same page\n      When the user switches back to the all articles list\n      Then the list returns to the first page\n",
+      "complete": true,
+      "spec": "generated/NB_terra_precise_H03_s3.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('@item:H03 Pagination with tag filter', async ({ page }) => {\n    const user = await newUser();\n    const tag = `pagination-tag-${Date.now()}`;\n\n    const articles = await Promise.all(\n      Array.from({ length: 15 }, (_, index) =>\n        newArticle(user, {\n          title: `Pagination article ${index + 1}`,\n          description: `Description ${index + 1}`,\n          body: `Body ${index + 1}`,\n          tagList: [tag],\n        }),\n      ),\n    );\n\n    await loginAs(page, user);\n    await page.goto(`${UI}/#/`);\n\n    await page.getByRole('link', { name: tag }).click();\n\n    const articlePreviews = page.locator('.article-preview');\n    await expect(articlePreviews).toHaveCount(10);\n\n    await page.getByRole('link', { name: '2', exact: true }).click();\n\n    await expect(articlePreviews).toHaveCount(5);\n    await expect(page).toHaveURL(new RegExp(`/#/\\\\?tag=${tag}&page=2|/#/\\\\?page=2&tag=${tag}`));\n\n    const secondPageTitles = await articlePreviews.locator('h1').allTextContents();\n    expect(secondPageTitles).toEqual(\n      expect.arrayContaining(articles.slice(10).map((article) => article.title)),\n    );\n\n    await page.goto(`${UI}/#/?tag=${encodeURIComponent(tag)}&page=2`);\n\n    await expect(articlePreviews).toHaveCount(5);\n    await expect(articlePreviews.locator('h1')).toHaveText(\n      expect.arrayContaining(articles.slice(10).map((article) => article.title)),\n    );\n\n    await page.getByRole('link', { name: 'Global Feed' }).click();\n\n    await expect(articlePreviews).toHaveCount(10);\n    await expect(page).toHaveURL(`${UI}/#/`);\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 5.0,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_gem_precise_S07_s3",
+      "condition": "C0-none",
+      "generator": "gem",
+      "model": "gemini-3.8-flash",
+      "item": "S07",
+      "seed": 3,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S07\n    Scenario: Author deletes own article\n      Given an author opens their own article page\n      When the author deletes the article\n      Then the article no longer appears in the article list on the home page\n",
+      "complete": true,
+      "spec": "generated/NB_gem_precise_S07_s3.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('@item:S07 Scenario: Author deletes own article', async ({ page }) => {\n    // Given an author opens their own article page\n    const author = await newUser();\n    const article = await newArticle(author);\n\n    await loginAs(page, author);\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    // When the author deletes the article\n    // Wait for the delete button to be available and click it\n    // Conduit standard usually has a button with text \"Delete Article\" or similar\n    const deleteButton = page.getByRole('button', { name: /delete article/i }).first();\n    await expect(deleteButton).toBeVisible();\n\n    // Sometimes a confirm dialog might appear; accept if dialog pops up\n    page.once('dialog', async (dialog) => {\n      await dialog.accept();\n    });\n\n    await deleteButton.click();\n\n    // Then the article no longer appears in the article list on the home page\n    // After deletion, the application should redirect to the home page\n    await page.waitForURL(`${UI}/#/`);\n\n    // Verify on home page (under Global Feed or Your Feed) that the article title does not appear\n    // Switch to Global Feed tab if needed, or check the article list\n    const globalFeedTab = page.getByRole('button', { name: /global feed/i }).or(page.getByText('Global Feed'));\n    if (await globalFeedTab.isVisible()) {\n      await globalFeedTab.click();\n    }\n\n    await expect(page.getByRole('heading', { name: article.title })).not.toBeVisible();\n    await expect(page.getByText(article.title)).not.toBeVisible();\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 2.4,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_terra_precise_S07_s3",
+      "condition": "C0-none",
+      "generator": "terra",
+      "model": "gpt-5.6-terra",
+      "item": "S07",
+      "seed": 3,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S07\n    Scenario: Author deletes own article\n      Given an author opens their own article page\n      When the author deletes the article\n      Then the article no longer appears in the article list on the home page\n",
+      "complete": true,
+      "spec": "generated/NB_terra_precise_S07_s3.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('S07: Author deletes own article', async ({ page }) => {\n    const author = await newUser();\n    const article = await newArticle(author);\n\n    await loginAs(page, author);\n\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    await expect(page.getByRole('button', { name: /delete article/i })).toBeVisible();\n    await page.getByRole('button', { name: /delete article/i }).click();\n\n    await expect(page).toHaveURL(new RegExp(`${UI.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}/#/?$`));\n\n    await expect(page.getByRole('link', { name: article.title })).toHaveCount(0);\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 3.2,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_gem_precise_H02_s3",
+      "condition": "C0-none",
+      "generator": "gem",
+      "model": "gemini-3.8-flash",
+      "item": "H02",
+      "seed": 3,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H02\n    Scenario: Article page visibility and permissions\n      Given an author creates an article and posts a comment on it\n      When an unauthenticated visitor opens the article page\n      Then the visitor can see the article but cannot post a comment\n      When another logged-in user who is not the author opens the article page\n      Then the user does not see the controls to edit or delete the article\n      And the user does not see the delete control for the author's comment\n      When this user posts a comment on the article\n      Then the user sees the delete control only for their own comment\n",
+      "complete": true,
+      "spec": "generated/NB_gem_precise_H02_s3.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, apiCall, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('@item:H02 Article page visibility and permissions', async ({ page }) => {\n    // Given an author creates an article and posts a comment on it\n    const author = await newUser();\n    const article = await newArticle(author);\n\n    const commentTextAuthor = 'Author comment ' + Date.now();\n    await apiCall(\n      `/articles/${article.slug}/comments`,\n      'POST',\n      { comment: { body: commentTextAuthor } },\n      author.token\n    );\n\n    // When an unauthenticated visitor opens the article page\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    // Then the visitor can see the article but cannot post a comment\n    await expect(page.locator('h1')).toHaveText(article.title);\n    await expect(page.locator('.article-content')).toContainText(article.body);\n    // Unauthenticated user should see sign in / sign up prompt instead of comment form\n    await expect(page.locator('textarea[placeholder=\"Write a comment...\"]')).toHaveCount(0);\n    await expect(page.locator('text=Sign in or sign up to add comments on this article')).toBeVisible();\n\n    // When another logged-in user who is not the author opens the article page\n    const reader = await newUser();\n    await loginAs(page, reader);\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    // Then the user does not see the controls to edit or delete the article\n    await expect(page.locator('a:has-text(\"Edit Article\")')).toHaveCount(0);\n    await expect(page.locator('button:has-text(\"Delete Article\")')).toHaveCount(0);\n\n    // And the user does not see the delete control for the author's comment\n    const authorCommentCard = page.locator('.card', { hasText: commentTextAuthor });\n    await expect(authorCommentCard).toBeVisible();\n    await expect(authorCommentCard.locator('.mod-options i, .ion-trash-a, [aria-label=\"Delete Comment\"]')).toHaveCount(0);\n\n    // When this user posts a comment on the article\n    const readerCommentText = 'Reader comment ' + Date.now();\n    await page.fill('textarea[placeholder=\"Write a comment...\"]', readerCommentText);\n    await page.click('button:has-text(\"Post Comment\")');\n\n    // Then the user sees the delete control only for their own comment\n    const readerCommentCard = page.locator('.card', { hasText: readerCommentText });\n    await expect(readerCommentCard).toBeVisible();\n    await expect(\n      readerCommentCard.locator('.mod-options i, .ion-trash-a, [aria-label=\"Delete Comment\"]')\n    ).toHaveCount(1);\n\n    // Confirm author's comment still has no delete control\n    await expect(\n      authorCommentCard.locator('.mod-options i, .ion-trash-a, [aria-label=\"Delete Comment\"]')\n    ).toHaveCount(0);\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 3.6,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_terra_precise_H02_s3",
+      "condition": "C0-none",
+      "generator": "terra",
+      "model": "gpt-5.6-terra",
+      "item": "H02",
+      "seed": 3,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H02\n    Scenario: Article page visibility and permissions\n      Given an author creates an article and posts a comment on it\n      When an unauthenticated visitor opens the article page\n      Then the visitor can see the article but cannot post a comment\n      When another logged-in user who is not the author opens the article page\n      Then the user does not see the controls to edit or delete the article\n      And the user does not see the delete control for the author's comment\n      When this user posts a comment on the article\n      Then the user sees the delete control only for their own comment\n",
+      "complete": true,
+      "spec": "generated/NB_terra_precise_H02_s3.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('Article page visibility and permissions', async ({ page }) => {\n    const author = await newUser();\n    const article = await newArticle(author);\n\n    await loginAs(page, author);\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    const authorComment = 'Comment posted by the article author';\n    await page.getByPlaceholder('Write a comment...').fill(authorComment);\n    await page.getByRole('button', { name: 'Post Comment' }).click();\n\n    await expect(page.getByText(authorComment)).toBeVisible();\n\n    await page.context().clearCookies();\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    await expect(page.getByRole('heading', { name: article.title })).toBeVisible();\n    await expect(page.getByText(authorComment)).toBeVisible();\n    await expect(page.getByPlaceholder('Write a comment...')).not.toBeVisible();\n    await expect(page.getByRole('button', { name: 'Post Comment' })).not.toBeVisible();\n\n    const otherUser = await newUser();\n    await loginAs(page, otherUser);\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    await expect(page.getByRole('heading', { name: article.title })).toBeVisible();\n    await expect(page.getByRole('link', { name: /edit article/i })).not.toBeVisible();\n    await expect(page.getByRole('button', { name: /delete article/i })).not.toBeVisible();\n\n    const authorCommentCard = page.locator('.card', {\n      hasText: authorComment,\n    });\n    await expect(authorCommentCard.locator('button')).toHaveCount(0);\n\n    const otherComment = 'Comment posted by another user';\n    await page.getByPlaceholder('Write a comment...').fill(otherComment);\n    await page.getByRole('button', { name: 'Post Comment' }).click();\n\n    const otherCommentCard = page.locator('.card', {\n      hasText: otherComment,\n    });\n\n    await expect(otherCommentCard).toBeVisible();\n    await expect(otherCommentCard.locator('button')).toHaveCount(1);\n    await expect(authorCommentCard.locator('button')).toHaveCount(0);\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 5.2,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_gem_precise_S09_s3",
+      "condition": "C0-none",
+      "generator": "gem",
+      "model": "gemini-3.8-flash",
+      "item": "S09",
+      "seed": 3,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S09\n    Scenario: Comment deletion visibility\n      Given user A posts a comment on an article\n      When user B opens the same article and posts their own comment\n      Then user B cannot see the delete control for user A's comment\n      And user B can see the delete control for their own comment\n",
+      "complete": true,
+      "spec": "generated/NB_gem_precise_S09_s3.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, apiCall, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('Comment deletion visibility (@item:S09)', async ({ page }) => {\n    // Given user A posts a comment on an article\n    const userA = await newUser();\n    const userB = await newUser();\n    const article = await newArticle(userA);\n\n    const commentBodyA = 'Comment by User A - ' + Date.now();\n    await apiCall(\n      `/articles/${article.slug}/comments`,\n      'POST',\n      { comment: { body: commentBodyA } },\n      userA.token\n    );\n\n    // When user B opens the same article and posts their own comment\n    await loginAs(page, userB);\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    const commentBodyB = 'Comment by User B - ' + Date.now();\n    await page.getByPlaceholder(/write a comment/i).fill(commentBodyB);\n    await page.getByRole('button', { name: /post comment/i }).click();\n\n    // Then user B cannot see the delete control for user A's comment\n    const commentCardA = page.locator('.card', { hasText: commentBodyA });\n    await expect(commentCardA).toBeVisible();\n    await expect(commentCardA.locator('.mod-options, .ion-trash-a, button:has-text(\"Delete\")')).not.toBeVisible();\n\n    // And user B can see the delete control for their own comment\n    const commentCardB = page.locator('.card', { hasText: commentBodyB });\n    await expect(commentCardB).toBeVisible();\n    await expect(commentCardB.locator('.mod-options, .ion-trash-a, button:has-text(\"Delete\")')).toBeVisible();\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 4.4,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_terra_precise_S09_s3",
+      "condition": "C0-none",
+      "generator": "terra",
+      "model": "gpt-5.6-terra",
+      "item": "S09",
+      "seed": 3,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S09\n    Scenario: Comment deletion visibility\n      Given user A posts a comment on an article\n      When user B opens the same article and posts their own comment\n      Then user B cannot see the delete control for user A's comment\n      And user B can see the delete control for their own comment\n",
+      "complete": true,
+      "spec": "generated/NB_terra_precise_S09_s3.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport {\n  newUser,\n  newArticle,\n  loginAs,\n  apiCall,\n  UI,\n} from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('@item:S09 Comment deletion visibility', async ({ page }) => {\n    const userA = await newUser();\n    const userB = await newUser();\n    const article = await newArticle(userA);\n\n    const commentA = 'Comment posted by user A';\n    const commentB = 'Comment posted by user B';\n\n    const postCommentA = await apiCall(\n      `/articles/${article.slug}/comments`,\n      'POST',\n      { comment: { body: commentA } },\n      userA.token,\n    );\n    expect(postCommentA.status).toBe(200);\n\n    await loginAs(page, userB);\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    const commentInput = page.locator('textarea[placeholder=\"Write a comment...\"]');\n    await expect(commentInput).toBeVisible();\n    await commentInput.fill(commentB);\n    await page.getByRole('button', { name: /post comment/i }).click();\n\n    const userAComment = page.locator('.card', { hasText: commentA });\n    const userBComment = page.locator('.card', { hasText: commentB });\n\n    await expect(userAComment).toBeVisible();\n    await expect(userBComment).toBeVisible();\n\n    await expect(userAComment.locator('button')).toHaveCount(0);\n    await expect(userBComment.locator('button')).toHaveCount(1);\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 3.5,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_gem_precise_H04_s3",
+      "condition": "C0-none",
+      "generator": "gem",
+      "model": "gemini-3.8-flash",
+      "item": "H04",
+      "seed": 3,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H04\n    Scenario: Follow and unfollow\n      When user B opens author A's profile page and follows author A\n      Then the follow button switches to an unfollow state\n      When user B goes to the home page and switches to \"Your Feed\"\n      Then author A's articles appear in \"Your Feed\"\n      When user B returns to author A's profile page and unfollows author A\n      Then the button returns to its original follow state\n      When user B switches to \"Your Feed\" again\n      Then author A's articles no longer appear in \"Your Feed\"\n      And \"Your Feed\" displays an empty state when there are no articles\n",
+      "complete": true,
+      "spec": "generated/NB_gem_precise_H04_s3.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('Follow and unfollow (@item:H04)', async ({ page }) => {\n    // Setup users and an article authored by user A\n    const authorA = await newUser();\n    const userB = await newUser();\n    const articleA = await newArticle(authorA);\n\n    // Login as user B\n    await loginAs(page, userB);\n\n    // When user B opens author A's profile page and follows author A\n    await page.goto(`${UI}/#/profile/${encodeURIComponent(authorA.username)}`);\n\n    const followButton = page.getByRole('button', { name: new RegExp(`Follow ${authorA.username}`, 'i') });\n    await expect(followButton).toBeVisible();\n    await followButton.click();\n\n    // Then the follow button switches to an unfollow state\n    const unfollowButton = page.getByRole('button', { name: new RegExp(`Unfollow ${authorA.username}`, 'i') });\n    await expect(unfollowButton).toBeVisible();\n\n    // When user B goes to the home page and switches to \"Your Feed\"\n    await page.goto(`${UI}/#/`);\n    const yourFeedTab = page.getByRole('button', { name: /Your Feed/i }).or(page.getByRole('link', { name: /Your Feed/i }));\n    await yourFeedTab.click();\n\n    // Then author A's articles appear in \"Your Feed\"\n    await expect(page.getByRole('heading', { name: articleA.title })).toBeVisible();\n\n    // When user B returns to author A's profile page and unfollows author A\n    await page.goto(`${UI}/#/profile/${encodeURIComponent(authorA.username)}`);\n    await expect(unfollowButton).toBeVisible();\n    await unfollowButton.click();\n\n    // Then the button returns to its original follow state\n    await expect(followButton).toBeVisible();\n\n    // When user B switches to \"Your Feed\" again\n    await page.goto(`${UI}/#/`);\n    await yourFeedTab.click();\n\n    // Then author A's articles no longer appear in \"Your Feed\"\n    await expect(page.getByRole('heading', { name: articleA.title })).not.toBeVisible();\n\n    // And \"Your Feed\" displays an empty state when there are no articles\n    await expect(page.getByText(/No articles are here\\.\\.\\. yet\\./i)).toBeVisible();\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 3.3,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_terra_precise_H04_s3",
+      "condition": "C0-none",
+      "generator": "terra",
+      "model": "gpt-5.6-terra",
+      "item": "H04",
+      "seed": 3,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H04\n    Scenario: Follow and unfollow\n      When user B opens author A's profile page and follows author A\n      Then the follow button switches to an unfollow state\n      When user B goes to the home page and switches to \"Your Feed\"\n      Then author A's articles appear in \"Your Feed\"\n      When user B returns to author A's profile page and unfollows author A\n      Then the button returns to its original follow state\n      When user B switches to \"Your Feed\" again\n      Then author A's articles no longer appear in \"Your Feed\"\n      And \"Your Feed\" displays an empty state when there are no articles\n",
+      "complete": true,
+      "spec": "generated/NB_terra_precise_H04_s3.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport {\n  newUser,\n  newArticle,\n  loginAs,\n  UI,\n} from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('@item:H04 Follow and unfollow', async ({ page }) => {\n    const author = await newUser();\n    const follower = await newUser();\n    const article = await newArticle(author);\n\n    await loginAs(page, follower);\n\n    await page.goto(`${UI}/#/profile/${author.username}`);\n\n    const followButton = page.getByRole('button', {\n      name: new RegExp(`Follow\\\\s+${author.username}`, 'i'),\n    });\n\n    await expect(followButton).toBeVisible();\n    await followButton.click();\n\n    const unfollowButton = page.getByRole('button', {\n      name: new RegExp(`Unfollow\\\\s+${author.username}`, 'i'),\n    });\n\n    await expect(unfollowButton).toBeVisible();\n\n    await page.goto(`${UI}/#/`);\n    await page.getByRole('link', { name: 'Your Feed' }).click();\n\n    await expect(page.getByRole('link', { name: article.title })).toBeVisible();\n\n    await page.goto(`${UI}/#/profile/${author.username}`);\n\n    await expect(unfollowButton).toBeVisible();\n    await unfollowButton.click();\n\n    await expect(followButton).toBeVisible();\n\n    await page.goto(`${UI}/#/`);\n    await page.getByRole('link', { name: 'Your Feed' }).click();\n\n    await expect(page.getByText('No articles are here... yet.')).toBeVisible();\n    await expect(page.getByRole('link', { name: article.title })).not.toBeVisible();\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 4.1,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_gem_precise_S10_s3",
+      "condition": "C0-none",
+      "generator": "gem",
+      "model": "gemini-3.8-flash",
+      "item": "S10",
+      "seed": 3,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S10\n    Scenario: Favorite an article\n      Given a user opens an article that has not been favorited and has 0 favorites\n      When the user favorites the article\n      Then the button switches to an unfavorited state\n      And the favorite count changes from 0 to 1\n",
+      "complete": true,
+      "spec": "generated/NB_gem_precise_S10_s3.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('@item:S10 Favorite an article', async ({ page }) => {\n    // 建立文章作者與文章\n    const author = await newUser();\n    const article = await newArticle(author);\n\n    // 建立登入使用者並登入\n    const user = await newUser();\n    await loginAs(page, user);\n\n    // 瀏覽至該文章頁面（Hash 路由）\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    // 定位收藏按鈕（通常文章頁面頂部或底部的 Favorite 按鈕，包含文字 Favorite (0) 或 Favorite Post）\n    // Conduit 的 favorite 按鈕常包含文字 \"Favorite\"\n    const favoriteBtn = page.getByRole('button', { name: /Favorite/i }).first();\n    await expect(favoriteBtn).toBeVisible();\n    await expect(favoriteBtn).toContainText('0');\n\n    // 點擊收藏文章\n    await favoriteBtn.click();\n\n    // 驗證按鈕切換為已收藏狀態（包含 Unfavorite）且計數從 0 變為 1\n    await expect(favoriteBtn).toContainText(/Unfavorite/i);\n    await expect(favoriteBtn).toContainText('1');\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 2.4,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_terra_precise_S10_s3",
+      "condition": "C0-none",
+      "generator": "terra",
+      "model": "gpt-5.6-terra",
+      "item": "S10",
+      "seed": 3,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S10\n    Scenario: Favorite an article\n      Given a user opens an article that has not been favorited and has 0 favorites\n      When the user favorites the article\n      Then the button switches to an unfavorited state\n      And the favorite count changes from 0 to 1\n",
+      "complete": true,
+      "spec": "generated/NB_terra_precise_S10_s3.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('Favorite an article', async ({ page }) => {\n    const author = await newUser();\n    const user = await newUser();\n    const article = await newArticle(author);\n\n    await loginAs(page, user);\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    const favoriteButton = page.getByRole('button', { name: /favorite article/i });\n\n    await expect(favoriteButton).toContainText('0');\n    await expect(favoriteButton).not.toHaveClass(/active/);\n\n    await favoriteButton.click();\n\n    await expect(favoriteButton).toContainText('1');\n    await expect(favoriteButton).toHaveClass(/active/);\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 2.6,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_gem_precise_S03_s3",
+      "condition": "C0-none",
+      "generator": "gem",
+      "model": "gemini-3.8-flash",
+      "item": "S03",
+      "seed": 3,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S03\n    Scenario: Login with incorrect password\n      Given a user is on the login page\n      When the user submits a registered email and an incorrect password\n      Then the user remains on the login page\n      And an error message is displayed\n",
+      "complete": true,
+      "spec": "generated/NB_gem_precise_S03_s3.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('Login with incorrect password', async ({ page }) => {\n    // Given a registered user\n    const user = await newUser();\n\n    // Given a user is on the login page\n    await page.goto(`${UI}/#/login`);\n\n    // When the user submits a registered email and an incorrect password\n    await page.getByPlaceholder('Email').fill(user.email);\n    await page.getByPlaceholder('Password').fill('incorrect-password');\n    await page.getByRole('button', { name: 'Sign in' }).click();\n\n    // Then the user remains on the login page\n    await expect(page).toHaveURL(/#\\/login/);\n\n    // And an error message is displayed\n    const errorMessage = page.locator('.error-messages');\n    await expect(errorMessage).toBeVisible();\n    await expect(errorMessage).not.toBeEmpty();\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 1.8,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_terra_precise_S03_s3",
+      "condition": "C0-none",
+      "generator": "terra",
+      "model": "gpt-5.6-terra",
+      "item": "S03",
+      "seed": 3,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S03\n    Scenario: Login with incorrect password\n      Given a user is on the login page\n      When the user submits a registered email and an incorrect password\n      Then the user remains on the login page\n      And an error message is displayed\n",
+      "complete": true,
+      "spec": "generated/NB_terra_precise_S03_s3.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('@item:S03 Login with incorrect password', async ({ page }) => {\n    const user = await newUser();\n\n    await page.goto(`${UI}/#/login`);\n\n    await page.getByPlaceholder('Email').fill(user.email);\n    await page.getByPlaceholder('Password').fill('incorrect-password');\n    await page.getByRole('button', { name: /sign in/i }).click();\n\n    await expect(page).toHaveURL(/#\\/login$/);\n    await expect(page.locator('.error-messages')).toBeVisible();\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 2.3,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_gem_precise_S12_s3",
+      "condition": "C0-none",
+      "generator": "gem",
+      "model": "gemini-3.8-flash",
+      "item": "S12",
+      "seed": 3,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S12\n    Scenario: Article list pagination\n      Given a user views the article list on the home page and scrolls to the pagination controls\n      When the user selects page 2\n      Then the subsequent articles are displayed\n",
+      "complete": true,
+      "spec": "generated/NB_gem_precise_S12_s3.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('Article list pagination (@item:S12)', async ({ page }) => {\n    // 建立使用者並發布 11 篇文章以觸發分頁（Conduit 首頁預設每頁 10 篇）\n    const user = await newUser();\n    const articles = [];\n    for (let i = 1; i <= 11; i++) {\n      const article = await newArticle(user, {\n        title: `Pagination Test Article ${i} - ${Date.now()}`,\n        description: `Description ${i}`,\n        body: `Body content ${i}`,\n        tagList: ['pagination-test'],\n      });\n      articles.push(article);\n    }\n\n    // Given a user views the article list on the home page and scrolls to the pagination controls\n    await page.goto(`${UI}/#/`);\n\n    // 等待全域文章載入完成\n    const globalFeedTab = page.getByRole('button', { name: 'Global Feed' });\n    if (await globalFeedTab.isVisible()) {\n      await globalFeedTab.click();\n    }\n\n    const pagination = page.locator('.pagination');\n    await expect(pagination).toBeVisible();\n\n    const page2Btn = pagination.locator('.page-item').filter({ hasText: '2' }).locator('.page-link');\n    await expect(page2Btn).toBeVisible();\n\n    // 取得第 1 頁顯示的第一篇文章標題\n    const firstArticleOnPage1 = page.locator('.article-preview h1').first();\n    const page1Title = await firstArticleOnPage1.innerText();\n\n    // When the user selects page 2\n    await page2Btn.click();\n\n    // Then the subsequent articles are displayed\n    // 驗證第二頁按鈕呈現 active 狀態\n    const activePageItem = pagination.locator('.page-item.active');\n    await expect(activePageItem).toHaveText('2');\n\n    // 驗證文章清單已刷新，內容與第一頁不同\n    const firstArticleOnPage2 = page.locator('.article-preview h1').first();\n    await expect(firstArticleOnPage2).toBeVisible();\n    await expect(firstArticleOnPage2).not.toHaveText(page1Title);\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 3.1,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    },
+    {
+      "run_id": "NB_terra_precise_S12_s3",
+      "condition": "C0-none",
+      "generator": "terra",
+      "model": "gpt-5.6-terra",
+      "item": "S12",
+      "seed": 3,
+      "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S12\n    Scenario: Article list pagination\n      Given a user views the article list on the home page and scrolls to the pagination controls\n      When the user selects page 2\n      Then the subsequent articles are displayed\n",
+      "complete": true,
+      "spec": "generated/NB_terra_precise_S12_s3.spec.ts",
+      "generation_log": [
+        {
+          "role": "model",
+          "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newArticle, newUser, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('@item:S12 Article list pagination', async ({ page }) => {\n    const user = await newUser();\n\n    // Create enough articles to ensure pagination has a second page.\n    for (let i = 0; i < 11; i++) {\n      await newArticle(user, {\n        title: `Pagination article ${i + 1}`,\n        description: `Description for pagination article ${i + 1}`,\n        body: `Body for pagination article ${i + 1}`,\n      });\n    }\n\n    await loginAs(page, user);\n    await page.goto(`${UI}/#/`);\n\n    const articlePreviews = page.locator('app-article-list .article-preview');\n    await expect(articlePreviews).toHaveCount(10);\n\n    const pagination = page.locator('nav[aria-label=\"Page navigation\"]');\n    await pagination.scrollIntoViewIfNeeded();\n\n    const pageTwo = pagination.getByRole('link', { name: '2', exact: true });\n    await expect(pageTwo).toBeVisible();\n    await pageTwo.click();\n\n    await expect(pageTwo).toHaveClass(/active/);\n    await expect(articlePreviews).toHaveCount(1);\n    await expect(articlePreviews).toContainText('Pagination article 1');\n  });\n});\n```"
+        }
+      ],
+      "generation_wall_seconds": 3.6,
+      "probe_steps": 0,
+      "improvised_probe": 0,
+      "wanted_walk": 0
+    }
+  ],
+  "canary_before": {
+    "gem": {
+      "model": "gemini-3.8-flash",
+      "text": "Given an article with an initial favorite count of 0 is open",
+      "resolved": [
+        "gemini-3.8-flash"
+      ]
+    },
+    "terra": {
+      "model": "gpt-5.6-terra",
+      "text": "Given an article with an initial favorite count of 0 is open",
+      "resolved": [
+        "gpt-5.6-terra"
+      ]
+    }
+  },
+  "canary_after": {
+    "gem": {
+      "model": "gemini-3.8-flash",
+      "text": "Given an article with an initial favorite count of 0 is open",
+      "resolved": [
+        "gemini-3.8-flash"
+      ]
+    },
+    "terra": {
+      "model": "gpt-5.6-terra",
+      "text": "Given an article with an initial favorite count of 0 is open",
+      "resolved": [
+        "gpt-5.6-terra"
+      ]
+    }
+  },
+  "canary_drift": {
+    "gem": false,
+    "terra": false
+  },
+  "budgets": {
+    "gem": {
+      "calls": 30,
+      "total_tokens": 35061,
+      "prompt_tokens": 11069,
+      "output_tokens": 15707,
+      "thinking_tokens": 8285,
+      "cached_prompt_tokens": 0,
+      "seconds": 116.1,
+      "resolved_models": [
+        "gemini-3.8-flash"
+      ]
+    },
+    "terra": {
+      "calls": 30,
+      "total_tokens": 21756,
+      "prompt_tokens": 11580,
+      "output_tokens": 10176,
+      "thinking_tokens": 0,
+      "cached_prompt_tokens": 0,
+      "seconds": 119.5,
+      "resolved_models": [
+        "gpt-5.6-terra"
+      ]
+    }
+  }
+}

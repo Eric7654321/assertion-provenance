@@ -1,0 +1,37 @@
+{
+  "source": "NB_gem_precise_H03_s3.json",
+  "gen": "gem",
+  "arm": "precise",
+  "item": "H03",
+  "seed": 3,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/navigation.spec.ts",
+      "line_start": 87,
+      "line_end": 90,
+      "quote": "      // Click on our custom tag\n      await page.click('.sidebar .tag-list .tag-pill:has-text(\"playwright-test\")');\n\n      // Should see the tag filter active\n      await expect(page.locator('.nav-link:has-text(\"playwright-test\")')).toBeVisible();",
+      "why": "公開 E2E 測試明確驗證了點擊標籤後，對應標籤名稱的 nav-link 標籤頁應顯示為 active 篩選狀態。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 1,
+      "assertion": "await expect(activeTab).toContainText(specificTag)",
+      "line": 29,
+      "p2_candidate": true
+    },
+    {
+      "supported": true,
+      "file": "specs/e2e/url-navigation.spec.ts",
+      "line_start": 87,
+      "line_end": 88,
+      "quote": "    await expect(page).toHaveURL('/');\n    await expect(page.locator('.nav-link:has-text(\"Global Feed\")')).toHaveClass(/active/);",
+      "why": "公開材料明確測試了點擊 Global Feed 後該分頁 tab 會帶有 active 樣式（即為作用中的 Global Feed 標籤）。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 9,
+      "assertion": "await expect(page.locator('.feed-toggle .nav-link.active')).toContainText('Global Feed')",
+      "line": 61,
+      "p2_candidate": true
+    }
+  ]
+}

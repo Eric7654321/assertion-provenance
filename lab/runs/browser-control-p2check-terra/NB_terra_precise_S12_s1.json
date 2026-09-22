@@ -1,0 +1,25 @@
+{
+  "source": "NB_terra_precise_S12_s1.json",
+  "gen": "terra",
+  "arm": "precise",
+  "item": "S12",
+  "seed": 1,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約中首頁分頁的 URL 規格為 /?page=N 或 /?feed=following&page=2，並無使用 hash 路由（/#/?page=2）的陳述或測試。",
+      "row": 1,
+      "assertion": "await expect(page).toHaveURL(/#\\/\\?(?:.*&)?page=2(?:&.*)?$/)",
+      "line": 33,
+      "p2_candidate": false
+    },
+    {
+      "status": "P4 confirmed",
+      "why": "公開材料中並未規定在首頁分頁至第 2 頁時文章清單數量必須恰為 1 篇。",
+      "row": 2,
+      "assertion": "await expect(articleList).toHaveCount(1)",
+      "line": 34,
+      "p2_candidate": false
+    }
+  ]
+}

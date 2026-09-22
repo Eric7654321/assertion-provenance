@@ -1,0 +1,430 @@
+{
+  "cases": [
+    {
+      "id": "p0_favorite_count",
+      "expected": "P0",
+      "decisions": {
+        "gem": {
+          "class": "P0",
+          "citation": "after one favorite, the count becomes 1",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "驗收要求明確寫出收藏一次後數量變為 1，與點擊收藏後斷言 count 為 '1' 完全相符。"
+        },
+        "terra": {
+          "class": "P0",
+          "citation": "Initial favorite count is 0; after one favorite, the count becomes 1.",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "點擊收藏後收藏數顯示為 1 是驗收要求直接陳述的結果。"
+        }
+      }
+    },
+    {
+      "id": "p0_updated_title",
+      "expected": "P0",
+      "decisions": {
+        "gem": {
+          "class": "P0",
+          "citation": "After submitting an edited title, the article page displays the new title.",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "斷言直接驗證提交編輯後的標題後頁面顯示新標題，完全符合驗收要求。"
+        },
+        "terra": {
+          "class": "P0",
+          "citation": "After submitting an edited title, the article page displays the new title.",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "斷言在提交後確認文章頁標題顯示更新後的標題，與驗收要求直接一致。"
+        }
+      }
+    },
+    {
+      "id": "p0_removed_tags",
+      "expected": "P0",
+      "decisions": {
+        "gem": {
+          "class": "P0",
+          "citation": "After editing the article to remove all tags, no tags are displayed.",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "斷言標籤數量為 0 是驗收要求中「no tags are displayed」的直接操作化對應。"
+        },
+        "terra": {
+          "class": "P0",
+          "citation": "After editing the article to remove all tags, no tags are displayed.",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "提交移除所有標籤後斷言標籤數為 0，直接驗證不再顯示任何標籤。"
+        }
+      }
+    },
+    {
+      "id": "p0_nonauthor_control",
+      "expected": "P0",
+      "decisions": {
+        "gem": {
+          "class": "P0",
+          "citation": "A non-author cannot see the article edit control.",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "斷言直接驗證驗收要求所敘述的非作者無法看見編輯控制項。"
+        },
+        "terra": {
+          "class": "P0",
+          "citation": "A non-author cannot see the article edit control.",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "斷言直接驗證驗收要求中非作者看不到文章編輯控制項的主張。"
+        }
+      }
+    },
+    {
+      "id": "p0_login_error",
+      "expected": "P0",
+      "decisions": {
+        "gem": {
+          "class": "P0",
+          "citation": "Submitting a wrong password displays an error message.",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "驗收要求明確指出提交錯誤密碼後會顯示錯誤訊息，斷言在點擊提交後驗證錯誤訊息可見，直接對應要求。"
+        },
+        "terra": {
+          "class": "P0",
+          "citation": "Submitting a wrong password displays an error message.",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "斷言在提交錯誤密碼後確認錯誤訊息可見，直接對應驗收要求。"
+        }
+      }
+    },
+    {
+      "id": "p1_page_url",
+      "expected": "P1",
+      "decisions": {
+        "gem": {
+          "class": "P1",
+          "citation": "And the URL contains page=2",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "驗收要求未提及 URL 變化，但 Gherkin 明確寫出 'And the URL contains page=2'。"
+        },
+        "terra": {
+          "class": "P1",
+          "citation": "And the URL contains page=2",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "此斷言直接驗證 Gherkin 明示的 URL 包含 page=2，驗收要求未提及 URL。"
+        }
+      }
+    },
+    {
+      "id": "p1_exact_page_count",
+      "expected": "P1",
+      "decisions": {
+        "gem": {
+          "class": "P1",
+          "citation": "Then page 2 displays exactly 5 articles",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "驗收要求僅提及遵循分頁設定，具體顯示 5 篇是 Gherkin 明確規定的行為主張。"
+        },
+        "terra": {
+          "class": "P0",
+          "citation": "The article count follows the pagination setting.",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "點擊第 2 頁後斷言文章預覽數為 5，是「文章數遵循分頁設定」在已知分頁設定為 5 時的直接驗證。"
+        }
+      }
+    },
+    {
+      "id": "p1_signin_link",
+      "expected": "P1",
+      "decisions": {
+        "gem": {
+          "class": "P1",
+          "citation": "Then a Sign in link is displayed instead of the comment form",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "驗收要求未提及登入連結，但 Gherkin 明確主張應顯示 Sign in link。"
+        },
+        "terra": {
+          "class": "P1",
+          "citation": "Then a Sign in link is displayed instead of the comment form",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "Gherkin 明確主張訪客查看文章時 Sign in link 會顯示，斷言直接驗證此可見性。"
+        }
+      }
+    },
+    {
+      "id": "p1_empty_feed",
+      "expected": "P1",
+      "decisions": {
+        "gem": {
+          "class": "P1",
+          "citation": "And an empty-feed message is displayed",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "驗收要求未提及空動態訊息，但 Gherkin 明確要求顯示 empty-feed message。"
+        },
+        "terra": {
+          "class": "P1",
+          "citation": "And an empty-feed message is displayed",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "此斷言主張取消追蹤後空 feed 訊息可見，驗收要求未寫但 Gherkin 明確寫出。"
+        }
+      }
+    },
+    {
+      "id": "p1_profile_count",
+      "expected": "P1",
+      "decisions": {
+        "gem": {
+          "class": "P1",
+          "citation": "Then the profile favorites tab contains one article",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "驗收要求僅提及更新收藏狀態，而 Gherkin 明確要求個人檔案收藏分頁包含一篇文章。"
+        },
+        "terra": {
+          "class": "P1",
+          "citation": "Then the profile favorites tab contains one article",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "斷言直接驗證 Gherkin 所述收藏分頁包含一篇文章，驗收要求未明示此列表結果。"
+        }
+      }
+    },
+    {
+      "id": "p3_submit_guard",
+      "expected": "P3",
+      "decisions": {
+        "gem": {
+          "class": "P3",
+          "citation": "",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "出現在點擊操作之前作為確保目標存在的可見性守衛，非需求層行為主張。"
+        },
+        "terra": {
+          "class": "P3",
+          "citation": "",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "此可見性斷言位於提交動作之前，且驗收要求與 Gherkin 都未主張提交按鈕在此時可見，屬於操作前守衛。"
+        }
+      }
+    },
+    {
+      "id": "p3_delete_guard",
+      "expected": "P3",
+      "decisions": {
+        "gem": {
+          "class": "P3",
+          "citation": "",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "此可見性斷言位於點擊刪除按鈕之前，用於確保後續操作對象存在，且驗收要求與 Gherkin 均未主張該按鈕在此時的可見性，屬於操作前的可見性守衛。"
+        },
+        "terra": {
+          "class": "P3",
+          "citation": "",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "此可見性斷言位於刪除動作之前，且驗收要求與 Gherkin 都未主張刪除按鈕在該時間點可見，僅作為操作守衛。"
+        }
+      }
+    },
+    {
+      "id": "p3_page_two_guard",
+      "expected": "P3",
+      "decisions": {
+        "gem": {
+          "class": "P3",
+          "citation": "",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "該可見性斷言位於點擊 page 2 的操作之前作為操作守衛，驗收要求與 Gherkin 均未主張點擊前分頁按鈕的可見性。"
+        },
+        "terra": {
+          "class": "P3",
+          "citation": "",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "此可見性斷言位於選擇第 2 頁的觸發動作之前，且驗收要求與 Gherkin 都未主張該時間點頁碼元素是否可見，屬於操作前守衛。"
+        }
+      }
+    },
+    {
+      "id": "p3_comment_guard",
+      "expected": "P3",
+      "decisions": {
+        "gem": {
+          "class": "P3",
+          "citation": "",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "出現在輸入操作之前的元素可見性守衛，非需求層的行為主張。"
+        },
+        "terra": {
+          "class": "P3",
+          "citation": "",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "此斷言位於提交動作之前，且驗收要求與 Gherkin 都只主張提交後評論出現，未主張輸入框此時可見，因此是操作前的可見性守衛。"
+        }
+      }
+    },
+    {
+      "id": "p3_favorite_guard",
+      "expected": "P3",
+      "decisions": {
+        "gem": {
+          "class": "P3",
+          "citation": "",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "該斷言出現在點擊按鈕之前，用於確認按鈕可點擊的動作守衛，非需求層的行為主張。"
+        },
+        "terra": {
+          "class": "P3",
+          "citation": "",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "此斷言位於點擊收藏前，僅確認按鈕可操作；驗收要求與 Gherkin 都未主張該時間點按鈕是否啟用。"
+        }
+      }
+    },
+    {
+      "id": "p4_hash_route",
+      "expected": "P4",
+      "decisions": {
+        "gem": {
+          "class": "P4",
+          "citation": "",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "驗收要求與 Gherkin 僅要求提交編輯後顯示更新的標題，未提及或蘊含頁面 URL 應導向或維持在 /#/editor/.+。"
+        },
+        "terra": {
+          "class": "P4",
+          "citation": "",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "驗收要求與 Gherkin 都只主張提交後顯示更新後的標題，未主張 URL 會停留或導向 editor 路徑。"
+        }
+      }
+    },
+    {
+      "id": "p4_wrong_count",
+      "expected": "P4",
+      "decisions": {
+        "gem": {
+          "class": "P4",
+          "citation": "",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "驗收要求與 Gherkin 僅提及文章數量遵循分頁設定及顯示後續文章，未具體定義每頁應有 11 篇文章。"
+        },
+        "terra": {
+          "class": "P0",
+          "citation": "The article count follows the pagination setting.",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "斷言在選擇第 2 頁後檢查文章數量，直接對應驗收要求中文章數量遵循分頁設定的主張。"
+        }
+      }
+    },
+    {
+      "id": "p4_fixed_order",
+      "expected": "P4",
+      "decisions": {
+        "gem": {
+          "class": "P4",
+          "citation": "",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "驗收要求與 Gherkin 僅要求顯示後續文章，未定義文章標題具體內容為 ['C', 'B', 'A']，屬於具體測試資料的主張。"
+        },
+        "terra": {
+          "class": "P0",
+          "citation": "Page 2 displays articles subsequent to page 1.",
+          "p2_candidate": false,
+          "borderline": true,
+          "why": "斷言以具體標題序列驗證第 2 頁顯示第 1 頁之後的文章，屬於驗收要求的具體化，但要求未明示文章標題與排序。"
+        }
+      }
+    },
+    {
+      "id": "p4_accessible_name",
+      "expected": "P4",
+      "decisions": {
+        "gem": {
+          "class": "P4",
+          "citation": "",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "驗收要求與 Gherkin 僅主張切換分頁後顯示後續文章，並未要求分頁按鈕自身狀態（如當前頁面無障礙名稱）的改變。"
+        },
+        "terra": {
+          "class": "P4",
+          "citation": "",
+          "p2_candidate": false,
+          "borderline": false,
+          "why": "驗收要求與 Gherkin 只主張選擇第 2 頁後顯示後續文章，未主張第 2 頁按鈕會以「目前頁面」名稱可見。"
+        }
+      }
+    },
+    {
+      "id": "p4_exact_error_text",
+      "expected": "P4",
+      "decisions": {
+        "gem": {
+          "class": "P4",
+          "citation": "",
+          "p2_candidate": true,
+          "borderline": false,
+          "why": "驗收要求與 Gherkin 僅要求顯示錯誤（displays an error），未具體指定錯誤訊息文字須為 'email has already been taken'。"
+        },
+        "terra": {
+          "class": "P0",
+          "citation": "Submitting a duplicate email displays an error.",
+          "p2_candidate": false,
+          "borderline": true,
+          "why": "重複 email 提交後顯示錯誤被要求明示，該斷言以具體錯誤文案驗證此結果。"
+        }
+      }
+    }
+  ],
+  "budgets": {
+    "gem": {
+      "calls": 20,
+      "total_tokens": 16290,
+      "prompt_tokens": 14987,
+      "output_tokens": 1215,
+      "thinking_tokens": 88,
+      "cached_prompt_tokens": 0,
+      "seconds": 31.5,
+      "resolved_models": [
+        "gemini-3.8-flash"
+      ]
+    },
+    "terra": {
+      "calls": 20,
+      "total_tokens": 18272,
+      "prompt_tokens": 16881,
+      "output_tokens": 1391,
+      "thinking_tokens": 0,
+      "cached_prompt_tokens": 0,
+      "seconds": 37.4,
+      "resolved_models": [
+        "gpt-5.6-terra"
+      ]
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "source": "NB_terra_precise_S09_s1.json",
+  "gen": "terra",
+  "arm": "precise",
+  "item": "S09",
+  "seed": 1,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/comments.spec.ts",
+      "line_start": 33,
+      "line_end": 36,
+      "quote": "    await addComment(page, commentText);\n    // Comment should be visible\n    await expect(page.locator(`.card:not(.comment-form) .card-block:has-text(\"${commentText}\")`)).toBeVisible();",
+      "why": "官方 E2E 測試在發布留言後明確斷言剛發布的留言內容卡片可見。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 3,
+      "assertion": "await expect(userBComment).toBeVisible()",
+      "line": 44,
+      "p2_candidate": false
+    }
+  ]
+}

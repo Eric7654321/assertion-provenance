@@ -1,0 +1,154 @@
+{
+  "source": "NB_gem_precise_S02_s2.json",
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "precise",
+  "condition": "C0-none",
+  "item": "S02",
+  "seed": 2,
+  "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:S02\n    Scenario: Registration with duplicate email\n      Given a user has registered with an unused email\n      And has logged out\n      When the user attempts to register again with the same email\n      Then the registration should fail with an error displayed\n      And the user should not be logged in\n",
+  "spec": "generated/NB_gem_precise_S02_s2.spec.ts",
+  "rows": [
+    {
+      "class": "P0",
+      "citation": "第二次註冊失敗並顯示錯誤",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出第二次註冊失敗並「顯示錯誤」，斷言錯誤訊息可見直接對應此要求。",
+      "assertion": "await expect(errorMessage).toBeVisible()",
+      "line": 20
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求「顯示錯誤 (with an error displayed)」，未具體規定錯誤訊息必須包含 'email' 字樣。",
+      "assertion": "await expect(errorMessage).toContainText(/email/i)",
+      "line": 21
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求註冊失敗且未登入，並未規範頁面 URL 必須停留在 /#/register。",
+      "assertion": "await expect(page).toHaveURL(/#\\/register/)",
+      "line": 24
+    },
+    {
+      "class": "P0",
+      "citation": "使用者未登入",
+      "p2_candidate": false,
+      "borderline": true,
+      "why": "驗收要求明確主張『使用者未登入』，檢查導航列中未登入時可見的 Sign in 按鈕是驗證未登入狀態的具體操作化。",
+      "assertion": "await expect(page.locator('a[href=\"#/login\"], a:has-text(\"Sign in\")')).toBeVisible()",
+      "line": 25
+    },
+    {
+      "class": "P0",
+      "citation": "使用者未登入。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明訂「使用者未登入」，在前端導航列中看到 Sign up 連結是驗證未登入狀態的操作化檢查。",
+      "assertion": "await expect(page.locator('a[href=\"#/register\"], a:has-text(\"Sign up\")')).toBeVisible()",
+      "line": 26
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P0",
+        "citation": "第二次註冊失敗並顯示錯誤",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出第二次註冊失敗並「顯示錯誤」，斷言錯誤訊息可見直接對應此要求。",
+        "assertion": "await expect(errorMessage).toBeVisible()",
+        "line": 20
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求「顯示錯誤 (with an error displayed)」，未具體規定錯誤訊息必須包含 'email' 字樣。",
+        "assertion": "await expect(errorMessage).toContainText(/email/i)",
+        "line": 21
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求註冊失敗且未登入，並未規範頁面 URL 必須停留在 /#/register。",
+        "assertion": "await expect(page).toHaveURL(/#\\/register/)",
+        "line": 24
+      },
+      {
+        "class": "P0",
+        "citation": "使用者未登入",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "驗收要求明確主張『使用者未登入』，檢查導航列中未登入時可見的 Sign in 按鈕是驗證未登入狀態的具體操作化。",
+        "assertion": "await expect(page.locator('a[href=\"#/login\"], a:has-text(\"Sign in\")')).toBeVisible()",
+        "line": 25
+      },
+      {
+        "class": "P0",
+        "citation": "使用者未登入。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明訂「使用者未登入」，在前端導航列中看到 Sign up 連結是驗證未登入狀態的操作化檢查。",
+        "assertion": "await expect(page.locator('a[href=\"#/register\"], a:has-text(\"Sign up\")')).toBeVisible()",
+        "line": 26
+      }
+    ],
+    "terra": [
+      {
+        "class": "P0",
+        "citation": "第二次註冊失敗並顯示錯誤，使用者未登入。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在第二次註冊後確認錯誤訊息可見，直接對應驗收要求的「顯示錯誤」。",
+        "assertion": "await expect(errorMessage).toBeVisible()",
+        "line": 20
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只要求顯示錯誤，未主張錯誤文字必須包含「email」。",
+        "assertion": "await expect(errorMessage).toContainText(/email/i)",
+        "line": 21
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只主張使用者未登入，未主張失敗後網址必須停留在 #/register。",
+        "assertion": "await expect(page).toHaveURL(/#\\/register/)",
+        "line": 24
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只主張使用者未登入，未主張註冊頁上的「Sign in」連結在此時可見；且此斷言位於觸發後，屬可檢查的額外行為主張。",
+        "assertion": "await expect(page.locator('a[href=\"#/login\"], a:has-text(\"Sign in\")')).toBeVisible()",
+        "line": 25
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言僅確認註冊頁上的 Sign up 連結可見，驗收要求與 Gherkin 未主張該元素在此時可見，且屬於非登入狀態的介面守衛而非需求行為。",
+        "assertion": "await expect(page.locator('a[href=\"#/register\"], a:has-text(\"Sign up\")')).toBeVisible()",
+        "line": 26
+      }
+    ]
+  }
+}

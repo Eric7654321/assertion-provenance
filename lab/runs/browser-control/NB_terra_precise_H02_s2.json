@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_terra_precise_H02_s2",
+  "condition": "C0-none",
+  "generator": "terra",
+  "model": "gpt-5.6-terra",
+  "item": "H02",
+  "seed": 2,
+  "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:H02\n    Scenario: Article page visibility and permissions\n      Given an author creates an article and leaves a comment on it\n      When an unauthenticated visitor opens the article page\n      Then the visitor can see the article but cannot leave a comment\n      When another logged-in user who is not the author opens the article page\n      Then the user should not see the edit and delete controls for the article\n      When this user leaves their own comment on the article page\n      Then the delete control for a comment should only appear to the author of that comment\n",
+  "complete": true,
+  "spec": "generated/NB_terra_precise_H02_s2.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport {\n  newUser,\n  newArticle,\n  loginAs,\n  apiCall,\n  UI,\n} from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Criteria', () => {\n  test('H02: Article page visibility and permissions', async ({ page }) => {\n    const author = await newUser();\n    const article = await newArticle(author);\n    const visitor = await newUser();\n\n    const authorComment = await apiCall(\n      `/articles/${article.slug}/comments`,\n      'POST',\n      { comment: { body: 'Comment written by the article author' } },\n      author.token,\n    );\n\n    expect(authorComment.status).toBe(200);\n\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    await expect(page.getByRole('heading', { name: article.title })).toBeVisible();\n    await expect(page.locator('textarea[placeholder=\"Write a comment...\"]')).toHaveCount(0);\n    await expect(page.getByText('Sign in or sign up to add comments on this article.')).toBeVisible();\n\n    await loginAs(page, visitor);\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    await expect(page.getByRole('heading', { name: article.title })).toBeVisible();\n    await expect(page.getByRole('button', { name: /edit article/i })).toHaveCount(0);\n    await expect(page.getByRole('button', { name: /delete article/i })).toHaveCount(0);\n\n    const visitorCommentBody = 'Comment written by another user';\n    await page.locator('textarea[placeholder=\"Write a comment...\"]').fill(visitorCommentBody);\n    await page.getByRole('button', { name: /post comment/i }).click();\n\n    const authorCommentCard = page.locator('.card', {\n      hasText: 'Comment written by the article author',\n    });\n    const visitorCommentCard = page.locator('.card', {\n      hasText: visitorCommentBody,\n    });\n\n    await expect(authorCommentCard).toBeVisible();\n    await expect(visitorCommentCard).toBeVisible();\n\n    await expect(authorCommentCard.locator('button')).toHaveCount(0);\n    await expect(visitorCommentCard.locator('button')).toHaveCount(1);\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 5.0,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

@@ -1,0 +1,181 @@
+{
+  "source": "NB_gem_precise_S02_s3.json",
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "precise",
+  "condition": "C0-none",
+  "item": "S02",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S02\n    Scenario: Registration with duplicate email\n      Given a user completes registration with an unused email\n      And logs out\n      When the user registers again with the same email\n      Then the registration fails with an error displayed\n      And the user is not logged in\n",
+  "spec": "generated/NB_gem_precise_S02_s3.spec.ts",
+  "rows": [
+    {
+      "class": "P0",
+      "citation": "第二次註冊失敗並顯示錯誤，使用者未登入。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確寫出「顯示錯誤」，斷言錯誤訊息元素可見直接對應此要求。",
+      "assertion": "await expect(errorMessages).toBeVisible()",
+      "line": 22
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求「顯示錯誤」，未指定具體錯誤文字為 'email has already been taken'，但該訊息符合 RealWorld/Conduit API 規格。",
+      "assertion": "await expect(errorMessages).toContainText('email has already been taken')",
+      "line": 23
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求「註冊失敗並顯示錯誤，使用者未登入」，未明確規定頁面必須停留或跳轉至 /#/register URL。",
+      "assertion": "await expect(page).toHaveURL(/#\\/register/)",
+      "line": 26
+    },
+    {
+      "class": "P0",
+      "citation": "使用者未登入",
+      "p2_candidate": false,
+      "borderline": true,
+      "why": "驗收要求明確指出「使用者未登入」，在前端導覽列檢查登入連結可見性為驗證未登入狀態的操作化檢查。",
+      "assertion": "await expect(page.locator('a[href=\"#/login\"]')).toBeVisible()",
+      "line": 27
+    },
+    {
+      "class": "P0",
+      "citation": "使用者未登入。",
+      "p2_candidate": false,
+      "borderline": true,
+      "why": "驗收要求明訂「使用者未登入」，未登入狀態在導航列顯示註冊連結屬於該狀態的操作化檢查，依判不準往有依據判原則歸為 P0。",
+      "assertion": "await expect(page.locator('a[href=\"#/register\"]')).toBeVisible()",
+      "line": 28
+    },
+    {
+      "class": "P0",
+      "citation": "使用者未登入。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明訂『使用者未登入』，在前端導覽列上看不到該使用者的個人頁面連結是未登入狀態的直接操作化表現。",
+      "assertion": "await expect(page.locator(`a[href=\"#/@${newUsername}\"]`)).not.toBeVisible()",
+      "line": 29
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P0",
+        "citation": "第二次註冊失敗並顯示錯誤，使用者未登入。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確寫出「顯示錯誤」，斷言錯誤訊息元素可見直接對應此要求。",
+        "assertion": "await expect(errorMessages).toBeVisible()",
+        "line": 22
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求「顯示錯誤」，未指定具體錯誤文字為 'email has already been taken'，但該訊息符合 RealWorld/Conduit API 規格。",
+        "assertion": "await expect(errorMessages).toContainText('email has already been taken')",
+        "line": 23
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求「註冊失敗並顯示錯誤，使用者未登入」，未明確規定頁面必須停留或跳轉至 /#/register URL。",
+        "assertion": "await expect(page).toHaveURL(/#\\/register/)",
+        "line": 26
+      },
+      {
+        "class": "P0",
+        "citation": "使用者未登入",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "驗收要求明確指出「使用者未登入」，在前端導覽列檢查登入連結可見性為驗證未登入狀態的操作化檢查。",
+        "assertion": "await expect(page.locator('a[href=\"#/login\"]')).toBeVisible()",
+        "line": 27
+      },
+      {
+        "class": "P0",
+        "citation": "使用者未登入。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "驗收要求明訂「使用者未登入」，未登入狀態在導航列顯示註冊連結屬於該狀態的操作化檢查，依判不準往有依據判原則歸為 P0。",
+        "assertion": "await expect(page.locator('a[href=\"#/register\"]')).toBeVisible()",
+        "line": 28
+      },
+      {
+        "class": "P0",
+        "citation": "使用者未登入。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明訂『使用者未登入』，在前端導覽列上看不到該使用者的個人頁面連結是未登入狀態的直接操作化表現。",
+        "assertion": "await expect(page.locator(`a[href=\"#/@${newUsername}\"]`)).not.toBeVisible()",
+        "line": 29
+      }
+    ],
+    "terra": [
+      {
+        "class": "P0",
+        "citation": "第二次註冊失敗並顯示錯誤，使用者未登入。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在第二次註冊提交後確認錯誤訊息區塊可見，直接對應驗收要求的「顯示錯誤」。",
+        "assertion": "await expect(errorMessages).toBeVisible()",
+        "line": 22
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只要求顯示錯誤，未指定錯誤訊息必須包含特定文字。",
+        "assertion": "await expect(errorMessages).toContainText('email has already been taken')",
+        "line": 23
+      },
+      {
+        "class": "P0",
+        "citation": "第二次註冊失敗並顯示錯誤，使用者未登入。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "註冊頁 URL 是「使用者未登入」在此流程中的可檢查表徵，但驗收要求未明示路由。",
+        "assertion": "await expect(page).toHaveURL(/#\\/register/)",
+        "line": 26
+      },
+      {
+        "class": "P0",
+        "citation": "第二次註冊失敗並顯示錯誤，使用者未登入。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "登入連結可見是在註冊失敗後以 UI 狀態佐證「使用者未登入」的行為主張，雖非唯一觀測方式但有驗收要求支持。",
+        "assertion": "await expect(page.locator('a[href=\"#/login\"]')).toBeVisible()",
+        "line": 27
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言主張重複註冊失敗後註冊連結可見，驗收要求與 Gherkin 都只主張顯示錯誤且使用者未登入，未支持該元素在此時可見。",
+        "assertion": "await expect(page.locator('a[href=\"#/register\"]')).toBeVisible()",
+        "line": 28
+      },
+      {
+        "class": "P0",
+        "citation": "第二次註冊失敗並顯示錯誤，使用者未登入。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "斷言以個人頁連結不可見來驗證使用者未登入，屬於該結果的間接 UI 表徵。",
+        "assertion": "await expect(page.locator(`a[href=\"#/@${newUsername}\"]`)).not.toBeVisible()",
+        "line": 29
+      }
+    ]
+  }
+}

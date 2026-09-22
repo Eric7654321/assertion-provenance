@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_gem_precise_S03_s1",
+  "condition": "C0-none",
+  "generator": "gem",
+  "model": "gemini-3.8-flash",
+  "item": "S03",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S03\n    Scenario: Login with incorrect password\n      Given I am on the login page\n      When I submit a registered email with an incorrect password\n      Then I remain on the login page\n      And an error message is displayed\n",
+  "complete": true,
+  "spec": "generated/NB_gem_precise_S03_s1.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('Login with incorrect password', async ({ page }) => {\n    // Given I am on the login page\n    const user = await newUser();\n    await page.goto(`${UI}/#/login`);\n\n    // When I submit a registered email with an incorrect password\n    await page.getByPlaceholder('Email').fill(user.email);\n    await page.getByPlaceholder('Password').fill('incorrect-password-12345');\n    await page.getByRole('button', { name: 'Sign in' }).click();\n\n    // Then I remain on the login page\n    await expect(page).toHaveURL(`${UI}/#/login`);\n\n    // And an error message is displayed\n    const errorMessages = page.locator('.error-messages');\n    await expect(errorMessages).toBeVisible();\n    await expect(errorMessages).not.toBeEmpty();\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 3.1,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

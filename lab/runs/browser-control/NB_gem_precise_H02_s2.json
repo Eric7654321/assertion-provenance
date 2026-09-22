@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_gem_precise_H02_s2",
+  "condition": "C0-none",
+  "generator": "gem",
+  "model": "gemini-3.8-flash",
+  "item": "H02",
+  "seed": 2,
+  "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:H02\n    Scenario: Article page visibility and permissions\n      Given an author creates an article and leaves a comment on it\n      When an unauthenticated visitor opens the article page\n      Then the visitor can see the article but cannot leave a comment\n      When another logged-in user who is not the author opens the article page\n      Then the user should not see the edit and delete controls for the article\n      When this user leaves their own comment on the article page\n      Then the delete control for a comment should only appear to the author of that comment\n",
+  "complete": true,
+  "spec": "generated/NB_gem_precise_H02_s2.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, apiCall, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Criteria', () => {\n  test('Article page visibility and permissions (@item:H02)', async ({ page }) => {\n    // Given an author creates an article and leaves a comment on it\n    const author = await newUser();\n    const article = await newArticle(author);\n\n    const authorCommentBody = 'Author original comment ' + Date.now();\n    await apiCall(`/articles/${article.slug}/comments`, 'POST', {\n      comment: { body: authorCommentBody }\n    }, author.token);\n\n    const articleUrl = `${UI}/#/article/${article.slug}`;\n\n    // When an unauthenticated visitor opens the article page\n    await page.goto(articleUrl);\n\n    // Then the visitor can see the article but cannot leave a comment\n    await expect(page.getByRole('heading', { name: article.title })).toBeVisible();\n    await expect(page.getByText(article.body)).toBeVisible();\n    // Unauthenticated user sees prompt to sign in / sign up instead of the comment form\n    await expect(page.locator('form.comment-form')).toHaveCount(0);\n    await expect(page.getByText(/sign in.*or.*sign up.*to add comments/i)).toBeVisible();\n\n    // When another logged-in user who is not the author opens the article page\n    const reader = await newUser();\n    await loginAs(page, reader);\n    await page.goto(articleUrl);\n\n    // Then the user should not see the edit and delete controls for the article\n    await expect(page.locator('.article-actions, .banner').locator('a[href*=\"#/editor/\"]')).toHaveCount(0);\n    await expect(page.locator('.article-actions, .banner').getByRole('button', { name: /delete article/i })).toHaveCount(0);\n\n    // When this user leaves their own comment on the article page\n    const readerCommentBody = 'Reader comment ' + Date.now();\n    await page.locator('form.comment-form textarea').fill(readerCommentBody);\n    await page.locator('form.comment-form button[type=\"submit\"]').click();\n\n    // Ensure reader's comment is visible\n    const readerCommentCard = page.locator('.card', { hasText: readerCommentBody });\n    await expect(readerCommentCard).toBeVisible();\n\n    // Then the delete control for a comment should only appear to the author of that comment\n    const authorCommentCard = page.locator('.card', { hasText: authorCommentBody });\n    await expect(authorCommentCard).toBeVisible();\n\n    // Delete control (.mod-options or trash icon) should be visible on reader's comment, but NOT on author's comment\n    await expect(readerCommentCard.locator('.mod-options, .ion-trash-a, i.ion-trash-b, button:has-text(\"Delete\")')).toBeVisible();\n    await expect(authorCommentCard.locator('.mod-options, .ion-trash-a, i.ion-trash-b, button:has-text(\"Delete\")')).toHaveCount(0);\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 3.7,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

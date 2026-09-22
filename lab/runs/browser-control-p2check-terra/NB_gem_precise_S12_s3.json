@@ -1,0 +1,23 @@
+{
+  "source": "NB_gem_precise_S12_s3.json",
+  "gen": "gem",
+  "arm": "precise",
+  "item": "S12",
+  "seed": 3,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/url-navigation.spec.ts",
+      "line_start": 133,
+      "line_end": 135,
+      "quote": "    // Page 2 should be active\n    await expect(page.locator('.pagination .page-item:has(.page-link:has-text(\"2\"))')).toHaveClass(/active/);",
+      "why": "E2E 規範明確測試了點擊第 2 頁後，帶有文字 2 的 .page-item 必須帶有 active class。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 2,
+      "assertion": "await expect(activePageItem).toHaveText('2')",
+      "line": 44,
+      "p2_candidate": false
+    }
+  ]
+}

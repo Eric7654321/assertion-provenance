@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_terra_precise_S12_s3",
+  "condition": "C0-none",
+  "generator": "terra",
+  "model": "gpt-5.6-terra",
+  "item": "S12",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S12\n    Scenario: Article list pagination\n      Given a user views the article list on the home page and scrolls to the pagination controls\n      When the user selects page 2\n      Then the subsequent articles are displayed\n",
+  "complete": true,
+  "spec": "generated/NB_terra_precise_S12_s3.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newArticle, newUser, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('@item:S12 Article list pagination', async ({ page }) => {\n    const user = await newUser();\n\n    // Create enough articles to ensure pagination has a second page.\n    for (let i = 0; i < 11; i++) {\n      await newArticle(user, {\n        title: `Pagination article ${i + 1}`,\n        description: `Description for pagination article ${i + 1}`,\n        body: `Body for pagination article ${i + 1}`,\n      });\n    }\n\n    await loginAs(page, user);\n    await page.goto(`${UI}/#/`);\n\n    const articlePreviews = page.locator('app-article-list .article-preview');\n    await expect(articlePreviews).toHaveCount(10);\n\n    const pagination = page.locator('nav[aria-label=\"Page navigation\"]');\n    await pagination.scrollIntoViewIfNeeded();\n\n    const pageTwo = pagination.getByRole('link', { name: '2', exact: true });\n    await expect(pageTwo).toBeVisible();\n    await pageTwo.click();\n\n    await expect(pageTwo).toHaveClass(/active/);\n    await expect(articlePreviews).toHaveCount(1);\n    await expect(articlePreviews).toContainText('Pagination article 1');\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 3.6,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

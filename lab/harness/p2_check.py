@@ -177,23 +177,35 @@ def selftest():
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--selftest", action="store_true")
+    ap.add_argument("--root", type=Path, default=ROOT,
+                    help="directory containing judged cell JSON files")
+    ap.add_argument("--out", type=Path, default=OUT,
+                    help="directory for public-reference verdicts")
+    ap.add_argument("--pattern", default="PR_*.json")
+    ap.add_argument("--judge", default="gem",
+                    help="judge key from rows_by_judge; gem preserves the original default")
     args = ap.parse_args()
     if args.selftest:
         raise SystemExit(selftest())
 
     files = load_corpus()
     corpus = render_corpus(files)
-    OUT.mkdir(parents=True, exist_ok=True)
+    args.out.mkdir(parents=True, exist_ok=True)
     budget = common.Budget()
-    for f in sorted(ROOT.glob("PR_*.json")):
-        out = OUT / f.name
+    for f in sorted(args.root.glob(args.pattern)):
+        out = args.out / f.name
         if out.exists():
             continue
         r = json.loads(f.read_text())
         src = (common.LAB / r["spec"]).read_text()
         oa = oa_items.render(r["item"], r["arm"])
         results = []
-        for i, d in enumerate(r["rows"]):          # 主判定器（Gemini）的結果
+        rows = r.get("rows_by_judge", {}).get(args.judge)
+        if rows is None:
+            if args.judge != "gem":
+                raise RuntimeError(f"{f.name}: no rows for judge {args.judge}")
+            rows = r["rows"]
+        for i, d in enumerate(rows):
             if d["class"] != "P4":
                 continue
             res = check(files, corpus, oa, r["feature"], d["assertion"],

@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_gem_precise_S09_s2",
+  "condition": "C0-none",
+  "generator": "gem",
+  "model": "gemini-3.8-flash",
+  "item": "S09",
+  "seed": 2,
+  "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:S09\n    Scenario: Comment deletion control visibility\n      Given user A leaves a comment on an article\n      When user B opens the same article and leaves their own comment\n      Then user B should not see the delete control for user A's comment\n      And user B should see the delete control for their own comment\n",
+  "complete": true,
+  "spec": "generated/NB_gem_precise_S09_s2.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, apiCall, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Criteria', () => {\n  test('Comment deletion control visibility', async ({ page }) => {\n    // Given user A leaves a comment on an article\n    const userA = await newUser();\n    const article = await newArticle(userA);\n\n    const commentABody = `Comment by user A ${Date.now()}`;\n    await apiCall(\n      `articles/${article.slug}/comments`,\n      'POST',\n      { comment: { body: commentABody } },\n      userA.token\n    );\n\n    // User B setup\n    const userB = await newUser();\n\n    // When user B opens the same article and leaves their own comment\n    await loginAs(page, userB);\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    const commentBBody = `Comment by user B ${Date.now()}`;\n    await page.locator('textarea').fill(commentBBody);\n    await page.locator('button:has-text(\"Post Comment\")').click();\n\n    const commentCardA = page.locator('.card', { hasText: commentABody });\n    const commentCardB = page.locator('.card', { hasText: commentBBody });\n\n    // Wait for user B's comment to appear\n    await expect(commentCardB).toBeVisible();\n    await expect(commentCardA).toBeVisible();\n\n    const deleteControlSelector = '.ion-trash-a, .mod-options, button:has-text(\"Delete\")';\n\n    // Then user B should not see the delete control for user A's comment\n    await expect(commentCardA.locator(deleteControlSelector)).toHaveCount(0);\n\n    // And user B should see the delete control for their own comment\n    await expect(commentCardB.locator(deleteControlSelector)).toBeVisible();\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 6.6,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

@@ -1,0 +1,73 @@
+{
+  "source": "NB_terra_precise_S07_s1.json",
+  "gen": "terra",
+  "gen_model": "gpt-5.6-terra",
+  "arm": "precise",
+  "condition": "C0-none",
+  "item": "S07",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S07\n    Scenario: Author deletes their own article\n      Given I am on my own article page as the author\n      When I choose to delete the article\n      Then the article no longer appears in the article list on the home page\n",
+  "spec": "generated/NB_terra_precise_S07_s1.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "該斷言位於點選刪除文章的操作之前，且驗收要求與 Gherkin 均未將該按鈕的可見性作為斷言目標，屬於操作前的可見性守衛。",
+      "assertion": "await expect(page.getByRole('button', { name: /delete article/i })).toBeVisible()",
+      "line": 12
+    },
+    {
+      "class": "P0",
+      "citation": "刪除後該文章不再出現在首頁的文章列表。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "刪除並回到首頁後，斷言該文章標題連結不再可見，直接對應驗收要求中文章不再出現在列表的主張。",
+      "assertion": "await expect(page.getByRole('link', { name: article.title })).not.toBeVisible()",
+      "line": 17
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "該斷言位於點選刪除文章的操作之前，且驗收要求與 Gherkin 均未將該按鈕的可見性作為斷言目標，屬於操作前的可見性守衛。",
+        "assertion": "await expect(page.getByRole('button', { name: /delete article/i })).toBeVisible()",
+        "line": 12
+      },
+      {
+        "class": "P0",
+        "citation": "刪除後該文章不再出現在首頁的文章列表。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "刪除並回到首頁後，斷言該文章標題連結不再可見，直接對應驗收要求中文章不再出現在列表的主張。",
+        "assertion": "await expect(page.getByRole('link', { name: article.title })).not.toBeVisible()",
+        "line": 17
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於刪除動作之前，驗收要求與 Gherkin 都未主張刪除按鈕此時可見，僅是確保後續點擊有對象的守衛。",
+        "assertion": "await expect(page.getByRole('button', { name: /delete article/i })).toBeVisible()",
+        "line": 12
+      },
+      {
+        "class": "P0",
+        "citation": "刪除後該文章不再出現在首頁的文章列表。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在刪除後確認該文章連結不再可見，直接對應文章不再出現在首頁文章列表。",
+        "assertion": "await expect(page.getByRole('link', { name: article.title })).not.toBeVisible()",
+        "line": 17
+      }
+    ]
+  }
+}

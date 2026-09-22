@@ -7,6 +7,7 @@
 !/LICENSE
 !/ASSERTION_PROVENANCE.md
 !/RELATED_WORK_EVIDENCE.md
+!/BROWSER_CONTROL_PROTOCOL.md
 !/audit/
 
 !/lab/
@@ -27,6 +28,7 @@
 !/lab/generated/
 /lab/generated/*
 !/lab/generated/PR_*.spec.ts
+!/lab/generated/NB_*.spec.ts
 
 !/lab/harness/
 /lab/harness/*
@@ -46,11 +48,20 @@
 !/lab/harness/provenance.py
 !/lab/harness/run.py
 !/lab/harness/sandbox.py
+!/lab/harness/browser_control.py
+!/lab/harness/browser_control_judge.py
+!/lab/harness/browser_control_report.py
+!/lab/harness/provenance_benchmark.py
 
 !/lab/runs/
 /lab/runs/*
 !/lab/runs/precision/
 !/lab/runs/p2check/
+!/lab/runs/browser-control/
+!/lab/runs/browser-control-judged/
+!/lab/runs/browser-control-p2check/
+!/lab/runs/browser-control-p2check-terra/
+!/lab/runs/provenance-benchmark.json
 !/lab/runs/group-probe/
 /lab/runs/group-probe/*
 !/lab/runs/group-probe/G4_*/

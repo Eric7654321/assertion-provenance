@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_gem_precise_S12_s3",
+  "condition": "C0-none",
+  "generator": "gem",
+  "model": "gemini-3.8-flash",
+  "item": "S12",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S12\n    Scenario: Article list pagination\n      Given a user views the article list on the home page and scrolls to the pagination controls\n      When the user selects page 2\n      Then the subsequent articles are displayed\n",
+  "complete": true,
+  "spec": "generated/NB_gem_precise_S12_s3.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('Article list pagination (@item:S12)', async ({ page }) => {\n    // 建立使用者並發布 11 篇文章以觸發分頁（Conduit 首頁預設每頁 10 篇）\n    const user = await newUser();\n    const articles = [];\n    for (let i = 1; i <= 11; i++) {\n      const article = await newArticle(user, {\n        title: `Pagination Test Article ${i} - ${Date.now()}`,\n        description: `Description ${i}`,\n        body: `Body content ${i}`,\n        tagList: ['pagination-test'],\n      });\n      articles.push(article);\n    }\n\n    // Given a user views the article list on the home page and scrolls to the pagination controls\n    await page.goto(`${UI}/#/`);\n\n    // 等待全域文章載入完成\n    const globalFeedTab = page.getByRole('button', { name: 'Global Feed' });\n    if (await globalFeedTab.isVisible()) {\n      await globalFeedTab.click();\n    }\n\n    const pagination = page.locator('.pagination');\n    await expect(pagination).toBeVisible();\n\n    const page2Btn = pagination.locator('.page-item').filter({ hasText: '2' }).locator('.page-link');\n    await expect(page2Btn).toBeVisible();\n\n    // 取得第 1 頁顯示的第一篇文章標題\n    const firstArticleOnPage1 = page.locator('.article-preview h1').first();\n    const page1Title = await firstArticleOnPage1.innerText();\n\n    // When the user selects page 2\n    await page2Btn.click();\n\n    // Then the subsequent articles are displayed\n    // 驗證第二頁按鈕呈現 active 狀態\n    const activePageItem = pagination.locator('.page-item.active');\n    await expect(activePageItem).toHaveText('2');\n\n    // 驗證文章清單已刷新，內容與第一頁不同\n    const firstArticleOnPage2 = page.locator('.article-preview h1').first();\n    await expect(firstArticleOnPage2).toBeVisible();\n    await expect(firstArticleOnPage2).not.toHaveText(page1Title);\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 3.1,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

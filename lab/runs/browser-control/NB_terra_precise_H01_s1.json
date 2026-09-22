@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_terra_precise_H01_s1",
+  "condition": "C0-none",
+  "generator": "terra",
+  "model": "gpt-5.6-terra",
+  "item": "H01",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H01\n    Scenario: Article tags and editing\n      Given I am a logged-in user on the new article page\n      When I publish an article with a title, body, and three tags\n      Then the article page shows content matching what was entered\n      When I choose to edit the article on its page\n      And I change the title to a different string, remove all tags, and submit\n      Then the article title is updated\n      And the tags no longer appear\n",
+  "complete": true,
+  "spec": "generated/NB_terra_precise_H01_s1.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('H01 - Article tags and editing', async ({ page }) => {\n    const user = await newUser();\n    const originalTitle = `Article title ${Date.now()}`;\n    const updatedTitle = `Updated article title ${Date.now()}`;\n    const body = 'This is the article body.';\n    const tags = ['playwright', 'typescript', 'conduit'];\n\n    await loginAs(page, user);\n    await page.goto(`${UI}/#/editor`);\n\n    await page.getByPlaceholder('Article Title').fill(originalTitle);\n    await page.getByPlaceholder(\"What's this article about?\").fill('Article description');\n    await page.getByPlaceholder('Write your article (in markdown)').fill(body);\n\n    const tagInput = page.getByPlaceholder('Enter tags');\n    for (const tag of tags) {\n      await tagInput.fill(tag);\n      await tagInput.press('Enter');\n    }\n\n    await page.getByRole('button', { name: 'Publish Article' }).click();\n\n    await expect(page).toHaveURL(/#\\/article\\//);\n    await expect(page.getByRole('heading', { name: originalTitle })).toBeVisible();\n    await expect(page.locator('.article-content')).toContainText(body);\n\n    for (const tag of tags) {\n      await expect(page.locator('.tag-list')).toContainText(tag);\n    }\n\n    await page.getByRole('button', { name: 'Edit Article' }).click();\n\n    await expect(page).toHaveURL(/#\\/editor\\//);\n    await page.getByPlaceholder('Article Title').fill(updatedTitle);\n\n    const tagPills = page.locator('.tag-list .tag-pill');\n    while (await tagPills.count()) {\n      await tagPills.first().locator('i').click();\n    }\n\n    await page.getByRole('button', { name: 'Publish Article' }).click();\n\n    await expect(page).toHaveURL(/#\\/article\\//);\n    await expect(page.getByRole('heading', { name: updatedTitle })).toBeVisible();\n\n    for (const tag of tags) {\n      await expect(page.locator('.tag-list')).not.toContainText(tag);\n    }\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 5.8,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

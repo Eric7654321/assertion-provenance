@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_gem_precise_S03_s2",
+  "condition": "C0-none",
+  "generator": "gem",
+  "model": "gemini-3.8-flash",
+  "item": "S03",
+  "seed": 2,
+  "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:S03\n    Scenario: Login with incorrect password\n      Given a user is on the login page\n      When the user enters a registered email and an incorrect password, and submits\n      Then the user should remain on the login page\n      And an error message should be displayed\n",
+  "complete": true,
+  "spec": "generated/NB_gem_precise_S03_s2.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Criteria', () => {\n  test('@item:S03 Login with incorrect password', async ({ page }) => {\n    // 建立一筆已註冊的使用者\n    const user = await newUser();\n\n    // Given a user is on the login page\n    await page.goto(`${UI}/#/login`);\n\n    // When the user enters a registered email and an incorrect password, and submits\n    await page.getByPlaceholder('Email').fill(user.email);\n    await page.getByPlaceholder('Password').fill('incorrect-password');\n    await page.getByRole('button', { name: 'Sign in' }).click();\n\n    // Then the user should remain on the login page\n    await expect(page).toHaveURL(/#\\/login/);\n\n    // And an error message should be displayed\n    const errorMessage = page.locator('.error-messages');\n    await expect(errorMessage).toBeVisible();\n    await expect(errorMessage).not.toBeEmpty();\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 1.8,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

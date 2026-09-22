@@ -1,0 +1,51 @@
+{
+  "source": "NB_gem_precise_H03_s2.json",
+  "gen": "gem",
+  "arm": "precise",
+  "item": "H03",
+  "seed": 2,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/url-navigation.spec.ts",
+      "line_start": 48,
+      "line_end": 50,
+      "quote": "    // Should see the tag filter active\n    await expect(page.locator(`.nav-link:has-text(\"${firstTag?.trim()}\")`)).toBeVisible();\n    await expect(page.locator(`.nav-link:has-text(\"${firstTag?.trim()}\")`)).toHaveClass(/active/);",
+      "why": "契約規格在以標籤篩選時，明確斷言了帶有該標籤名稱的 nav-link 處於 active 狀態。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 1,
+      "assertion": "await expect(page.locator('.feed-toggle .nav-link.active')).toContainText(specificTag)",
+      "line": 30,
+      "p2_candidate": false
+    },
+    {
+      "supported": true,
+      "file": "specs/e2e/url-navigation.spec.ts",
+      "line_start": 46,
+      "line_end": 49,
+      "quote": "    await page.goto(`/tag/${firstTag?.trim()}`);\n    // Should see the tag filter active\n    await expect(page.locator(`.nav-link:has-text(\"${firstTag?.trim()}\")`)).toBeVisible();\n    await expect(page.locator(`.nav-link:has-text(\"${firstTag?.trim()}\")`)).toHaveClass(/active/);",
+      "why": "規格測試明確驗證導向標籤篩選頁面時，該標籤對應的 nav-link 呈現 active 狀態。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 8,
+      "assertion": "await expect(newPage.locator('.feed-toggle .nav-link.active')).toContainText(specificTag)",
+      "line": 60,
+      "p2_candidate": false
+    },
+    {
+      "supported": true,
+      "file": "specs/e2e/url-navigation.spec.ts",
+      "line_start": 85,
+      "line_end": 88,
+      "quote": "    // Click Global Feed\n    await page.click('.nav-link:has-text(\"Global Feed\")');\n    // Should navigate to /\n    await expect(page).toHaveURL('/');\n    await expect(page.locator('.nav-link:has-text(\"Global Feed\")')).toHaveClass(/active/);",
+      "why": "E2E 測試明確斷言點擊 Global Feed 後該分頁連結應帶有 active class。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 11,
+      "assertion": "await expect(globalFeedTab).toHaveClass(/active/)",
+      "line": 70,
+      "p2_candidate": false
+    }
+  ]
+}

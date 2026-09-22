@@ -1,0 +1,181 @@
+{
+  "source": "NB_terra_precise_S09_s1.json",
+  "gen": "terra",
+  "gen_model": "gpt-5.6-terra",
+  "arm": "precise",
+  "condition": "C0-none",
+  "item": "S09",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S09\n    Scenario: Visibility of comment deletion control\n      Given User A has posted a comment on an article\n      When User B views the same article and posts their own comment\n      Then User B does not see the delete control for User A's comment\n      And User B sees the delete control for their own comment\n",
+  "spec": "generated/NB_terra_precise_S09_s1.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此斷言是在測試前置準備步驟中確認使用者 A 建立留言的 API 呼叫成功，屬於測試資料備妥守衛，非需求層的行為主張。",
+      "assertion": "expect(commentA.status).toBe(200)",
+      "line": 25
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此斷言位於填寫並送出留言之前，用於確保輸入框可見以進行後續操作，屬於非需求層的守衛斷言。",
+      "assertion": "await expect(commentInput).toBeVisible()",
+      "line": 31
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求只驗證刪除控制項的可見性，此處確認留言本身可見屬於後續檢查按鈕前的可見性守衛。",
+      "assertion": "await expect(userAComment).toBeVisible()",
+      "line": 43
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅規範刪除控制項的可見性，未主張留言卡片本身的可見性，且斷言位於操作完成後而非動作前的守衛。",
+      "assertion": "await expect(userBComment).toBeVisible()",
+      "line": 44
+    },
+    {
+      "class": "P0",
+      "citation": "B 看不到 A 那則留言的刪除控制項，只看得到自己那則的。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "斷言驗證 User A 的留言區塊內不存在刪除按鈕（計數為 0），直接對應驗收要求中「B 看不到 A 那則留言的刪除控制項」的主張。",
+      "assertion": "await expect(userAComment.locator('button')).toHaveCount(0)",
+      "line": 46
+    },
+    {
+      "class": "P0",
+      "citation": "只看得到自己那則的。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出使用者 B 只看得到自己該則留言的刪除控制項（對應其評論卡片內的刪除按鈕 count 為 1）。",
+      "assertion": "await expect(userBComment.locator('button')).toHaveCount(1)",
+      "line": 47
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言是在測試前置準備步驟中確認使用者 A 建立留言的 API 呼叫成功，屬於測試資料備妥守衛，非需求層的行為主張。",
+        "assertion": "expect(commentA.status).toBe(200)",
+        "line": 25
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於填寫並送出留言之前，用於確保輸入框可見以進行後續操作，屬於非需求層的守衛斷言。",
+        "assertion": "await expect(commentInput).toBeVisible()",
+        "line": 31
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求只驗證刪除控制項的可見性，此處確認留言本身可見屬於後續檢查按鈕前的可見性守衛。",
+        "assertion": "await expect(userAComment).toBeVisible()",
+        "line": 43
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅規範刪除控制項的可見性，未主張留言卡片本身的可見性，且斷言位於操作完成後而非動作前的守衛。",
+        "assertion": "await expect(userBComment).toBeVisible()",
+        "line": 44
+      },
+      {
+        "class": "P0",
+        "citation": "B 看不到 A 那則留言的刪除控制項，只看得到自己那則的。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言驗證 User A 的留言區塊內不存在刪除按鈕（計數為 0），直接對應驗收要求中「B 看不到 A 那則留言的刪除控制項」的主張。",
+        "assertion": "await expect(userAComment.locator('button')).toHaveCount(0)",
+        "line": 46
+      },
+      {
+        "class": "P0",
+        "citation": "只看得到自己那則的。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出使用者 B 只看得到自己該則留言的刪除控制項（對應其評論卡片內的刪除按鈕 count 為 1）。",
+        "assertion": "await expect(userBComment.locator('button')).toHaveCount(1)",
+        "line": 47
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "這是在後續使用者 B 操作前確認使用者 A 的留言建立 API 成功，屬於測試資料備妥的守衛，非需求層行為主張。",
+        "assertion": "expect(commentA.status).toBe(200)",
+        "line": 25
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "這是在使用者 B 發表留言前確認輸入框可操作的前置守衛，驗收要求與 Gherkin 都未主張該時間點留言輸入框的可見性。",
+        "assertion": "await expect(commentInput).toBeVisible()",
+        "line": 31
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言僅在後續檢查刪除控制項前確認 A 的留言元素存在；需求與 Gherkin 都未主張該留言在此時間點的可見性。",
+        "assertion": "await expect(userAComment).toBeVisible()",
+        "line": 43
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "這是在後續刪除控制項檢查前確認 User B 留言元素存在的可見性守衛；驗收要求與 Gherkin 都未主張留言本身在此時間點的可見性。",
+        "assertion": "await expect(userBComment).toBeVisible()",
+        "line": 44
+      },
+      {
+        "class": "P0",
+        "citation": "B 看不到 A 那則留言的刪除控制項，只看得到自己那則的。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言驗證使用者 B 看不到使用者 A 留言的按鈕（刪除控制項），與驗收要求直接一致。",
+        "assertion": "await expect(userAComment.locator('button')).toHaveCount(0)",
+        "line": 46
+      },
+      {
+        "class": "P0",
+        "citation": "B 看不到 A 那則留言的刪除控制項，只看得到自己那則的。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言確認 B 自己留言中恰有一個按鈕，作為其看得到自己留言刪除控制項的具體驗證。",
+        "assertion": "await expect(userBComment.locator('button')).toHaveCount(1)",
+        "line": 47
+      }
+    ]
+  }
+}

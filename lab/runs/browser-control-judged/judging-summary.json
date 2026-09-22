@@ -1,0 +1,65 @@
+{
+  "records": 60,
+  "canary_before": {
+    "gem": {
+      "model": "gemini-3.8-flash",
+      "text": "Given an article with an initial favorite count of 0 is open",
+      "resolved": [
+        "gemini-3.8-flash"
+      ]
+    },
+    "terra": {
+      "model": "gpt-5.6-terra",
+      "text": "Given an article with an initial favorite count of 0 is open",
+      "resolved": [
+        "gpt-5.6-terra"
+      ]
+    }
+  },
+  "canary_after": {
+    "gem": {
+      "model": "gemini-3.8-flash",
+      "text": "Given an article with an initial favorite count of 0 is open",
+      "resolved": [
+        "gemini-3.8-flash"
+      ]
+    },
+    "terra": {
+      "model": "gpt-5.6-terra",
+      "text": "Given an article with an initial favorite count of 0 is open",
+      "resolved": [
+        "gpt-5.6-terra"
+      ]
+    }
+  },
+  "canary_drift": {
+    "gem": false,
+    "terra": false
+  },
+  "budgets": {
+    "gem": {
+      "calls": 349,
+      "total_tokens": 402812,
+      "prompt_tokens": 377458,
+      "output_tokens": 24132,
+      "thinking_tokens": 1222,
+      "cached_prompt_tokens": 0,
+      "seconds": 567.1,
+      "resolved_models": [
+        "gemini-3.8-flash"
+      ]
+    },
+    "terra": {
+      "calls": 349,
+      "total_tokens": 438579,
+      "prompt_tokens": 409919,
+      "output_tokens": 28660,
+      "thinking_tokens": 0,
+      "cached_prompt_tokens": 0,
+      "seconds": 661.0,
+      "resolved_models": [
+        "gpt-5.6-terra"
+      ]
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "source": "NB_gem_precise_S10_s2.json",
+  "gen": "gem",
+  "arm": "precise",
+  "item": "S10",
+  "seed": 2,
+  "checks": []
+}

@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_terra_precise_S07_s1",
+  "condition": "C0-none",
+  "generator": "terra",
+  "model": "gpt-5.6-terra",
+  "item": "S07",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S07\n    Scenario: Author deletes their own article\n      Given I am on my own article page as the author\n      When I choose to delete the article\n      Then the article no longer appears in the article list on the home page\n",
+  "complete": true,
+  "spec": "generated/NB_terra_precise_S07_s1.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('@item:S07 Author deletes their own article', async ({ page }) => {\n    const user = await newUser();\n    const article = await newArticle(user);\n\n    await loginAs(page, user);\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    await expect(page.getByRole('button', { name: /delete article/i })).toBeVisible();\n    await page.getByRole('button', { name: /delete article/i }).click();\n\n    await page.waitForURL(/#\\/?$/);\n\n    await expect(page.getByRole('link', { name: article.title })).not.toBeVisible();\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 2.7,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

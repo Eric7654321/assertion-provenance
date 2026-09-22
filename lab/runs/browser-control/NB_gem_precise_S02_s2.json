@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_gem_precise_S02_s2",
+  "condition": "C0-none",
+  "generator": "gem",
+  "model": "gemini-3.8-flash",
+  "item": "S02",
+  "seed": 2,
+  "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:S02\n    Scenario: Registration with duplicate email\n      Given a user has registered with an unused email\n      And has logged out\n      When the user attempts to register again with the same email\n      Then the registration should fail with an error displayed\n      And the user should not be logged in\n",
+  "complete": true,
+  "spec": "generated/NB_gem_precise_S02_s2.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Criteria', () => {\n  test('Registration with duplicate email', async ({ page }) => {\n    // Given a user has registered with an unused email\n    const existingUser = await newUser();\n\n    // And has logged out (new page context starts logged out)\n    await page.goto(`${UI}/#/register`);\n\n    // When the user attempts to register again with the same email\n    await page.locator('input[placeholder=\"Username\"]').fill(`user_${Date.now()}`);\n    await page.locator('input[placeholder=\"Email\"]').fill(existingUser.email);\n    await page.locator('input[placeholder=\"Password\"]').fill('Password123!');\n    await page.locator('button[type=\"submit\"], button:has-text(\"Sign up\")').click();\n\n    // Then the registration should fail with an error displayed\n    const errorMessage = page.locator('.error-messages');\n    await expect(errorMessage).toBeVisible();\n    await expect(errorMessage).toContainText(/email/i);\n\n    // And the user should not be logged in\n    await expect(page).toHaveURL(/#\\/register/);\n    await expect(page.locator('a[href=\"#/login\"], a:has-text(\"Sign in\")')).toBeVisible();\n    await expect(page.locator('a[href=\"#/register\"], a:has-text(\"Sign up\")')).toBeVisible();\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 3.2,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

@@ -1,0 +1,25 @@
+{
+  "source": "NB_terra_precise_S12_s1.json",
+  "gen": "terra",
+  "arm": "precise",
+  "item": "S12",
+  "seed": 1,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約與官方測試定義的換頁 URL 格式為標準路徑與 query 參數（如 /?page=N 或 /tag/:tag?page=2），並無 hash 路由格式（如 /#/?page=2）。",
+      "row": 1,
+      "assertion": "await expect(page).toHaveURL(/#\\/\\?(?:.*&)?page=2(?:&.*)?$/)",
+      "line": 33,
+      "p2_candidate": true
+    },
+    {
+      "status": "P4 confirmed",
+      "why": "公開材料中並未規定首頁分頁切換到第 2 頁時文章列表的數量必須為 1。",
+      "row": 2,
+      "assertion": "await expect(articleList).toHaveCount(1)",
+      "line": 34,
+      "p2_candidate": false
+    }
+  ]
+}

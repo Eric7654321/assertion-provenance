@@ -1,0 +1,17 @@
+{
+  "source": "NB_terra_precise_S09_s3.json",
+  "gen": "terra",
+  "arm": "precise",
+  "item": "S09",
+  "seed": 3,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開材料中並無在多使用者留言權限驗證場景下針對他人先前留言內容可見性（toBeVisible）的明確規範或對應斷言。",
+      "row": 2,
+      "assertion": "await expect(userAComment).toBeVisible()",
+      "line": 38,
+      "p2_candidate": false
+    }
+  ]
+}

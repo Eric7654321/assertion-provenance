@@ -1,0 +1,39 @@
+{
+  "source": "NB_terra_precise_S02_s1.json",
+  "gen": "terra",
+  "arm": "precise",
+  "item": "S02",
+  "seed": 1,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開材料中無論是規格（URL 為 /register）、E2E 測試（await expect(page).toHaveURL('/register')）皆無使用 hash 路由（/#/register）的要求或斷言。",
+      "row": 2,
+      "assertion": "await expect(page).toHaveURL(/#\\/register$/)",
+      "line": 19,
+      "p2_candidate": false
+    },
+    {
+      "supported": true,
+      "file": "docs/src/content/docs/specifications/frontend/templates.md",
+      "line_start": 34,
+      "line_end": 41,
+      "quote": "#### Unauthenticated user\n\nIf no user is logged in, then the header should include links to:\n\n- the home page\n- the login page\n- the register page",
+      "why": "契約明確規定未登入（註冊失敗後保持未登入）時，導覽列標頭必須包含登入頁面（Sign in）的連結。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 3,
+      "assertion": "await expect(page.getByRole('link', { name: 'Sign in' })).toBeVisible()",
+      "line": 20,
+      "p2_candidate": true
+    },
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約中僅測試了重複註冊時 API 回傳 409 與前端保留在註冊頁/顯示錯誤，並未要求或測試註冊失敗後呼叫 GET /user 必須回傳 401 狀態碼。",
+      "row": 4,
+      "assertion": "expect(currentUser.status).toBe(401)",
+      "line": 23,
+      "p2_candidate": true
+    }
+  ]
+}

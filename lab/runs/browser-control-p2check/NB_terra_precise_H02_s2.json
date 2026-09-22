@@ -1,0 +1,17 @@
+{
+  "source": "NB_terra_precise_H02_s2.json",
+  "gen": "terra",
+  "arm": "precise",
+  "item": "H02",
+  "seed": 2,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開材料中未要求或測試未登入訪客在文章頁時必須顯示特定的 'Sign in or sign up to add comments on this article.' 提示文字。",
+      "row": 3,
+      "assertion": "await expect(page.getByText('Sign in or sign up to add comments on this article.')).toBeVisible()",
+      "line": 29,
+      "p2_candidate": true
+    }
+  ]
+}

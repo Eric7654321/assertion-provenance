@@ -1,0 +1,17 @@
+{
+  "source": "NB_gem_precise_S02_s1.json",
+  "gen": "gem",
+  "arm": "precise",
+  "item": "S02",
+  "seed": 1,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開材料中未規範或測試註冊失敗時 URL 必須維持為或匹配 /#/register。",
+      "row": 4,
+      "assertion": "await expect(page).toHaveURL(/#\\/register/)",
+      "line": 26,
+      "p2_candidate": true
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_terra_precise_S12_s1",
+  "condition": "C0-none",
+  "generator": "terra",
+  "model": "gpt-5.6-terra",
+  "item": "S12",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S12\n    Scenario: Article list pagination\n      Given I scroll to the pagination bar in the article list on the home page\n      When I select page 2\n      Then the list displays the consecutive articles\n",
+  "complete": true,
+  "spec": "generated/NB_terra_precise_S12_s1.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newArticle, newUser, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('@item:S12 Article list pagination', async ({ page }) => {\n    const user = await newUser();\n\n    // Create enough articles to require a second page (Conduit displays 10 per page).\n    const articles = [];\n    for (let i = 0; i < 11; i++) {\n      articles.push(\n        await newArticle(user, {\n          title: `Pagination article ${i + 1}`,\n          description: `Description for pagination article ${i + 1}`,\n          body: `Body for pagination article ${i + 1}`,\n        }),\n      );\n    }\n\n    await loginAs(page, user);\n    await page.goto(`${UI}/#/`);\n\n    const articleList = page.locator('.article-preview');\n    await expect(articleList).toHaveCount(10);\n\n    const firstPageTitles = await articleList.locator('h1').allTextContents();\n\n    const pagination = page.locator('ul.pagination');\n    await pagination.scrollIntoViewIfNeeded();\n\n    await pagination.getByRole('link', { name: '2', exact: true }).click();\n\n    await expect(page).toHaveURL(/#\\/\\?(?:.*&)?page=2(?:&.*)?$/);\n    await expect(articleList).toHaveCount(1);\n\n    const secondPageTitles = await articleList.locator('h1').allTextContents();\n\n    expect(secondPageTitles).not.toEqual(firstPageTitles);\n    expect(secondPageTitles).toContain(articles[0].title);\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 4.9,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

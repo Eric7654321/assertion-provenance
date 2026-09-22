@@ -1,0 +1,17 @@
+{
+  "source": "NB_gem_precise_H02_s3.json",
+  "gen": "gem",
+  "arm": "precise",
+  "item": "H02",
+  "seed": 3,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約與官方測試中未要求或提及「Sign in or sign up to add comments on this article」特定提示文字，官方 comments.spec.ts 僅驗證未登入時 sign in/sign up 連結可見且 textarea 不存在。",
+      "row": 3,
+      "assertion": "await expect(page.locator('text=Sign in or sign up to add comments on this article')).toBeVisible()",
+      "line": 26,
+      "p2_candidate": true
+    }
+  ]
+}

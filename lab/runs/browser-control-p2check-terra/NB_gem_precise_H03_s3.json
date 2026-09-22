@@ -1,0 +1,23 @@
+{
+  "source": "NB_gem_precise_H03_s3.json",
+  "gen": "gem",
+  "arm": "precise",
+  "item": "H03",
+  "seed": 3,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/url-navigation.spec.ts",
+      "line_start": 48,
+      "line_end": 50,
+      "quote": "    // Should see the tag filter active\n    await expect(page.locator(`.nav-link:has-text(\"${firstTag?.trim()}\")`)).toBeVisible();\n    await expect(page.locator(`.nav-link:has-text(\"${firstTag?.trim()}\")`)).toHaveClass(/active/);",
+      "why": "官方 E2E 測試明確斷言透過標籤網址瀏覽時，該標籤的 .nav-link 必須處於 active 狀態。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 6,
+      "assertion": "await expect(page.locator('.feed-toggle .nav-link.active')).toContainText(specificTag)",
+      "line": 51,
+      "p2_candidate": false
+    }
+  ]
+}

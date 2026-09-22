@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_gem_precise_S10_s1",
+  "condition": "C0-none",
+  "generator": "gem",
+  "model": "gemini-3.8-flash",
+  "item": "S10",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S10\n    Scenario: Favorite an article\n      Given I view an un-favorited article with an initial favorite count of 0\n      When I choose to favorite the article\n      Then the favorite button changes to an un-favorite state\n      And the favorite count changes from 0 to 1\n",
+  "complete": true,
+  "spec": "generated/NB_gem_precise_S10_s1.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('Favorite an article', async ({ page }) => {\n    // 建立文章作者與閱讀者（按讚者）\n    const author = await newUser();\n    const reader = await newUser();\n    const article = await newArticle(author);\n\n    // 以 reader 身份登入\n    await loginAs(page, reader);\n\n    // 瀏覽未收藏且收藏數為 0 的文章頁面 (Hash router: /#/article/:slug)\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    // 定位收藏按鈕（在 article-actions 或 article-meta 中）\n    const favoriteButton = page.locator('.article-actions button, .article-meta button').filter({\n      hasText: /Favorite/i,\n    }).first();\n\n    // 確認初始狀態收藏數為 0\n    await expect(favoriteButton).toContainText('(0)');\n\n    // 點擊收藏按鈕\n    await favoriteButton.click();\n\n    // 驗證按鈕變為 Unfavorite 狀態且計數從 0 變為 1\n    const unfavoriteButton = page.locator('.article-actions button, .article-meta button').filter({\n      hasText: /Unfavorite/i,\n    }).first();\n\n    await expect(unfavoriteButton).toBeVisible();\n    await expect(unfavoriteButton).toContainText('(1)');\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 2.6,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

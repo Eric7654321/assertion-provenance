@@ -1,0 +1,31 @@
+{
+  "source": "NB_gem_precise_S02_s3.json",
+  "gen": "gem",
+  "arm": "precise",
+  "item": "S02",
+  "seed": 3,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開材料中後端 API 測試 (specs/api/hurl/errors_auth.hurl) 驗證了 API 回傳 $.errors.email[0] == 'has already been taken'，但前端模板與 E2E 規範中並未規範前端 .error-messages 必須顯示包含 'email has already been taken' 的特定文字。",
+      "row": 1,
+      "assertion": "await expect(errorMessages).toContainText('email has already been taken')",
+      "line": 23,
+      "p2_candidate": false
+    },
+    {
+      "supported": true,
+      "file": "docs/src/content/docs/specifications/frontend/templates.md",
+      "line_start": 34,
+      "line_end": 41,
+      "quote": "#### Unauthenticated user\n\nIf no user is logged in, then the header should include links to:\n\n- the home page\n- the login page\n- the register page",
+      "why": "公開規格明訂未登入狀態（Unauthenticated user）的 Header 必須包含前往註冊頁面（the register page）的連結。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 4,
+      "assertion": "await expect(page.locator('a[href=\"#/register\"]')).toBeVisible()",
+      "line": 28,
+      "p2_candidate": false
+    }
+  ]
+}

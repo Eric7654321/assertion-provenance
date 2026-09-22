@@ -1,0 +1,23 @@
+{
+  "source": "NB_gem_precise_S12_s1.json",
+  "gen": "gem",
+  "arm": "precise",
+  "item": "S12",
+  "seed": 1,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/SELECTORS.md",
+      "line_start": 213,
+      "line_end": 213,
+      "quote": "- **Pagination active**: The current page's `.page-item` has the CSS class `active`.",
+      "why": "公開規格在按鈕與狀態約定中明確規定：目前所在頁碼的 `.page-item` 元素必須具有 CSS class `active`。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 2,
+      "assertion": "await expect(activePage).toContainText('2')",
+      "line": 43,
+      "p2_candidate": false
+    }
+  ]
+}

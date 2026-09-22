@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_gem_precise_H04_s3",
+  "condition": "C0-none",
+  "generator": "gem",
+  "model": "gemini-3.8-flash",
+  "item": "H04",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H04\n    Scenario: Follow and unfollow\n      When user B opens author A's profile page and follows author A\n      Then the follow button switches to an unfollow state\n      When user B goes to the home page and switches to \"Your Feed\"\n      Then author A's articles appear in \"Your Feed\"\n      When user B returns to author A's profile page and unfollows author A\n      Then the button returns to its original follow state\n      When user B switches to \"Your Feed\" again\n      Then author A's articles no longer appear in \"Your Feed\"\n      And \"Your Feed\" displays an empty state when there are no articles\n",
+  "complete": true,
+  "spec": "generated/NB_gem_precise_H04_s3.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('Follow and unfollow (@item:H04)', async ({ page }) => {\n    // Setup users and an article authored by user A\n    const authorA = await newUser();\n    const userB = await newUser();\n    const articleA = await newArticle(authorA);\n\n    // Login as user B\n    await loginAs(page, userB);\n\n    // When user B opens author A's profile page and follows author A\n    await page.goto(`${UI}/#/profile/${encodeURIComponent(authorA.username)}`);\n\n    const followButton = page.getByRole('button', { name: new RegExp(`Follow ${authorA.username}`, 'i') });\n    await expect(followButton).toBeVisible();\n    await followButton.click();\n\n    // Then the follow button switches to an unfollow state\n    const unfollowButton = page.getByRole('button', { name: new RegExp(`Unfollow ${authorA.username}`, 'i') });\n    await expect(unfollowButton).toBeVisible();\n\n    // When user B goes to the home page and switches to \"Your Feed\"\n    await page.goto(`${UI}/#/`);\n    const yourFeedTab = page.getByRole('button', { name: /Your Feed/i }).or(page.getByRole('link', { name: /Your Feed/i }));\n    await yourFeedTab.click();\n\n    // Then author A's articles appear in \"Your Feed\"\n    await expect(page.getByRole('heading', { name: articleA.title })).toBeVisible();\n\n    // When user B returns to author A's profile page and unfollows author A\n    await page.goto(`${UI}/#/profile/${encodeURIComponent(authorA.username)}`);\n    await expect(unfollowButton).toBeVisible();\n    await unfollowButton.click();\n\n    // Then the button returns to its original follow state\n    await expect(followButton).toBeVisible();\n\n    // When user B switches to \"Your Feed\" again\n    await page.goto(`${UI}/#/`);\n    await yourFeedTab.click();\n\n    // Then author A's articles no longer appear in \"Your Feed\"\n    await expect(page.getByRole('heading', { name: articleA.title })).not.toBeVisible();\n\n    // And \"Your Feed\" displays an empty state when there are no articles\n    await expect(page.getByText(/No articles are here\\.\\.\\. yet\\./i)).toBeVisible();\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 3.3,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

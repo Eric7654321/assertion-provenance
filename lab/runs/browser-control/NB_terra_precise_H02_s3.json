@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_terra_precise_H02_s3",
+  "condition": "C0-none",
+  "generator": "terra",
+  "model": "gpt-5.6-terra",
+  "item": "H02",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H02\n    Scenario: Article page visibility and permissions\n      Given an author creates an article and posts a comment on it\n      When an unauthenticated visitor opens the article page\n      Then the visitor can see the article but cannot post a comment\n      When another logged-in user who is not the author opens the article page\n      Then the user does not see the controls to edit or delete the article\n      And the user does not see the delete control for the author's comment\n      When this user posts a comment on the article\n      Then the user sees the delete control only for their own comment\n",
+  "complete": true,
+  "spec": "generated/NB_terra_precise_H02_s3.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('Article page visibility and permissions', async ({ page }) => {\n    const author = await newUser();\n    const article = await newArticle(author);\n\n    await loginAs(page, author);\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    const authorComment = 'Comment posted by the article author';\n    await page.getByPlaceholder('Write a comment...').fill(authorComment);\n    await page.getByRole('button', { name: 'Post Comment' }).click();\n\n    await expect(page.getByText(authorComment)).toBeVisible();\n\n    await page.context().clearCookies();\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    await expect(page.getByRole('heading', { name: article.title })).toBeVisible();\n    await expect(page.getByText(authorComment)).toBeVisible();\n    await expect(page.getByPlaceholder('Write a comment...')).not.toBeVisible();\n    await expect(page.getByRole('button', { name: 'Post Comment' })).not.toBeVisible();\n\n    const otherUser = await newUser();\n    await loginAs(page, otherUser);\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    await expect(page.getByRole('heading', { name: article.title })).toBeVisible();\n    await expect(page.getByRole('link', { name: /edit article/i })).not.toBeVisible();\n    await expect(page.getByRole('button', { name: /delete article/i })).not.toBeVisible();\n\n    const authorCommentCard = page.locator('.card', {\n      hasText: authorComment,\n    });\n    await expect(authorCommentCard.locator('button')).toHaveCount(0);\n\n    const otherComment = 'Comment posted by another user';\n    await page.getByPlaceholder('Write a comment...').fill(otherComment);\n    await page.getByRole('button', { name: 'Post Comment' }).click();\n\n    const otherCommentCard = page.locator('.card', {\n      hasText: otherComment,\n    });\n\n    await expect(otherCommentCard).toBeVisible();\n    await expect(otherCommentCard.locator('button')).toHaveCount(1);\n    await expect(authorCommentCard.locator('button')).toHaveCount(0);\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 5.2,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

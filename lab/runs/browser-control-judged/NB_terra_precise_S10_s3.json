@@ -1,0 +1,127 @@
+{
+  "source": "NB_terra_precise_S10_s3.json",
+  "gen": "terra",
+  "gen_model": "gpt-5.6-terra",
+  "arm": "precise",
+  "condition": "C0-none",
+  "item": "S10",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S10\n    Scenario: Favorite an article\n      Given a user opens an article that has not been favorited and has 0 favorites\n      When the user favorites the article\n      Then the button switches to an unfavorited state\n      And the favorite count changes from 0 to 1\n",
+  "spec": "generated/NB_terra_precise_S10_s3.spec.ts",
+  "rows": [
+    {
+      "class": "P0",
+      "citation": "該文章的初始收藏數為 0。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求的 note 載明該文章的初始收藏數為 0，且 Gherkin 亦明確指定具有 0 個收藏，斷言點擊前收藏按鈕顯示 0 是直接驗證此初始狀態。",
+      "assertion": "await expect(favoriteButton).toContainText('0')",
+      "line": 15
+    },
+    {
+      "class": "P0",
+      "citation": "1. 開啟一篇尚未被收藏的文章",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求的前置步驟明確指出文章『尚未被收藏』，因此在點選收藏前按鈕不處於 active 狀態是被前置條件蘊含的驗證。",
+      "assertion": "await expect(favoriteButton).not.toHaveClass(/active/)",
+      "line": 16
+    },
+    {
+      "class": "P0",
+      "citation": "收藏後按鈕切換成取消收藏的狀態，且收藏計數由 0 變成 1。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確寫出點選收藏後「收藏計數由 0 變成 1」，斷言驗證按鈕上的計數為 1 與此完全相符。",
+      "assertion": "await expect(favoriteButton).toContainText('1')",
+      "line": 20
+    },
+    {
+      "class": "P0",
+      "citation": "收藏後按鈕切換成取消收藏的狀態",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "點選收藏後驗證按鈕切換為 active 類別，直接對應驗收要求中按鈕切換成已收藏/取消收藏狀態的主張。",
+      "assertion": "await expect(favoriteButton).toHaveClass(/active/)",
+      "line": 21
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P0",
+        "citation": "該文章的初始收藏數為 0。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求的 note 載明該文章的初始收藏數為 0，且 Gherkin 亦明確指定具有 0 個收藏，斷言點擊前收藏按鈕顯示 0 是直接驗證此初始狀態。",
+        "assertion": "await expect(favoriteButton).toContainText('0')",
+        "line": 15
+      },
+      {
+        "class": "P0",
+        "citation": "1. 開啟一篇尚未被收藏的文章",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求的前置步驟明確指出文章『尚未被收藏』，因此在點選收藏前按鈕不處於 active 狀態是被前置條件蘊含的驗證。",
+        "assertion": "await expect(favoriteButton).not.toHaveClass(/active/)",
+        "line": 16
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕切換成取消收藏的狀態，且收藏計數由 0 變成 1。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確寫出點選收藏後「收藏計數由 0 變成 1」，斷言驗證按鈕上的計數為 1 與此完全相符。",
+        "assertion": "await expect(favoriteButton).toContainText('1')",
+        "line": 20
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕切換成取消收藏的狀態",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "點選收藏後驗證按鈕切換為 active 類別，直接對應驗收要求中按鈕切換成已收藏/取消收藏狀態的主張。",
+        "assertion": "await expect(favoriteButton).toHaveClass(/active/)",
+        "line": 21
+      }
+    ],
+    "terra": [
+      {
+        "class": "P0",
+        "citation": "該文章的初始收藏數為 0。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在收藏前確認按鈕文字含有 0，直接對應驗收要求明示的初始收藏數為 0。",
+        "assertion": "await expect(favoriteButton).toContainText('0')",
+        "line": 15
+      },
+      {
+        "class": "P0",
+        "citation": "1. 開啟一篇尚未被收藏的文章",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在點擊前確認按鈕非 active，直接對應文章尚未被收藏的前置條件。",
+        "assertion": "await expect(favoriteButton).not.toHaveClass(/active/)",
+        "line": 16
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕切換成取消收藏的狀態，且收藏計數由 0 變成 1。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "點擊收藏後按鈕文字包含「1」是在驗證收藏計數由 0 變成 1。",
+        "assertion": "await expect(favoriteButton).toContainText('1')",
+        "line": 20
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕切換成取消收藏的狀態，且收藏計數由 0 變成 1。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "點擊收藏後按鈕具有 active 類別是在驗證其已切換為取消收藏狀態。",
+        "assertion": "await expect(favoriteButton).toHaveClass(/active/)",
+        "line": 21
+      }
+    ]
+  }
+}

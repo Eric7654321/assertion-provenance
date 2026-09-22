@@ -49,6 +49,9 @@ RUN
 ```
 我會執行並把 stdout／stderr 回給你。最多 {max_steps} 次。"""
 
+NONE = """這個條件不提供瀏覽器、網站快照、腳本執行或其他走查工具。
+請只根據下方 scenario 與共用 fixture 介面直接產生最終測試。"""
+
 RULES = """產出測試時必須遵守：
 1. 一定要有 assertion，而且要驗**這條需求描述的行為結果**，不是只驗頁面有載入或元素存在。
 2. 驗「值」不要只驗「有變化」：該比對數字就比對數字，該比對文字就比對文字。
@@ -71,13 +74,15 @@ CONDITIONS = {
     "C2F":       {"rules": True,  "self_check": False, "gates": "form", "explore": "walk",   "max_steps": 6},
     "C0-script": {"rules": False, "self_check": False, "gates": False, "explore": "script", "max_steps": 6},
     "C2-script": {"rules": True,  "self_check": False, "gates": "all",  "explore": "script", "max_steps": 6},
+    # Cross-stage provenance study control: downstream generator cannot inspect the running app.
+    "C0-none":   {"rules": False, "self_check": False, "gates": False, "explore": "none",   "max_steps": 0},
 }
 
 
 def build_prompt(cond: str, scenario: str, lab_path: str) -> str:
     cfg = CONDITIONS[cond]
     # 用 replace 不用 format：提示詞裡有 `{ status, json }` 這種字面大括號
-    explore = (WALK if cfg["explore"] == "walk" else SCRIPT)
+    explore = {"walk": WALK, "script": SCRIPT, "none": NONE}[cfg["explore"]]
     explore = explore.replace("{max_steps}", str(cfg["max_steps"])).replace("{lab}", lab_path)
     text = BASE.replace("{explore}", explore).replace("{scenario}", scenario)
     if cfg["rules"]:

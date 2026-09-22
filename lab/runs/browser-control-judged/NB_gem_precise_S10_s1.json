@@ -1,0 +1,100 @@
+{
+  "source": "NB_gem_precise_S10_s1.json",
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "precise",
+  "condition": "C0-none",
+  "item": "S10",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S10\n    Scenario: Favorite an article\n      Given I view an un-favorited article with an initial favorite count of 0\n      When I choose to favorite the article\n      Then the favorite button changes to an un-favorite state\n      And the favorite count changes from 0 to 1\n",
+  "spec": "generated/NB_gem_precise_S10_s1.spec.ts",
+  "rows": [
+    {
+      "class": "P0",
+      "citation": "該文章的初始收藏數為 0。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出該文章的初始收藏數為 0，此斷言在點擊前驗證按鈕上的初始計數為 0。",
+      "assertion": "await expect(favoriteButton).toContainText('(0)')",
+      "line": 23
+    },
+    {
+      "class": "P0",
+      "citation": "收藏後按鈕切換成取消收藏的狀態",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確主張收藏後按鈕切換成取消收藏狀態，此處斷言該取消收藏按鈕可見即直接反映此狀態變化。",
+      "assertion": "await expect(unfavoriteButton).toBeVisible()",
+      "line": 33
+    },
+    {
+      "class": "P0",
+      "citation": "收藏後按鈕切換成取消收藏的狀態，且收藏計數由 0 變成 1。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出收藏後收藏計數由 0 變成 1，斷言驗證按鈕包含 '(1)' 是對此要求的直接實作。",
+      "assertion": "await expect(unfavoriteButton).toContainText('(1)')",
+      "line": 34
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P0",
+        "citation": "該文章的初始收藏數為 0。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出該文章的初始收藏數為 0，此斷言在點擊前驗證按鈕上的初始計數為 0。",
+        "assertion": "await expect(favoriteButton).toContainText('(0)')",
+        "line": 23
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕切換成取消收藏的狀態",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確主張收藏後按鈕切換成取消收藏狀態，此處斷言該取消收藏按鈕可見即直接反映此狀態變化。",
+        "assertion": "await expect(unfavoriteButton).toBeVisible()",
+        "line": 33
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕切換成取消收藏的狀態，且收藏計數由 0 變成 1。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出收藏後收藏計數由 0 變成 1，斷言驗證按鈕包含 '(1)' 是對此要求的直接實作。",
+        "assertion": "await expect(unfavoriteButton).toContainText('(1)')",
+        "line": 34
+      }
+    ],
+    "terra": [
+      {
+        "class": "P0",
+        "citation": "該文章的初始收藏數為 0。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在點擊前確認收藏按鈕文字中的初始計數為 0，直接對應驗收要求明示的初始收藏數。",
+        "assertion": "await expect(favoriteButton).toContainText('(0)')",
+        "line": 23
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕切換成取消收藏的狀態，且收藏計數由 0 變成 1。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在收藏動作後確認取消收藏按鈕可見，直接支持按鈕已切換為取消收藏狀態。",
+        "assertion": "await expect(unfavoriteButton).toBeVisible()",
+        "line": 33
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕切換成取消收藏的狀態，且收藏計數由 0 變成 1。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在收藏後確認取消收藏按鈕文字中的計數為 1，直接對應要求的收藏計數由 0 變成 1。",
+        "assertion": "await expect(unfavoriteButton).toContainText('(1)')",
+        "line": 34
+      }
+    ]
+  }
+}

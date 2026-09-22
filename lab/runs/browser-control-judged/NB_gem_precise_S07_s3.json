@@ -1,0 +1,100 @@
+{
+  "source": "NB_gem_precise_S07_s3.json",
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "precise",
+  "condition": "C0-none",
+  "item": "S07",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S07\n    Scenario: Author deletes own article\n      Given an author opens their own article page\n      When the author deletes the article\n      Then the article no longer appears in the article list on the home page\n",
+  "spec": "generated/NB_gem_precise_S07_s3.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此斷言位於點選刪除按鈕之前，用於確保後續操作對象存在的可見性守衛，非需求層的行為主張。",
+      "assertion": "await expect(deleteButton).toBeVisible()",
+      "line": 17
+    },
+    {
+      "class": "P0",
+      "citation": "刪除後該文章不再出現在首頁的文章列表。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "斷言文章標題在首頁列表中不可見，直接對應驗收要求中刪除後該文章不再出現在首頁文章列表的主張。",
+      "assertion": "await expect(page.getByRole('heading', { name: article.title })).not.toBeVisible()",
+      "line": 37
+    },
+    {
+      "class": "P0",
+      "citation": "刪除後該文章不再出現在首頁的文章列表。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出刪除後文章不再出現在首頁列表中，斷言在首頁驗證該文章標題不可見為其直接體現。",
+      "assertion": "await expect(page.getByText(article.title)).not.toBeVisible()",
+      "line": 38
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於點選刪除按鈕之前，用於確保後續操作對象存在的可見性守衛，非需求層的行為主張。",
+        "assertion": "await expect(deleteButton).toBeVisible()",
+        "line": 17
+      },
+      {
+        "class": "P0",
+        "citation": "刪除後該文章不再出現在首頁的文章列表。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言文章標題在首頁列表中不可見，直接對應驗收要求中刪除後該文章不再出現在首頁文章列表的主張。",
+        "assertion": "await expect(page.getByRole('heading', { name: article.title })).not.toBeVisible()",
+        "line": 37
+      },
+      {
+        "class": "P0",
+        "citation": "刪除後該文章不再出現在首頁的文章列表。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出刪除後文章不再出現在首頁列表中，斷言在首頁驗證該文章標題不可見為其直接體現。",
+        "assertion": "await expect(page.getByText(article.title)).not.toBeVisible()",
+        "line": 38
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於刪除動作之前，驗收要求與 Gherkin 都未主張刪除按鈕在此時可見，僅是確保後續點擊有對象的守衛。",
+        "assertion": "await expect(deleteButton).toBeVisible()",
+        "line": 17
+      },
+      {
+        "class": "P0",
+        "citation": "刪除後該文章不再出現在首頁的文章列表。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在刪除後確認該文章標題不再於首頁文章列表可見，屬於驗收要求的直接驗證。",
+        "assertion": "await expect(page.getByRole('heading', { name: article.title })).not.toBeVisible()",
+        "line": 37
+      },
+      {
+        "class": "P0",
+        "citation": "刪除後該文章不再出現在首頁的文章列表。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言在刪除後確認文章標題文字不可見，直接驗證文章不再出現在首頁文章列表。",
+        "assertion": "await expect(page.getByText(article.title)).not.toBeVisible()",
+        "line": 38
+      }
+    ]
+  }
+}

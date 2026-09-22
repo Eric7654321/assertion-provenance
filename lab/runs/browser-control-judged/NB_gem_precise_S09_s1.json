@@ -1,0 +1,127 @@
+{
+  "source": "NB_gem_precise_S09_s1.json",
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "precise",
+  "condition": "C0-none",
+  "item": "S09",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S09\n    Scenario: Visibility of comment deletion control\n      Given User A has posted a comment on an article\n      When User B views the same article and posts their own comment\n      Then User B does not see the delete control for User A's comment\n      And User B sees the delete control for their own comment\n",
+  "spec": "generated/NB_gem_precise_S09_s1.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "在使用者 B 發表留言前確認使用者 A 的留言已載入可見，屬於操作前的環境與資料就緒守衛，驗收要求與 Gherkin 均未將其列為行為斷言。",
+      "assertion": "await expect(userAComment).toBeVisible()",
+      "line": 24
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 核心都在驗證刪除控制項的可見性，該斷言僅是在確認 User B 留言成功發佈並渲染的可見性守衛。",
+      "assertion": "await expect(userBComment).toBeVisible()",
+      "line": 30
+    },
+    {
+      "class": "P0",
+      "citation": "B 看不到 A 那則留言的刪除控制項，只看得到自己那則的。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出 B 看不到 A 留言的刪除控制項，斷言完全對應此行為主張。",
+      "assertion": "await expect(userAComment.locator('.mod-options, .ion-trash-a, [data-testid=\"delete-comment\"]')).not.toBeVisible()",
+      "line": 33
+    },
+    {
+      "class": "P0",
+      "citation": "只看得到自己那則的。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確寫出使用者 B 只看得到自己留言的刪除控制項，斷言驗證該刪除控制項可見。",
+      "assertion": "await expect(userBComment.locator('.mod-options, .ion-trash-a, [data-testid=\"delete-comment\"]')).toBeVisible()",
+      "line": 36
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "在使用者 B 發表留言前確認使用者 A 的留言已載入可見，屬於操作前的環境與資料就緒守衛，驗收要求與 Gherkin 均未將其列為行為斷言。",
+        "assertion": "await expect(userAComment).toBeVisible()",
+        "line": 24
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 核心都在驗證刪除控制項的可見性，該斷言僅是在確認 User B 留言成功發佈並渲染的可見性守衛。",
+        "assertion": "await expect(userBComment).toBeVisible()",
+        "line": 30
+      },
+      {
+        "class": "P0",
+        "citation": "B 看不到 A 那則留言的刪除控制項，只看得到自己那則的。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出 B 看不到 A 留言的刪除控制項，斷言完全對應此行為主張。",
+        "assertion": "await expect(userAComment.locator('.mod-options, .ion-trash-a, [data-testid=\"delete-comment\"]')).not.toBeVisible()",
+        "line": 33
+      },
+      {
+        "class": "P0",
+        "citation": "只看得到自己那則的。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確寫出使用者 B 只看得到自己留言的刪除控制項，斷言驗證該刪除控制項可見。",
+        "assertion": "await expect(userBComment.locator('.mod-options, .ion-trash-a, [data-testid=\"delete-comment\"]')).toBeVisible()",
+        "line": 36
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言在 B 發表留言前僅確認 A 的留言元素存在，驗收要求與 Gherkin 都未主張該時間點 A 留言的可見性，屬於後續操作的可見性守衛。",
+        "assertion": "await expect(userAComment).toBeVisible()",
+        "line": 24
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "這是在發文後確認測試資料／後續定位對象已出現的可見性守衛；需求與 Gherkin 只主張刪除控制項的可見性，未主張留言本身此時可見。",
+        "assertion": "await expect(userBComment).toBeVisible()",
+        "line": 30
+      },
+      {
+        "class": "P0",
+        "citation": "B 看不到 A 那則留言的刪除控制項，只看得到自己那則的。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言直接驗證使用者 B 看不到使用者 A 留言的刪除控制項。",
+        "assertion": "await expect(userAComment.locator('.mod-options, .ion-trash-a, [data-testid=\"delete-comment\"]')).not.toBeVisible()",
+        "line": 33
+      },
+      {
+        "class": "P0",
+        "citation": "B 看不到 A 那則留言的刪除控制項，只看得到自己那則的。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言直接驗證使用者 B 能看見自己留言的刪除控制項，與驗收要求一致。",
+        "assertion": "await expect(userBComment.locator('.mod-options, .ion-trash-a, [data-testid=\"delete-comment\"]')).toBeVisible()",
+        "line": 36
+      }
+    ]
+  }
+}

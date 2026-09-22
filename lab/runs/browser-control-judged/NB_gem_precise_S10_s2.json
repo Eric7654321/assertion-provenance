@@ -1,0 +1,154 @@
+{
+  "source": "NB_gem_precise_S10_s2.json",
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "precise",
+  "condition": "C0-none",
+  "item": "S10",
+  "seed": 2,
+  "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:S10\n    Scenario: Favorite an article\n      Given a user opens an article that has not been favorited and has an initial favorite count of 0\n      When the user favorites the article\n      Then the favorite button should change to an unfavorite state\n      And the favorite count should change from 0 to 1\n",
+  "spec": "generated/NB_gem_precise_S10_s2.spec.ts",
+  "rows": [
+    {
+      "class": "P0",
+      "citation": "1. 開啟一篇尚未被收藏的文章",
+      "p2_candidate": false,
+      "borderline": true,
+      "why": "驗收要求已陳述前置條件為「尚未被收藏的文章」，其對應的按鈕初始狀態即為 Favorite",
+      "assertion": "await expect(favoriteButton).toContainText('Favorite')",
+      "line": 21
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此斷言位於點擊收藏之前，用來確認前置條件的初始按鈕文字非 Unfavorite，屬於測試前置檢查而非驗收結果主張。",
+      "assertion": "await expect(favoriteButton).not.toContainText('Unfavorite')",
+      "line": 22
+    },
+    {
+      "class": "P0",
+      "citation": "該文章的初始收藏數為 0。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求的 note 明確指出該文章初始收藏數為 0，此斷言驗證初始計數為 0 被驗收要求直接支持。",
+      "assertion": "await expect(favoriteButton).toContainText('(0)')",
+      "line": 23
+    },
+    {
+      "class": "P0",
+      "citation": "收藏後按鈕切換成取消收藏的狀態",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出收藏後按鈕需切換成取消收藏（Unfavorite）狀態。",
+      "assertion": "await expect(favoriteButton).toContainText('Unfavorite')",
+      "line": 29
+    },
+    {
+      "class": "P0",
+      "citation": "收藏後按鈕切換成取消收藏的狀態，且收藏計數由 0 變成 1。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確寫出收藏後收藏計數由 0 變成 1，斷言驗證按鈕上的計數為 1 完全符合。",
+      "assertion": "await expect(favoriteButton).toContainText('(1)')",
+      "line": 30
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P0",
+        "citation": "1. 開啟一篇尚未被收藏的文章",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "驗收要求已陳述前置條件為「尚未被收藏的文章」，其對應的按鈕初始狀態即為 Favorite",
+        "assertion": "await expect(favoriteButton).toContainText('Favorite')",
+        "line": 21
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於點擊收藏之前，用來確認前置條件的初始按鈕文字非 Unfavorite，屬於測試前置檢查而非驗收結果主張。",
+        "assertion": "await expect(favoriteButton).not.toContainText('Unfavorite')",
+        "line": 22
+      },
+      {
+        "class": "P0",
+        "citation": "該文章的初始收藏數為 0。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求的 note 明確指出該文章初始收藏數為 0，此斷言驗證初始計數為 0 被驗收要求直接支持。",
+        "assertion": "await expect(favoriteButton).toContainText('(0)')",
+        "line": 23
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕切換成取消收藏的狀態",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出收藏後按鈕需切換成取消收藏（Unfavorite）狀態。",
+        "assertion": "await expect(favoriteButton).toContainText('Unfavorite')",
+        "line": 29
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕切換成取消收藏的狀態，且收藏計數由 0 變成 1。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確寫出收藏後收藏計數由 0 變成 1，斷言驗證按鈕上的計數為 1 完全符合。",
+        "assertion": "await expect(favoriteButton).toContainText('(1)')",
+        "line": 30
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於點擊收藏前，驗證按鈕可作為後續操作對象；需求僅主張收藏後切換為取消收藏狀態，未主張此前按鈕文字可見。",
+        "assertion": "await expect(favoriteButton).toContainText('Favorite')",
+        "line": 21
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於觸發收藏動作之前，驗收要求與 Gherkin 都未主張按鈕在此前不含「Unfavorite」文字，屬於操作前的狀態守衛。",
+        "assertion": "await expect(favoriteButton).not.toContainText('Unfavorite')",
+        "line": 22
+      },
+      {
+        "class": "P0",
+        "citation": "該文章的初始收藏數為 0。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在收藏前確認按鈕文字中的收藏計數為 0，直接對應驗收要求明示的初始收藏數。",
+        "assertion": "await expect(favoriteButton).toContainText('(0)')",
+        "line": 23
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕切換成取消收藏的狀態，且收藏計數由 0 變成 1。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "點擊收藏後按鈕文字為「Unfavorite」是按鈕切換成取消收藏狀態的直接驗證。",
+        "assertion": "await expect(favoriteButton).toContainText('Unfavorite')",
+        "line": 29
+      },
+      {
+        "class": "P0",
+        "citation": "收藏後按鈕切換成取消收藏的狀態，且收藏計數由 0 變成 1。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在收藏動作後驗證按鈕文字中的收藏計數為 1，直接對應驗收要求的計數由 0 變成 1。",
+        "assertion": "await expect(favoriteButton).toContainText('(1)')",
+        "line": 30
+      }
+    ]
+  }
+}

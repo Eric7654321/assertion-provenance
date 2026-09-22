@@ -1,0 +1,25 @@
+{
+  "source": "NB_terra_precise_S12_s2.json",
+  "gen": "terra",
+  "arm": "precise",
+  "item": "S12",
+  "seed": 2,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開材料中規定的分頁路由為 /?page=N（如 specs/e2e/SELECTORS.md 第 147 行），並未陳述或測試包含 Hash 路由格式（/#/?page=2）的行為。",
+      "row": 2,
+      "assertion": "await expect(page).toHaveURL(/#\\/\\?page=2/)",
+      "line": 36,
+      "p2_candidate": false
+    },
+    {
+      "status": "P4 confirmed",
+      "why": "公開材料中未規定首頁分頁切換到第 2 頁時文章數量必須剛好為 2 篇。",
+      "row": 3,
+      "assertion": "await expect(articlePreviews).toHaveCount(2)",
+      "line": 37,
+      "p2_candidate": false
+    }
+  ]
+}

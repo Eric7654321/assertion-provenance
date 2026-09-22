@@ -1,0 +1,17 @@
+{
+  "source": "NB_terra_precise_S02_s2.json",
+  "gen": "terra",
+  "arm": "precise",
+  "item": "S02",
+  "seed": 2,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開材料中定義的註冊頁面路由為 /register 而非 hash 路由 /#/register，且無任何契約測試或要求註冊失敗後 URL 必須符合 /#\\/register$/。",
+      "row": 2,
+      "assertion": "await expect(page).toHaveURL(/#\\/register$/)",
+      "line": 18,
+      "p2_candidate": true
+    }
+  ]
+}

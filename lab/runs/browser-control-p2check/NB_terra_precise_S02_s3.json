@@ -1,0 +1,31 @@
+{
+  "source": "NB_terra_precise_S02_s3.json",
+  "gen": "terra",
+  "arm": "precise",
+  "item": "S02",
+  "seed": 3,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開材料中無論是規格（標準路由為 /register）或 E2E 測試皆未規定註冊失敗時 URL 必須匹配 Hash 路由 /#\\/register/。",
+      "row": 0,
+      "assertion": "await expect(page).toHaveURL(/#\\/register/)",
+      "line": 16,
+      "p2_candidate": true
+    },
+    {
+      "supported": true,
+      "file": "docs/src/content/docs/specifications/frontend/templates.md",
+      "line_start": 268,
+      "line_end": 270,
+      "quote": "        <ul class=\"error-messages\">\n          <li>That email is already taken</li>\n        </ul>",
+      "why": "註冊頁面模板明確規範在重複 email 時，.error-messages 內應顯示包含 email 的錯誤訊息「That email is already taken」。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 2,
+      "assertion": "await expect(page.locator('.error-messages')).toContainText(/email/i)",
+      "line": 18,
+      "p2_candidate": true
+    }
+  ]
+}

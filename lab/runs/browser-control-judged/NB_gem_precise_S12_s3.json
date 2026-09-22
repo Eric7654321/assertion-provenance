@@ -1,0 +1,154 @@
+{
+  "source": "NB_gem_precise_S12_s3.json",
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "precise",
+  "condition": "C0-none",
+  "item": "S12",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S12\n    Scenario: Article list pagination\n      Given a user views the article list on the home page and scrolls to the pagination controls\n      When the user selects page 2\n      Then the subsequent articles are displayed\n",
+  "spec": "generated/NB_gem_precise_S12_s3.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 均未將分頁列的可見性作為斷言期望，此處位於點擊第 2 頁操作之前，純屬確保操作對象存在的可見性守衛。",
+      "assertion": "await expect(pagination).toBeVisible()",
+      "line": 29
+    },
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "該斷言出現在點擊第 2 頁之前，用來確保按鈕存在可點擊，為操作前的可見性守衛。",
+      "assertion": "await expect(page2Btn).toBeVisible()",
+      "line": 32
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求顯示接續的文章，未規定分頁按鈕本身需呈現 active 狀態或顯示為 2。",
+      "assertion": "await expect(activePageItem).toHaveText('2')",
+      "line": 44
+    },
+    {
+      "class": "P0",
+      "citation": "顯示的是接續的文章。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確主張換頁後要顯示接續的文章，斷言第二頁的第一篇文章可見直接對應此行為主張。",
+      "assertion": "await expect(firstArticleOnPage2).toBeVisible()",
+      "line": 48
+    },
+    {
+      "class": "P0",
+      "citation": "顯示的是接續的文章。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "換頁後文章標題不等於第 1 頁標題，是驗收要求中「顯示的是接續的文章」之直接操作化驗證。",
+      "assertion": "await expect(firstArticleOnPage2).not.toHaveText(page1Title)",
+      "line": 49
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 均未將分頁列的可見性作為斷言期望，此處位於點擊第 2 頁操作之前，純屬確保操作對象存在的可見性守衛。",
+        "assertion": "await expect(pagination).toBeVisible()",
+        "line": 29
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "該斷言出現在點擊第 2 頁之前，用來確保按鈕存在可點擊，為操作前的可見性守衛。",
+        "assertion": "await expect(page2Btn).toBeVisible()",
+        "line": 32
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求顯示接續的文章，未規定分頁按鈕本身需呈現 active 狀態或顯示為 2。",
+        "assertion": "await expect(activePageItem).toHaveText('2')",
+        "line": 44
+      },
+      {
+        "class": "P0",
+        "citation": "顯示的是接續的文章。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確主張換頁後要顯示接續的文章，斷言第二頁的第一篇文章可見直接對應此行為主張。",
+        "assertion": "await expect(firstArticleOnPage2).toBeVisible()",
+        "line": 48
+      },
+      {
+        "class": "P0",
+        "citation": "顯示的是接續的文章。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "換頁後文章標題不等於第 1 頁標題，是驗收要求中「顯示的是接續的文章」之直接操作化驗證。",
+        "assertion": "await expect(firstArticleOnPage2).not.toHaveText(page1Title)",
+        "line": 49
+      }
+    ],
+    "terra": [
+      {
+        "class": "P1",
+        "citation": "Given a user views the article list on the home page and scrolls to the pagination controls",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "Gherkin 明確描述使用者已捲動到分頁控制項，支持分頁列在此時可見；驗收要求未明示可見性。",
+        "assertion": "await expect(pagination).toBeVisible()",
+        "line": 29
+      },
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於選擇第 2 頁的觸發動作之前，驗收要求與 Gherkin 都未主張第 2 頁按鈕在此時可見，僅是確保後續點擊對象存在的守衛。",
+        "assertion": "await expect(page2Btn).toBeVisible()",
+        "line": 32
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只要求顯示接續文章，未主張第 2 頁分頁項目必須呈現 active 狀態或文字為 2。",
+        "assertion": "await expect(activePageItem).toHaveText('2')",
+        "line": 44
+      },
+      {
+        "class": "P0",
+        "citation": "顯示的是接續的文章。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "點選第 2 頁後首篇文章可見是「顯示的是接續的文章」的直接可觀測表現。",
+        "assertion": "await expect(firstArticleOnPage2).toBeVisible()",
+        "line": 48
+      },
+      {
+        "class": "P0",
+        "citation": "顯示的是接續的文章。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "第 2 頁第一篇文章標題不同於第 1 頁標題，是「顯示的是接續的文章」的可檢查改寫。",
+        "assertion": "await expect(firstArticleOnPage2).not.toHaveText(page1Title)",
+        "line": 49
+      }
+    ]
+  }
+}

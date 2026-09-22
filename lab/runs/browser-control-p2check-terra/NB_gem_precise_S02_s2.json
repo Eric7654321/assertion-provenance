@@ -1,0 +1,45 @@
+{
+  "source": "NB_gem_precise_S02_s2.json",
+  "gen": "gem",
+  "arm": "precise",
+  "item": "S02",
+  "seed": 2,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/api/hurl/errors_auth.hurl",
+      "line_start": 66,
+      "line_end": 77,
+      "quote": "# Register duplicate email\nPOST {{host}}/api/users\n{\n  \"user\": {\n    \"username\": \"ea_dup2_{{uid}}\",\n    \"email\": \"ea_dup_{{uid}}@test.com\",\n    \"password\": \"password123\"\n  }\n}\nHTTP 409\n[Asserts]\njsonpath \"$.errors.email[0]\" == \"has already been taken\"",
+      "why": "API 測試規範明確斷言以重複 email 註冊時，返回的錯誤鍵為 email 且訊息為 has already been taken。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 1,
+      "assertion": "await expect(errorMessage).toContainText(/email/i)",
+      "line": 21,
+      "p2_candidate": false
+    },
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約中未要求重複註冊失敗時 URL 必須符合 hash 路由格式 /#\\/register/，且 specs/e2e/error-handling.spec.ts 第 64 行測試的是 /register 而非 hash 路由。",
+      "row": 2,
+      "assertion": "await expect(page).toHaveURL(/#\\/register/)",
+      "line": 24,
+      "p2_candidate": false
+    },
+    {
+      "supported": true,
+      "file": "docs/src/content/docs/specifications/frontend/templates.md",
+      "line_start": 34,
+      "line_end": 41,
+      "quote": "#### Unauthenticated user\n\nIf no user is logged in, then the header should include links to:\n\n- the home page\n- the login page\n- the register page",
+      "why": "規格明確要求未登入狀態（即使用者未登入）時，導航欄標頭必須包含指向登入頁面的連結（Sign in）。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 3,
+      "assertion": "await expect(page.locator('a[href=\"#/login\"], a:has-text(\"Sign in\")')).toBeVisible()",
+      "line": 25,
+      "p2_candidate": false
+    }
+  ]
+}

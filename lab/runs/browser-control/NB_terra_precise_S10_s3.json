@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_terra_precise_S10_s3",
+  "condition": "C0-none",
+  "generator": "terra",
+  "model": "gpt-5.6-terra",
+  "item": "S10",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S10\n    Scenario: Favorite an article\n      Given a user opens an article that has not been favorited and has 0 favorites\n      When the user favorites the article\n      Then the button switches to an unfavorited state\n      And the favorite count changes from 0 to 1\n",
+  "complete": true,
+  "spec": "generated/NB_terra_precise_S10_s3.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('Favorite an article', async ({ page }) => {\n    const author = await newUser();\n    const user = await newUser();\n    const article = await newArticle(author);\n\n    await loginAs(page, user);\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    const favoriteButton = page.getByRole('button', { name: /favorite article/i });\n\n    await expect(favoriteButton).toContainText('0');\n    await expect(favoriteButton).not.toHaveClass(/active/);\n\n    await favoriteButton.click();\n\n    await expect(favoriteButton).toContainText('1');\n    await expect(favoriteButton).toHaveClass(/active/);\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 2.6,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

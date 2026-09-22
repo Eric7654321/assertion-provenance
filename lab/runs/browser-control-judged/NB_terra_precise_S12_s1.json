@@ -1,0 +1,154 @@
+{
+  "source": "NB_terra_precise_S12_s1.json",
+  "gen": "terra",
+  "gen_model": "gpt-5.6-terra",
+  "arm": "precise",
+  "condition": "C0-none",
+  "item": "S12",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S12\n    Scenario: Article list pagination\n      Given I scroll to the pagination bar in the article list on the home page\n      When I select page 2\n      Then the list displays the consecutive articles\n",
+  "spec": "generated/NB_terra_precise_S12_s1.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此斷言在點選分頁操作之前執行，用於確認首頁預設文章列表加載完成與測試前置狀態，非驗收要求的主張。",
+      "assertion": "await expect(articleList).toHaveCount(10)",
+      "line": 24
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求顯示接續的文章，未規定換頁時網址必須帶有 page=2 參數。",
+      "assertion": "await expect(page).toHaveURL(/#\\/\\?(?:.*&)?page=2(?:&.*)?$/)",
+      "line": 33
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求顯示接續的文章，未規定第 2 頁的文章筆數必須恰好為 1 篇。",
+      "assertion": "await expect(articleList).toHaveCount(1)",
+      "line": 34
+    },
+    {
+      "class": "P0",
+      "citation": "顯示的是接續的文章。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "換頁後顯示接續的文章直接蘊含第二頁的文章列表與第一頁不同。",
+      "assertion": "expect(secondPageTitles).not.toEqual(firstPageTitles)",
+      "line": 38
+    },
+    {
+      "class": "P0",
+      "citation": "顯示的是接續的文章。",
+      "p2_candidate": false,
+      "borderline": true,
+      "why": "驗收要求指定第二頁應顯示接續的文章，在預先建立的測試資料排序下，斷言第二頁包含接續的第一篇文章（articles[0]）屬此要求的具體操作化驗證。",
+      "assertion": "expect(secondPageTitles).toContain(articles[0].title)",
+      "line": 39
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言在點選分頁操作之前執行，用於確認首頁預設文章列表加載完成與測試前置狀態，非驗收要求的主張。",
+        "assertion": "await expect(articleList).toHaveCount(10)",
+        "line": 24
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求顯示接續的文章，未規定換頁時網址必須帶有 page=2 參數。",
+        "assertion": "await expect(page).toHaveURL(/#\\/\\?(?:.*&)?page=2(?:&.*)?$/)",
+        "line": 33
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求顯示接續的文章，未規定第 2 頁的文章筆數必須恰好為 1 篇。",
+        "assertion": "await expect(articleList).toHaveCount(1)",
+        "line": 34
+      },
+      {
+        "class": "P0",
+        "citation": "顯示的是接續的文章。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "換頁後顯示接續的文章直接蘊含第二頁的文章列表與第一頁不同。",
+        "assertion": "expect(secondPageTitles).not.toEqual(firstPageTitles)",
+        "line": 38
+      },
+      {
+        "class": "P0",
+        "citation": "顯示的是接續的文章。",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "驗收要求指定第二頁應顯示接續的文章，在預先建立的測試資料排序下，斷言第二頁包含接續的第一篇文章（articles[0]）屬此要求的具體操作化驗證。",
+        "assertion": "expect(secondPageTitles).toContain(articles[0].title)",
+        "line": 39
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於點選第 2 頁之前，僅確認初始列表有 10 筆可供後續比對，驗收要求與 Gherkin 均未主張初始筆數。",
+        "assertion": "await expect(articleList).toHaveCount(10)",
+        "line": 24
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只主張選第 2 頁後顯示接續文章，未主張網址必須含有 page=2。",
+        "assertion": "await expect(page).toHaveURL(/#\\/\\?(?:.*&)?page=2(?:&.*)?$/)",
+        "line": 33
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只主張第 2 頁顯示接續文章，未主張文章列表容器數量必須為 1。",
+        "assertion": "await expect(articleList).toHaveCount(1)",
+        "line": 34
+      },
+      {
+        "class": "P0",
+        "citation": "顯示的是接續的文章。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "第二頁文章標題集合不同於第一頁，是「顯示的是接續的文章」的可檢查改寫。",
+        "assertion": "expect(secondPageTitles).not.toEqual(firstPageTitles)",
+        "line": 38
+      },
+      {
+        "class": "P0",
+        "citation": "顯示的是接續的文章。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "第 2 頁文章標題包含預先準備文章中的首篇，屬於驗證列表顯示接續文章的具體行為主張。",
+        "assertion": "expect(secondPageTitles).toContain(articles[0].title)",
+        "line": 39
+      }
+    ]
+  }
+}

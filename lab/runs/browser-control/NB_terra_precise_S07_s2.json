@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_terra_precise_S07_s2",
+  "condition": "C0-none",
+  "generator": "terra",
+  "model": "gpt-5.6-terra",
+  "item": "S07",
+  "seed": 2,
+  "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:S07\n    Scenario: Author deletes own article\n      Given an author opens their own article page\n      When the author deletes the article\n      Then the article should no longer appear in the article list on the home page\n",
+  "complete": true,
+  "spec": "generated/NB_terra_precise_S07_s2.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Criteria', () => {\n  test('S07: Author deletes own article', async ({ page }) => {\n    const author = await newUser();\n    const article = await newArticle(author);\n\n    await loginAs(page, author);\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    await expect(page.getByRole('button', { name: /delete article/i })).toBeVisible();\n    await page.getByRole('button', { name: /delete article/i }).click();\n\n    await expect(page).toHaveURL(new RegExp(`${UI.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}/#/?$`));\n    await expect(page.getByText(article.title)).not.toBeVisible();\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 2.6,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

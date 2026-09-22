@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_terra_precise_S02_s1",
+  "condition": "C0-none",
+  "generator": "terra",
+  "model": "gpt-5.6-terra",
+  "item": "S02",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S02\n    Scenario: Registration with duplicate email\n      Given a user has completed registration with an unused email and logged out\n      When someone attempts to register again with the same email\n      Then the registration fails with an error displayed\n      And the user is not logged in\n",
+  "complete": true,
+  "spec": "generated/NB_terra_precise_S02_s1.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, apiCall, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('@item:S02 Registration with duplicate email', async ({ page }) => {\n    const user = await newUser();\n\n    await page.goto(`${UI}/#/register`);\n\n    await page.getByPlaceholder('Username').fill(`${user.username}-duplicate`);\n    await page.getByPlaceholder('Email').fill(user.email);\n    await page.getByPlaceholder('Password').fill('password123');\n\n    await page.getByRole('button', { name: 'Sign up' }).click();\n\n    await expect(page.locator('.error-messages')).toBeVisible();\n    await expect(page.locator('.error-messages')).toContainText(/email.*already|already.*email/i);\n\n    await expect(page).toHaveURL(/#\\/register$/);\n    await expect(page.getByRole('link', { name: 'Sign in' })).toBeVisible();\n\n    const currentUser = await apiCall('/user', 'GET');\n    expect(currentUser.status).toBe(401);\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 4.3,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

@@ -1,0 +1,100 @@
+{
+  "source": "NB_gem_precise_S07_s1.json",
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "precise",
+  "condition": "C0-none",
+  "item": "S07",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S07\n    Scenario: Author deletes their own article\n      Given I am on my own article page as the author\n      When I choose to delete the article\n      Then the article no longer appears in the article list on the home page\n",
+  "spec": "generated/NB_gem_precise_S07_s1.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此斷言位於點擊刪除按鈕之前，用於確認文章頁面載入完成以確保後續操作有對象，屬前置可見性守衛。",
+      "assertion": "await expect(page.locator('h1')).toHaveText(article.title)",
+      "line": 17
+    },
+    {
+      "class": "P0",
+      "citation": "刪除後該文章不再出現在首頁的文章列表。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出刪除後該文章不再出現在首頁列表，斷言文章標題不可見為此要求的直接驗證。",
+      "assertion": "await expect(page.getByRole('heading', { name: article.title })).not.toBeVisible()",
+      "line": 33
+    },
+    {
+      "class": "P0",
+      "citation": "刪除後該文章不再出現在首頁的文章列表。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "斷言確認首頁文章列表中包含該標題的文章預覽數量為 0，直接對應驗收要求中刪除後不再出現在首頁文章列表的主張。",
+      "assertion": "await expect(page.locator('.article-preview').filter({ hasText: article.title })).toHaveCount(0)",
+      "line": 34
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於點擊刪除按鈕之前，用於確認文章頁面載入完成以確保後續操作有對象，屬前置可見性守衛。",
+        "assertion": "await expect(page.locator('h1')).toHaveText(article.title)",
+        "line": 17
+      },
+      {
+        "class": "P0",
+        "citation": "刪除後該文章不再出現在首頁的文章列表。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出刪除後該文章不再出現在首頁列表，斷言文章標題不可見為此要求的直接驗證。",
+        "assertion": "await expect(page.getByRole('heading', { name: article.title })).not.toBeVisible()",
+        "line": 33
+      },
+      {
+        "class": "P0",
+        "citation": "刪除後該文章不再出現在首頁的文章列表。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言確認首頁文章列表中包含該標題的文章預覽數量為 0，直接對應驗收要求中刪除後不再出現在首頁文章列表的主張。",
+        "assertion": "await expect(page.locator('.article-preview').filter({ hasText: article.title })).toHaveCount(0)",
+        "line": 34
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於刪除動作前，用於確認文章頁已載入且後續操作對象存在，驗收要求與 Gherkin 均未主張 h1 文字內容。",
+        "assertion": "await expect(page.locator('h1')).toHaveText(article.title)",
+        "line": 17
+      },
+      {
+        "class": "P0",
+        "citation": "刪除後該文章不再出現在首頁的文章列表。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在刪除後於首頁驗證該文章標題不可見，是文章不再出現在首頁文章列表的直接觀測。",
+        "assertion": "await expect(page.getByRole('heading', { name: article.title })).not.toBeVisible()",
+        "line": 33
+      },
+      {
+        "class": "P0",
+        "citation": "刪除後該文章不再出現在首頁的文章列表。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言直接驗證刪除後首頁文章列表中不存在該文章。",
+        "assertion": "await expect(page.locator('.article-preview').filter({ hasText: article.title })).toHaveCount(0)",
+        "line": 34
+      }
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "source": "NB_gem_precise_H03_s2.json",
+  "gen": "gem",
+  "arm": "precise",
+  "item": "H03",
+  "seed": 2,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/url-navigation.spec.ts",
+      "line_start": 48,
+      "line_end": 49,
+      "quote": "    await expect(page.locator(`.nav-link:has-text(\"${firstTag?.trim()}\")`)).toBeVisible();\n    await expect(page.locator(`.nav-link:has-text(\"${firstTag?.trim()}\")`)).toHaveClass(/active/);",
+      "why": "官方 E2E 測試明確斷言點擊標籤進行篩選後，對應標籤名稱的 nav-link 應呈現 active 狀態。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 1,
+      "assertion": "await expect(page.locator('.feed-toggle .nav-link.active')).toContainText(specificTag)",
+      "line": 30,
+      "p2_candidate": true
+    },
+    {
+      "supported": true,
+      "file": "specs/e2e/url-navigation.spec.ts",
+      "line_start": 84,
+      "line_end": 88,
+      "quote": "    // Click Global Feed\n    await page.click('.nav-link:has-text(\"Global Feed\")');\n    // Should navigate to /\n    await expect(page).toHaveURL('/');\n    await expect(page.locator('.nav-link:has-text(\"Global Feed\")')).toHaveClass(/active/);",
+      "why": "官方 E2E 測試在切換至 Global Feed 標籤時，明確斷言 Global Feed 連結帶有 active class。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 11,
+      "assertion": "await expect(globalFeedTab).toHaveClass(/active/)",
+      "line": 70,
+      "p2_candidate": true
+    }
+  ]
+}

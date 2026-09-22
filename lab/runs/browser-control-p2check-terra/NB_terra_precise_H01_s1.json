@@ -1,0 +1,17 @@
+{
+  "source": "NB_terra_precise_H01_s1.json",
+  "gen": "terra",
+  "arm": "precise",
+  "item": "H01",
+  "seed": 1,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開材料中定義的文章 URL 為 `/article/:slug`（或正規表達式 `//article\\/.+/`），並無使用 hash routing（`/#/article/`）的規範或測試。",
+      "row": 0,
+      "assertion": "await expect(page).toHaveURL(/#\\/article\\//); await expect(page.getByRole('heading', { name: originalTitle })).toBeVisible(); await expect(page.locator('.article-content')).toContainText(body); for (const tag of tags) { await expect(page.locator('.tag-list')).toContainText(tag); } await page.getByRole('button', { name: 'Edit Article' }).click(); await expect(page).toHaveURL(/#\\/editor\\//); await page.getByPlaceholder('Article Title').fill(updatedTitle); const tagPills = page.locator('.tag-list .tag-pill'); while (await tagPills.count()) { await tagPills.first().locator('i').click(); } await page.getByRole('button', { name: 'Publish Article' }).click(); await expect(page).toHaveURL(/#\\/article\\//); await expect(page.getByRole('heading', { name: updatedTitle })).toBeVisible(); for (const tag of tags) { await expect(page.locator('.tag-list')).not.toContainText(tag); } }); });",
+      "line": 27,
+      "p2_candidate": false
+    }
+  ]
+}

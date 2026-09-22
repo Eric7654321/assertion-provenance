@@ -1,0 +1,23 @@
+{
+  "source": "NB_gem_precise_S12_s2.json",
+  "gen": "gem",
+  "arm": "precise",
+  "item": "S12",
+  "seed": 2,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/SELECTORS.md",
+      "line_start": 209,
+      "line_end": 213,
+      "quote": "## Button State Conventions\n\n- **Favorite**: Uses `.btn-outline-primary` when not favorited, switches to `.btn-primary` when favorited.\n- **Follow**: Button text toggles between `Follow {username}` and `Unfollow {username}`.\n- **Pagination active**: The current page's `.page-item` has the CSS class `active`.",
+      "why": "公開材料中的 E2E 規格契約明確規定當前分頁的 .page-item 元素必須具備 active CSS 類別。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 3,
+      "assertion": "await expect(page2Item).toHaveClass(/active/)",
+      "line": 50,
+      "p2_candidate": true
+    }
+  ]
+}

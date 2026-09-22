@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_terra_precise_S03_s1",
+  "condition": "C0-none",
+  "generator": "terra",
+  "model": "gpt-5.6-terra",
+  "item": "S03",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S03\n    Scenario: Login with incorrect password\n      Given I am on the login page\n      When I submit a registered email with an incorrect password\n      Then I remain on the login page\n      And an error message is displayed\n",
+  "complete": true,
+  "spec": "generated/NB_terra_precise_S03_s1.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('S03 - Login with incorrect password', async ({ page }) => {\n    const user = await newUser();\n\n    await page.goto(`${UI}/#/login`);\n\n    await page.getByPlaceholder('Email').fill(user.email);\n    await page.getByPlaceholder('Password').fill('incorrect-password');\n    await page.getByRole('button', { name: /sign in/i }).click();\n\n    await expect(page).toHaveURL(/#\\/login$/);\n    await expect(page.locator('.error-messages')).toBeVisible();\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 2.5,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

@@ -1,0 +1,23 @@
+{
+  "source": "NB_gem_precise_H04_s1.json",
+  "gen": "gem",
+  "arm": "precise",
+  "item": "H04",
+  "seed": 1,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/SELECTORS.md",
+      "line_start": 212,
+      "line_end": 212,
+      "quote": "- **Follow**: Button text toggles between `Follow {username}` and `Unfollow {username}`.",
+      "why": "規格明確約定追蹤按鈕的文字會在 Follow {username} 與 Unfollow {username} 之間切換。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 1,
+      "assertion": "await expect(followButton).toContainText(`Follow ${authorA.username}`)",
+      "line": 22,
+      "p2_candidate": false
+    }
+  ]
+}

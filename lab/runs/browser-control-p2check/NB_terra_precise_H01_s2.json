@@ -1,0 +1,17 @@
+{
+  "source": "NB_terra_precise_H01_s2.json",
+  "gen": "terra",
+  "arm": "precise",
+  "item": "H01",
+  "seed": 2,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開材料中編輯文章的表單僅等待標題輸入框不為空（not.toHaveValue('')），並未明確陳述或斷言進入編輯頁時標題輸入框的值必須等於原文章標題。",
+      "row": 3,
+      "assertion": "await expect(page.getByPlaceholder('Article Title')).toHaveValue(originalTitle)",
+      "line": 36,
+      "p2_candidate": true
+    }
+  ]
+}

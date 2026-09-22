@@ -1,0 +1,100 @@
+{
+  "source": "NB_terra_precise_S07_s3.json",
+  "gen": "terra",
+  "gen_model": "gpt-5.6-terra",
+  "arm": "precise",
+  "condition": "C0-none",
+  "item": "S07",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S07\n    Scenario: Author deletes own article\n      Given an author opens their own article page\n      When the author deletes the article\n      Then the article no longer appears in the article list on the home page\n",
+  "spec": "generated/NB_terra_precise_S07_s3.spec.ts",
+  "rows": [
+    {
+      "class": "P3",
+      "citation": "",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "此可見性斷言位於點擊刪除按鈕操作之前，用於確認後續操作對象存在，屬於前置可見性守衛。",
+      "assertion": "await expect(page.getByRole('button', { name: /delete article/i })).toBeVisible()",
+      "line": 13
+    },
+    {
+      "class": "P4",
+      "citation": "",
+      "p2_candidate": true,
+      "borderline": false,
+      "why": "驗收要求與 Gherkin 僅要求首頁列表中不再出現該文章，未要求刪除後頁面跳轉至首頁 URL，但此跳轉行為符合 RealWorld 規範。",
+      "assertion": "await expect(page).toHaveURL(new RegExp(`${UI.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}/#/?$`))",
+      "line": 16
+    },
+    {
+      "class": "P0",
+      "citation": "刪除後該文章不再出現在首頁的文章列表。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "斷言確認首頁文章列表中已不存在該文章標題的連結，直接對應驗收要求中刪除後不再出現在首頁列表的主張。",
+      "assertion": "await expect(page.getByRole('link', { name: article.title })).toHaveCount(0)",
+      "line": 18
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此可見性斷言位於點擊刪除按鈕操作之前，用於確認後續操作對象存在，屬於前置可見性守衛。",
+        "assertion": "await expect(page.getByRole('button', { name: /delete article/i })).toBeVisible()",
+        "line": 13
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": true,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 僅要求首頁列表中不再出現該文章，未要求刪除後頁面跳轉至首頁 URL，但此跳轉行為符合 RealWorld 規範。",
+        "assertion": "await expect(page).toHaveURL(new RegExp(`${UI.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}/#/?$`))",
+        "line": 16
+      },
+      {
+        "class": "P0",
+        "citation": "刪除後該文章不再出現在首頁的文章列表。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言確認首頁文章列表中已不存在該文章標題的連結，直接對應驗收要求中刪除後不再出現在首頁列表的主張。",
+        "assertion": "await expect(page.getByRole('link', { name: article.title })).toHaveCount(0)",
+        "line": 18
+      }
+    ],
+    "terra": [
+      {
+        "class": "P3",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言位於刪除動作之前，驗收要求與 Gherkin 都未主張刪除按鈕在該時點可見，僅是確保後續點擊有對象的守衛。",
+        "assertion": "await expect(page.getByRole('button', { name: /delete article/i })).toBeVisible()",
+        "line": 13
+      },
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求與 Gherkin 只主張文章不再出現在首頁文章列表，未主張刪除後瀏覽器 URL 必須導向首頁。",
+        "assertion": "await expect(page).toHaveURL(new RegExp(`${UI.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}/#/?$`))",
+        "line": 16
+      },
+      {
+        "class": "P0",
+        "citation": "刪除後該文章不再出現在首頁的文章列表。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在刪除後確認該文章連結不在首頁文章列表中，與驗收要求直接一致。",
+        "assertion": "await expect(page.getByRole('link', { name: article.title })).toHaveCount(0)",
+        "line": 18
+      }
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_gem_precise_H01_s1",
+  "condition": "C0-none",
+  "generator": "gem",
+  "model": "gemini-3.8-flash",
+  "item": "H01",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H01\n    Scenario: Article tags and editing\n      Given I am a logged-in user on the new article page\n      When I publish an article with a title, body, and three tags\n      Then the article page shows content matching what was entered\n      When I choose to edit the article on its page\n      And I change the title to a different string, remove all tags, and submit\n      Then the article title is updated\n      And the tags no longer appear\n",
+  "complete": true,
+  "spec": "generated/NB_gem_precise_H01_s1.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('Article tags and editing', async ({ page }) => {\n    const user = await newUser();\n    await loginAs(page, user);\n\n    // Given I am a logged-in user on the new article page\n    await page.goto(`${UI}/#/editor`);\n\n    const title = `Article Title ${Date.now()}`;\n    const description = 'Article Description';\n    const body = 'Article Body Content';\n    const tags = ['tag-one', 'tag-two', 'tag-three'];\n\n    // When I publish an article with a title, body, and three tags\n    await page.locator('input[placeholder=\"Article Title\"]').fill(title);\n    await page.locator('input[placeholder*=\"about\"]').fill(description);\n    await page.locator('textarea[placeholder*=\"markdown\"]').fill(body);\n\n    const tagInput = page.locator('input[placeholder*=\"tags\"]');\n    for (const tag of tags) {\n      await tagInput.fill(tag);\n      await tagInput.press('Enter');\n    }\n\n    await page.locator('button:has-text(\"Publish Article\")').click();\n\n    // Then the article page shows content matching what was entered\n    await expect(page.locator('h1')).toHaveText(title);\n    await expect(page.locator('.article-content')).toContainText(body);\n    for (const tag of tags) {\n      await expect(page.locator('.tag-list')).toContainText(tag);\n    }\n\n    // When I choose to edit the article on its page\n    await page.locator('a:has-text(\"Edit Article\")').first().click();\n\n    // And I change the title to a different string, remove all tags, and submit\n    const updatedTitle = `Updated Title ${Date.now()}`;\n    const titleInput = page.locator('input[placeholder=\"Article Title\"]');\n    await titleInput.fill('');\n    await titleInput.fill(updatedTitle);\n\n    // Remove all tags\n    const removeTagIcons = page.locator('.tag-default i, .tag-pill i');\n    while (await removeTagIcons.count() > 0) {\n      await removeTagIcons.first().click();\n    }\n\n    await page.locator('button:has-text(\"Publish Article\")').click();\n\n    // Then the article title is updated\n    await expect(page.locator('h1')).toHaveText(updatedTitle);\n\n    // And the tags no longer appear\n    for (const tag of tags) {\n      await expect(page.locator('.tag-list')).not.toContainText(tag);\n    }\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 6.2,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

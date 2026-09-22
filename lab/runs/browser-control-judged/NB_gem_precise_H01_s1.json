@@ -1,0 +1,154 @@
+{
+  "source": "NB_gem_precise_H01_s1.json",
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "precise",
+  "condition": "C0-none",
+  "item": "H01",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H01\n    Scenario: Article tags and editing\n      Given I am a logged-in user on the new article page\n      When I publish an article with a title, body, and three tags\n      Then the article page shows content matching what was entered\n      When I choose to edit the article on its page\n      And I change the title to a different string, remove all tags, and submit\n      Then the article title is updated\n      And the tags no longer appear\n",
+  "spec": "generated/NB_gem_precise_H01_s1.spec.ts",
+  "rows": [
+    {
+      "class": "P0",
+      "citation": "文章頁顯示的內容與輸入一致",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出發佈後文章頁顯示的內容與輸入一致，斷言 h1 顯示文章標題為其直接操作化。",
+      "assertion": "await expect(page.locator('h1')).toHaveText(title)",
+      "line": 31
+    },
+    {
+      "class": "P0",
+      "citation": "文章頁顯示的內容與輸入一致",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出發佈後文章頁顯示的內容需與輸入一致，斷言檢查內文符合輸入屬此要求的直接操作化。",
+      "assertion": "await expect(page.locator('.article-content')).toContainText(body)",
+      "line": 32
+    },
+    {
+      "class": "P0",
+      "citation": "文章頁顯示的內容與輸入一致",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出發佈後文章頁顯示的內容與輸入一致，且 note 特別說明三個標籤是為了覆蓋多標籤的顯示，因此斷言標籤列表包含輸入的標籤屬 P0。",
+      "assertion": "await expect(page.locator('.tag-list')).toContainText(tag)",
+      "line": 34
+    },
+    {
+      "class": "P0",
+      "citation": "編輯送出後標題更新",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指明編輯送出後標題需更新，斷言檢查頁面 h1 為更新後的標題直接符合該要求。",
+      "assertion": "await expect(page.locator('h1')).toHaveText(updatedTitle)",
+      "line": 55
+    },
+    {
+      "class": "P0",
+      "citation": "編輯送出後標題更新，標籤不再出現。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出編輯送出後標籤不再出現，此斷言驗證原本的標籤皆不在標籤列表中。",
+      "assertion": "await expect(page.locator('.tag-list')).not.toContainText(tag)",
+      "line": 59
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P0",
+        "citation": "文章頁顯示的內容與輸入一致",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出發佈後文章頁顯示的內容與輸入一致，斷言 h1 顯示文章標題為其直接操作化。",
+        "assertion": "await expect(page.locator('h1')).toHaveText(title)",
+        "line": 31
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁顯示的內容與輸入一致",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出發佈後文章頁顯示的內容需與輸入一致，斷言檢查內文符合輸入屬此要求的直接操作化。",
+        "assertion": "await expect(page.locator('.article-content')).toContainText(body)",
+        "line": 32
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁顯示的內容與輸入一致",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出發佈後文章頁顯示的內容與輸入一致，且 note 特別說明三個標籤是為了覆蓋多標籤的顯示，因此斷言標籤列表包含輸入的標籤屬 P0。",
+        "assertion": "await expect(page.locator('.tag-list')).toContainText(tag)",
+        "line": 34
+      },
+      {
+        "class": "P0",
+        "citation": "編輯送出後標題更新",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指明編輯送出後標題需更新，斷言檢查頁面 h1 為更新後的標題直接符合該要求。",
+        "assertion": "await expect(page.locator('h1')).toHaveText(updatedTitle)",
+        "line": 55
+      },
+      {
+        "class": "P0",
+        "citation": "編輯送出後標題更新，標籤不再出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出編輯送出後標籤不再出現，此斷言驗證原本的標籤皆不在標籤列表中。",
+        "assertion": "await expect(page.locator('.tag-list')).not.toContainText(tag)",
+        "line": 59
+      }
+    ],
+    "terra": [
+      {
+        "class": "P0",
+        "citation": "文章頁顯示的內容與輸入一致；編輯送出後標題更新，標籤不再出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "發佈後文章頁的 h1 標題等於輸入的 title，是「文章頁顯示的內容與輸入一致」的直接具體化。",
+        "assertion": "await expect(page.locator('h1')).toHaveText(title)",
+        "line": 31
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁顯示的內容與輸入一致；編輯送出後標題更新，標籤不再出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "發佈後文章內容區包含輸入的 body 是「文章頁顯示的內容與輸入一致」的直接驗證。",
+        "assertion": "await expect(page.locator('.article-content')).toContainText(body)",
+        "line": 32
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁顯示的內容與輸入一致；編輯送出後標題更新，標籤不再出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "發布後文章頁的標籤文字包含每個輸入標籤，是「內容與輸入一致」的直接驗證。",
+        "assertion": "await expect(page.locator('.tag-list')).toContainText(tag)",
+        "line": 34
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁顯示的內容與輸入一致；編輯送出後標題更新，標籤不再出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在編輯送出後確認文章標題為更新後字串，直接對應驗收要求的「標題更新」。",
+        "assertion": "await expect(page.locator('h1')).toHaveText(updatedTitle)",
+        "line": 55
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁顯示的內容與輸入一致；編輯送出後標題更新，標籤不再出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "此斷言在編輯送出後確認各原標籤不再出現在文章頁的標籤列表中，直接對應驗收要求。",
+        "assertion": "await expect(page.locator('.tag-list')).not.toContainText(tag)",
+        "line": 59
+      }
+    ]
+  }
+}

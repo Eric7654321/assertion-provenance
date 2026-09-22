@@ -1,0 +1,39 @@
+{
+  "source": "NB_terra_precise_S02_s2.json",
+  "gen": "terra",
+  "arm": "precise",
+  "item": "S02",
+  "seed": 2,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約中僅規定註冊路由為 /register 且註冊失敗時顯示錯誤，未要求或測試註冊失敗後 URL 必須維持在 /#/register 之 hash 路由格式。",
+      "row": 2,
+      "assertion": "await expect(page).toHaveURL(/#\\/register$/)",
+      "line": 18,
+      "p2_candidate": false
+    },
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約中未陳述或測試在註冊失敗（重複 email）後需驗證導覽列或頁面中存在 Sign in 連結的可觀測行為。",
+      "row": 3,
+      "assertion": "await expect(page.getByRole('link', { name: /sign in/i })).toBeVisible()",
+      "line": 19,
+      "p2_candidate": false
+    },
+    {
+      "supported": true,
+      "file": "docs/src/content/docs/specifications/frontend/templates.md",
+      "line_start": 34,
+      "line_end": 41,
+      "quote": "#### Unauthenticated user\n\nIf no user is logged in, then the header should include links to:\n\n- the home page\n- the login page\n- the register page",
+      "why": "契約明定當使用者未登入（未認證）時，頂端導覽列必須包含連往註冊頁面（Sign up）的連結。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 4,
+      "assertion": "await expect(page.getByRole('link', { name: /sign up/i })).toBeVisible()",
+      "line": 20,
+      "p2_candidate": false
+    }
+  ]
+}

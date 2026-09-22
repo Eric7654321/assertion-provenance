@@ -1,0 +1,31 @@
+{
+  "source": "NB_gem_precise_S02_s3.json",
+  "gen": "gem",
+  "arm": "precise",
+  "item": "S02",
+  "seed": 3,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開材料中後端 API 返回 errors.email 為 'has already been taken'，但前端規格與測試並未規定或測試 UI 的 .error-messages 必須包含 'email has already been taken' 特定文字（模板中甚至僅示例 'That email is already taken'）。",
+      "row": 1,
+      "assertion": "await expect(errorMessages).toContainText('email has already been taken')",
+      "line": 23,
+      "p2_candidate": true
+    },
+    {
+      "supported": true,
+      "file": "specs/e2e/error-handling.spec.ts",
+      "line_start": 62,
+      "line_end": 65,
+      "quote": "    // Should show error messages\n    await expect(page.locator('.error-messages')).toBeVisible();\n    await expect(page).toHaveURL('/register');\n    await expect(page.locator('input[name=\"email\"]')).toBeVisible();",
+      "why": "公開材料中的 E2E 測試明確斷言註冊驗證失敗時，頁面應留在註冊頁（toHaveURL('/register')）且不跳轉。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 2,
+      "assertion": "await expect(page).toHaveURL(/#\\/register/)",
+      "line": 26,
+      "p2_candidate": true
+    }
+  ]
+}

@@ -114,7 +114,7 @@ def _agent_steps(cfg, messages, budget, log, counters, model=None):
                 feed = "這裡沒有執行腳本的管道。要看畫面請用 OPEN <route>；不然就直接輸出 FINAL。"
             else:
                 feed = "請用 OPEN／FIND／LOCATOR 走查，或直接輸出 FINAL 區塊。"
-        else:
+        elif cfg["explore"] == "script":
             m = RUN_RE.search(reply)
             if m and counters["probe_steps"] < cfg["max_steps"]:
                 counters["probe_steps"] += 1
@@ -125,6 +125,12 @@ def _agent_steps(cfg, messages, budget, log, counters, model=None):
                 feed = "這裡沒有 OPEN 這個工具。要看畫面請自己寫 RUN 腳本；不然就直接輸出 FINAL。"
             else:
                 feed = "請用 RUN 腳本探查，或直接輸出 FINAL 區塊。"
+        else:
+            # Controlled no-exploration condition used by the provenance study.
+            # Do not execute a requested tool; give only a protocol reminder.
+            if OPEN_RE.search(reply) or FIND_RE.search(reply) or LOCATOR_RE.search(reply) or RUN_RE.search(reply):
+                counters["wanted_walk"] += 1
+            feed = "這個條件沒有任何走查或執行工具。請直接輸出完整的 FINAL 區塊。"
 
         log.append({"role": "user", "text": feed[:2000]})
         messages.append({"role": "user", "text": feed})

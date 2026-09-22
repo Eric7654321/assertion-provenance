@@ -1,0 +1,23 @@
+{
+  "source": "NB_terra_precise_H03_s3.json",
+  "gen": "terra",
+  "arm": "precise",
+  "item": "H03",
+  "seed": 3,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/url-navigation.spec.ts",
+      "line_start": 227,
+      "line_end": 229,
+      "quote": "    // Click Global Feed and wait for URL to change to root path\n    await page.click('.nav-link:has-text(\"Global Feed\")');\n    await expect(page).toHaveURL('/');",
+      "why": "官方 E2E 測試明確驗證在標籤分頁（page 2）狀態下點擊 Global Feed 切回全部文章列表時，URL 必須變更回根路徑（'/'）。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 7,
+      "assertion": "await expect(page).toHaveURL(`${UI}/#/`)",
+      "line": 48,
+      "p2_candidate": false
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_gem_precise_H03_s1",
+  "condition": "C0-none",
+  "generator": "gem",
+  "model": "gemini-3.8-flash",
+  "item": "H03",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H03\n    Scenario: Pagination under tag filter\n      Given there are 15 articles under a specific tag\n      When I filter by this tag on the home page\n      Then the number of articles per page matches the pagination setting\n      When I select page 2 in the pagination bar\n      Then the second page displays the consecutive articles\n      And the URL reflects the current page number\n      When I open a new page directly with the URL containing page=2\n      Then I arrive at the same page\n      When I switch back to the all articles list\n      Then the list returns to the first page\n",
+  "complete": true,
+  "spec": "generated/NB_gem_precise_H03_s1.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('Pagination under tag filter (@item:H03)', async ({ page, context }) => {\n    const author = await newUser();\n    const tagName = `tag-${Date.now()}`;\n\n    // Given there are 15 articles under a specific tag\n    for (let i = 1; i <= 15; i++) {\n      await newArticle(author, {\n        title: `Tag Article ${i.toString().padStart(2, '0')} - ${Date.now()}`,\n        tagList: [tagName],\n      });\n    }\n\n    // Go to home page\n    await page.goto(`${UI}/#/`);\n\n    // When I filter by this tag on the home page\n    const tagButton = page.locator('.tag-list, .tag-default').filter({ hasText: tagName }).first();\n    await expect(tagButton).toBeVisible();\n    await tagButton.click();\n\n    // Then the number of articles per page matches the pagination setting (typically 10 per page in Conduit)\n    const articlePreviews = page.locator('.article-preview');\n    await expect(articlePreviews.first()).toBeVisible();\n    await expect(articlePreviews).toHaveCount(10);\n\n    const firstPageFirstArticleTitle = await articlePreviews.first().locator('h1').textContent();\n\n    // When I select page 2 in the pagination bar\n    const page2Button = page.locator('.pagination .page-item, .pagination li').filter({ hasText: '2' }).first();\n    await expect(page2Button).toBeVisible();\n    await page2Button.click();\n\n    // Then the second page displays the consecutive articles\n    await expect(articlePreviews).toHaveCount(5);\n    const secondPageFirstArticleTitle = await articlePreviews.first().locator('h1').textContent();\n    expect(secondPageFirstArticleTitle).not.toEqual(firstPageFirstArticleTitle);\n\n    // And the URL reflects the current page number\n    await expect(page).toHaveURL(/page=2/);\n    const page2Url = page.url();\n\n    // When I open a new page directly with the URL containing page=2\n    const newPage = await context.newPage();\n    await newPage.goto(page2Url);\n\n    // Then I arrive at the same page\n    const newPageArticlePreviews = newPage.locator('.article-preview');\n    await expect(newPageArticlePreviews.first()).toBeVisible();\n    await expect(newPageArticlePreviews).toHaveCount(5);\n    const newPageFirstArticleTitle = await newPageArticlePreviews.first().locator('h1').textContent();\n    expect(newPageFirstArticleTitle).toEqual(secondPageFirstArticleTitle);\n    await newPage.close();\n\n    // When I switch back to the all articles list\n    const globalFeedTab = page.locator('.feed-toggle a, .nav-link').filter({ hasText: /Global Feed|All/i }).first();\n    await globalFeedTab.click();\n\n    // Then the list returns to the first page\n    await expect(articlePreviews.first()).toBeVisible();\n    await expect(page).not.toHaveURL(/page=2/);\n    const activePageItem = page.locator('.pagination .page-item.active, .pagination li.active');\n    if (await activePageItem.count() > 0) {\n      await expect(activePageItem.first()).toHaveText('1');\n    }\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 4.2,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

@@ -1,0 +1,46 @@
+{
+  "source": "NB_terra_precise_H01_s1.json",
+  "gen": "terra",
+  "gen_model": "gpt-5.6-terra",
+  "arm": "precise",
+  "condition": "C0-none",
+  "item": "H01",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H01\n    Scenario: Article tags and editing\n      Given I am a logged-in user on the new article page\n      When I publish an article with a title, body, and three tags\n      Then the article page shows content matching what was entered\n      When I choose to edit the article on its page\n      And I change the title to a different string, remove all tags, and submit\n      Then the article title is updated\n      And the tags no longer appear\n",
+  "spec": "generated/NB_terra_precise_H01_s1.spec.ts",
+  "rows": [
+    {
+      "class": "P0",
+      "citation": "在該文章頁點選編輯",
+      "p2_candidate": false,
+      "borderline": true,
+      "why": "驗收要求指明發佈後進入「該文章頁」，斷言跳轉至文章頁 URL (/article/) 屬於該頁面轉換的直接具體化檢查。",
+      "assertion": "await expect(page).toHaveURL(/#\\/article\\//); await expect(page.getByRole('heading', { name: originalTitle })).toBeVisible(); await expect(page.locator('.article-content')).toContainText(body); for (const tag of tags) { await expect(page.locator('.tag-list')).toContainText(tag); } await page.getByRole('button', { name: 'Edit Article' }).click(); await expect(page).toHaveURL(/#\\/editor\\//); await page.getByPlaceholder('Article Title').fill(updatedTitle); const tagPills = page.locator('.tag-list .tag-pill'); while (await tagPills.count()) { await tagPills.first().locator('i').click(); } await page.getByRole('button', { name: 'Publish Article' }).click(); await expect(page).toHaveURL(/#\\/article\\//); await expect(page.getByRole('heading', { name: updatedTitle })).toBeVisible(); for (const tag of tags) { await expect(page.locator('.tag-list')).not.toContainText(tag); } }); });",
+      "line": 27
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P0",
+        "citation": "在該文章頁點選編輯",
+        "p2_candidate": false,
+        "borderline": true,
+        "why": "驗收要求指明發佈後進入「該文章頁」，斷言跳轉至文章頁 URL (/article/) 屬於該頁面轉換的直接具體化檢查。",
+        "assertion": "await expect(page).toHaveURL(/#\\/article\\//); await expect(page.getByRole('heading', { name: originalTitle })).toBeVisible(); await expect(page.locator('.article-content')).toContainText(body); for (const tag of tags) { await expect(page.locator('.tag-list')).toContainText(tag); } await page.getByRole('button', { name: 'Edit Article' }).click(); await expect(page).toHaveURL(/#\\/editor\\//); await page.getByPlaceholder('Article Title').fill(updatedTitle); const tagPills = page.locator('.tag-list .tag-pill'); while (await tagPills.count()) { await tagPills.first().locator('i').click(); } await page.getByRole('button', { name: 'Publish Article' }).click(); await expect(page).toHaveURL(/#\\/article\\//); await expect(page.getByRole('heading', { name: updatedTitle })).toBeVisible(); for (const tag of tags) { await expect(page.locator('.tag-list')).not.toContainText(tag); } }); });",
+        "line": 27
+      }
+    ],
+    "terra": [
+      {
+        "class": "P4",
+        "citation": "",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言發布後 URL 符合 `#/article/` 是可檢查的行為主張，但驗收要求與 Gherkin 都只要求文章頁顯示內容，未主張 URL 格式。",
+        "assertion": "await expect(page).toHaveURL(/#\\/article\\//); await expect(page.getByRole('heading', { name: originalTitle })).toBeVisible(); await expect(page.locator('.article-content')).toContainText(body); for (const tag of tags) { await expect(page.locator('.tag-list')).toContainText(tag); } await page.getByRole('button', { name: 'Edit Article' }).click(); await expect(page).toHaveURL(/#\\/editor\\//); await page.getByPlaceholder('Article Title').fill(updatedTitle); const tagPills = page.locator('.tag-list .tag-pill'); while (await tagPills.count()) { await tagPills.first().locator('i').click(); } await page.getByRole('button', { name: 'Publish Article' }).click(); await expect(page).toHaveURL(/#\\/article\\//); await expect(page.getByRole('heading', { name: updatedTitle })).toBeVisible(); for (const tag of tags) { await expect(page.locator('.tag-list')).not.toContainText(tag); } }); });",
+        "line": 27
+      }
+    ]
+  }
+}

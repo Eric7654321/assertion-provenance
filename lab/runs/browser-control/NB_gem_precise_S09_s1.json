@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_gem_precise_S09_s1",
+  "condition": "C0-none",
+  "generator": "gem",
+  "model": "gemini-3.8-flash",
+  "item": "S09",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S09\n    Scenario: Visibility of comment deletion control\n      Given User A has posted a comment on an article\n      When User B views the same article and posts their own comment\n      Then User B does not see the delete control for User A's comment\n      And User B sees the delete control for their own comment\n",
+  "complete": true,
+  "spec": "generated/NB_gem_precise_S09_s1.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, apiCall, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('Visibility of comment deletion control', async ({ page }) => {\n    // Given User A has posted a comment on an article\n    const userA = await newUser();\n    const userB = await newUser();\n\n    const article = await newArticle(userA);\n\n    await apiCall(\n      `/articles/${article.slug}/comments`,\n      'POST',\n      { comment: { body: \"Comment by User A\" } },\n      userA.token\n    );\n\n    // When User B views the same article and posts their own comment\n    await loginAs(page, userB);\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    const userAComment = page.locator('.card', { hasText: \"Comment by User A\" });\n    await expect(userAComment).toBeVisible();\n\n    await page.fill('textarea[placeholder*=\"comment\" i]', \"Comment by User B\");\n    await page.click('button:has-text(\"Post Comment\")');\n\n    const userBComment = page.locator('.card', { hasText: \"Comment by User B\" });\n    await expect(userBComment).toBeVisible();\n\n    // Then User B does not see the delete control for User A's comment\n    await expect(userAComment.locator('.mod-options, .ion-trash-a, [data-testid=\"delete-comment\"]')).not.toBeVisible();\n\n    // And User B sees the delete control for their own comment\n    await expect(userBComment.locator('.mod-options, .ion-trash-a, [data-testid=\"delete-comment\"]')).toBeVisible();\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 4.6,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

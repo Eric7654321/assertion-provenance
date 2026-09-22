@@ -1,0 +1,23 @@
+{
+  "source": "NB_terra_precise_H02_s1.json",
+  "gen": "terra",
+  "arm": "precise",
+  "item": "H02",
+  "seed": 1,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/comments.spec.ts",
+      "line_start": 31,
+      "line_end": 36,
+      "quote": "  test('should add a comment to an article', async ({ page }) => {\n    const commentText = 'This is a test comment from Playwright!';\n    await addComment(page, commentText);\n    // Comment should be visible\n    await expect(page.locator(`.card:not(.comment-form) .card-block:has-text(\"${commentText}\")`)).toBeVisible();\n  });",
+      "why": "公開的 E2E 測試明確斷言在文章頁上發布留言後，該留言內容在頁面上可見。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 2,
+      "assertion": "await expect(page.getByText(authorCommentBody)).toBeVisible()",
+      "line": 31,
+      "p2_candidate": true
+    }
+  ]
+}

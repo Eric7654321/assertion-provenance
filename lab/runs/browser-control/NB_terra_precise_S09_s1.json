@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_terra_precise_S09_s1",
+  "condition": "C0-none",
+  "generator": "terra",
+  "model": "gpt-5.6-terra",
+  "item": "S09",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S09\n    Scenario: Visibility of comment deletion control\n      Given User A has posted a comment on an article\n      When User B views the same article and posts their own comment\n      Then User B does not see the delete control for User A's comment\n      And User B sees the delete control for their own comment\n",
+  "complete": true,
+  "spec": "generated/NB_terra_precise_S09_s1.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport {\n  newUser,\n  newArticle,\n  loginAs,\n  apiCall,\n  UI,\n} from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('@item:S09 User B only sees deletion control for their own comment', async ({\n    page,\n  }) => {\n    const userA = await newUser();\n    const userB = await newUser();\n    const article = await newArticle(userA);\n\n    const commentA = await apiCall(\n      `/articles/${article.slug}/comments`,\n      'POST',\n      { comment: { body: 'Comment written by User A' } },\n      userA.token,\n    );\n\n    expect(commentA.status).toBe(200);\n\n    await loginAs(page, userB);\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    const commentInput = page.locator('textarea[placeholder=\"Write a comment...\"]');\n    await expect(commentInput).toBeVisible();\n\n    await commentInput.fill('Comment written by User B');\n    await page.getByRole('button', { name: 'Post Comment' }).click();\n\n    const userAComment = page.locator('.card', {\n      hasText: 'Comment written by User A',\n    });\n    const userBComment = page.locator('.card', {\n      hasText: 'Comment written by User B',\n    });\n\n    await expect(userAComment).toBeVisible();\n    await expect(userBComment).toBeVisible();\n\n    await expect(userAComment.locator('button')).toHaveCount(0);\n    await expect(userBComment.locator('button')).toHaveCount(1);\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 4.2,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

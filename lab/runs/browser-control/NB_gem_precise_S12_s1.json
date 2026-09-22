@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_gem_precise_S12_s1",
+  "condition": "C0-none",
+  "generator": "gem",
+  "model": "gemini-3.8-flash",
+  "item": "S12",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S12\n    Scenario: Article list pagination\n      Given I scroll to the pagination bar in the article list on the home page\n      When I select page 2\n      Then the list displays the consecutive articles\n",
+  "complete": true,
+  "spec": "generated/NB_gem_precise_S12_s1.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('Article list pagination', async ({ page }) => {\n    // 確保有足夠文章觸發分頁（Conduit 預設一頁 10 篇，建立 11 篇）\n    const user = await newUser();\n    for (let i = 1; i <= 11; i++) {\n      await newArticle(user, {\n        title: `Pagination Test Article ${i} ${Date.now()}`,\n        description: `Description ${i}`,\n        body: `Body content ${i}`,\n        tagList: ['pagination-test'],\n      });\n    }\n\n    // 瀏覽首頁\n    await page.goto(`${UI}/#/`);\n\n    // 確保切換至 Global Feed\n    const globalFeedTab = page.locator('.feed-toggle').getByText('Global Feed');\n    if (await globalFeedTab.isVisible()) {\n      await globalFeedTab.click();\n    }\n\n    // 等待文章列表加載完成\n    await expect(page.locator('.article-preview').first()).toBeVisible();\n\n    // 取得第一頁顯示的第一篇文章標題作為比對基準\n    const firstPageArticleTitle = await page.locator('.article-preview h1').first().textContent();\n\n    // 捲動至分頁列\n    const pagination = page.locator('.pagination');\n    await pagination.scrollIntoViewIfNeeded();\n    await expect(pagination).toBeVisible();\n\n    // 點選第 2 頁\n    const page2Button = pagination.locator('.page-item, li').filter({ hasText: '2' }).locator('a, button');\n    await page2Button.click();\n\n    // 驗證分頁狀態變為 active\n    const activePage = pagination.locator('.page-item.active, li.active');\n    await expect(activePage).toContainText('2');\n\n    // 驗證列表顯示出接續的文章（文章已換頁，第一篇標題不同且有文章顯示）\n    await expect(page.locator('.article-preview').first()).toBeVisible();\n    const secondPageArticleTitle = await page.locator('.article-preview h1').first().textContent();\n    expect(secondPageArticleTitle).not.toBe(firstPageArticleTitle);\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 7.0,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

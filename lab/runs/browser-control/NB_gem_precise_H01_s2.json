@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_gem_precise_H01_s2",
+  "condition": "C0-none",
+  "generator": "gem",
+  "model": "gemini-3.8-flash",
+  "item": "H01",
+  "seed": 2,
+  "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:H01\n    Scenario: Article tags and editing\n      Given a logged-in user is on the new article page\n      When the user fills in a title and body, adds three tags, and publishes the article\n      Then the article page should display content matching the input\n      When the user edits the article from the article page\n      And changes the title to another string, removes all tags, and submits\n      Then the updated title should be displayed\n      And the tags should no longer appear\n",
+  "complete": true,
+  "spec": "generated/NB_gem_precise_H01_s2.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Criteria', () => {\n  test('@item:H01 Article tags and editing', async ({ page }) => {\n    const user = await newUser();\n    await loginAs(page, user);\n\n    // Given a logged-in user is on the new article page\n    await page.goto(`${UI}/#/editor`);\n\n    // When the user fills in a title and body, adds three tags, and publishes the article\n    const originalTitle = `Title ${Date.now()}`;\n    const description = 'Article Description';\n    const body = 'Article Body Content';\n    const tags = ['tag1', 'tag2', 'tag3'];\n\n    await page.getByPlaceholder('Article Title').fill(originalTitle);\n    await page.getByPlaceholder(\"What's this article about?\").fill(description);\n    await page.getByPlaceholder('Write your article (in markdown)').fill(body);\n\n    const tagInput = page.getByPlaceholder('Enter tags');\n    for (const tag of tags) {\n      await tagInput.fill(tag);\n      await tagInput.press('Enter');\n    }\n\n    await page.getByRole('button', { name: 'Publish Article' }).click();\n\n    // Then the article page should display content matching the input\n    await expect(page.getByRole('heading', { name: originalTitle, level: 1 })).toBeVisible();\n    await expect(page.getByText(body)).toBeVisible();\n    for (const tag of tags) {\n      await expect(page.getByRole('list').getByText(tag, { exact: true })).toBeVisible();\n    }\n\n    // When the user edits the article from the article page\n    await page.getByRole('link', { name: /Edit Article/i }).first().click();\n\n    // And changes the title to another string, removes all tags, and submits\n    const updatedTitle = `Updated Title ${Date.now()}`;\n    await page.getByPlaceholder('Article Title').fill(updatedTitle);\n\n    // Remove all tags\n    const removeTagIcons = page.locator('.tag-list i.ion-close-round, .tag-list [class*=\"ion-close\"], .tag-list button, .tag-default i');\n    while (await removeTagIcons.count() > 0) {\n      await removeTagIcons.first().click();\n    }\n\n    await page.getByRole('button', { name: /Publish Article|Update Article/i }).click();\n\n    // Then the updated title should be displayed\n    await expect(page.getByRole('heading', { name: updatedTitle, level: 1 })).toBeVisible();\n\n    // And the tags should no longer appear\n    for (const tag of tags) {\n      await expect(page.locator('.tag-list').getByText(tag, { exact: true })).not.toBeVisible();\n    }\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 2.6,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_gem_precise_S02_s1",
+  "condition": "C0-none",
+  "generator": "gem",
+  "model": "gemini-3.8-flash",
+  "item": "S02",
+  "seed": 1,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S02\n    Scenario: Registration with duplicate email\n      Given a user has completed registration with an unused email and logged out\n      When someone attempts to register again with the same email\n      Then the registration fails with an error displayed\n      And the user is not logged in\n",
+  "complete": true,
+  "spec": "generated/NB_gem_precise_S02_s1.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('Registration with duplicate email (@item:S02)', async ({ page }) => {\n    // Given a user has completed registration with an unused email and logged out\n    const existingUser = await newUser();\n\n    // When someone attempts to register again with the same email\n    await page.goto(`${UI}/#/register`);\n\n    await page.getByPlaceholder('Username').fill(`dup_${Date.now()}`);\n    await page.getByPlaceholder('Email').fill(existingUser.email);\n    await page.getByPlaceholder('Password').fill('password123');\n\n    await page.getByRole('button', { name: 'Sign up' }).click();\n\n    // Then the registration fails with an error displayed\n    const errorMessages = page.locator('.error-messages');\n    await expect(errorMessages).toBeVisible();\n    await expect(errorMessages).toContainText(/email.*has already been taken|email/i);\n\n    // And the user is not logged in\n    await expect(page.getByRole('link', { name: 'Sign in' })).toBeVisible();\n    await expect(page.getByRole('link', { name: 'Sign up' })).toBeVisible();\n    await expect(page).toHaveURL(/#\\/register/);\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 1.9,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

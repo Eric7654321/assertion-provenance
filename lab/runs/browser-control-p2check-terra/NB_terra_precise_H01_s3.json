@@ -1,0 +1,23 @@
+{
+  "source": "NB_terra_precise_H01_s3.json",
+  "gen": "terra",
+  "arm": "precise",
+  "item": "H01",
+  "seed": 3,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/articles.spec.ts",
+      "line_start": 38,
+      "line_end": 47,
+      "quote": "    // Should be on article page\n    await expect(page).toHaveURL(/\\/article\\/.+/);\n\n    // Should show article content\n    await expect(page.locator('h1')).toHaveText(article.title);\n    await expect(page.locator('.article-content p')).toContainText(article.body);\n\n    // Should show tags\n    for (const tag of article.tags || []) {\n      await expect(page.locator(`.tag-list .tag-default:has-text(\"${tag}\")`)).toBeVisible();\n    }",
+      "why": "官方 E2E 測試在建立文章後明確驗證了 URL 導向至文章頁，並斷言標題、內文與標籤均正確顯示在文章頁上。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 0,
+      "assertion": "await expect(page).toHaveURL(/#\\/article\\//); await expect(page.getByRole('heading', { name: originalTitle })).toBeVisible(); await expect(page.getByText(body)).toBeVisible(); for (const tag of tags) { await expect(page.getByText(tag, { exact: true })).toBeVisible(); } await page.getByRole('link', { name: 'Edit Article' }).click(); await expect(page).toHaveURL(/#\\/editor\\//); await page.getByPlaceholder('Article Title').fill(updatedTitle); const removeTagButtons = page.locator('.tag-list i'); while (await removeTagButtons.count()) { await removeTagButtons.first().click(); } await page.getByRole('button', { name: 'Publish Article' }).click(); await expect(page).toHaveURL(/#\\/article\\//); await expect(page.getByRole('heading', { name: updatedTitle })).toBeVisible(); for (const tag of tags) { await expect(page.getByText(tag, { exact: true })).not.toBeVisible(); } }); });",
+      "line": 28,
+      "p2_candidate": false
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "source": "NB_terra_precise_S12_s3.json",
+  "gen": "terra",
+  "arm": "precise",
+  "item": "S12",
+  "seed": 3,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/SELECTORS.md",
+      "line_start": 213,
+      "line_end": 213,
+      "quote": "- **Pagination active**: The current page's `.page-item` has the CSS class `active`.",
+      "why": "SELECTORS.md 明確規定分頁中當前頁面必須具備 CSS class active 的狀態約定。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 2,
+      "assertion": "await expect(pageTwo).toHaveClass(/active/)",
+      "line": 30,
+      "p2_candidate": false
+    },
+    {
+      "status": "P4 confirmed",
+      "why": "公開材料中並未規範或測試首頁換至第 2 頁時文章數量必須剛好為 1 篇，此數量為該特定測試 setup 的特有數據。",
+      "row": 3,
+      "assertion": "await expect(articlePreviews).toHaveCount(1)",
+      "line": 31,
+      "p2_candidate": false
+    }
+  ]
+}

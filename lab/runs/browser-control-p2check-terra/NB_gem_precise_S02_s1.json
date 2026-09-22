@@ -1,0 +1,17 @@
+{
+  "source": "NB_gem_precise_S02_s1.json",
+  "gen": "gem",
+  "arm": "precise",
+  "item": "S02",
+  "seed": 1,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開材料中無論是規格路由（/register）、E2E 測試（expect(page).toHaveURL('/register')），都沒有規定使用 hash 路由（/#/register）。",
+      "row": 4,
+      "assertion": "await expect(page).toHaveURL(/#\\/register/)",
+      "line": 26,
+      "p2_candidate": false
+    }
+  ]
+}

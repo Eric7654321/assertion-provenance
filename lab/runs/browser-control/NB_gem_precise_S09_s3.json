@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_gem_precise_S09_s3",
+  "condition": "C0-none",
+  "generator": "gem",
+  "model": "gemini-3.8-flash",
+  "item": "S09",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S09\n    Scenario: Comment deletion visibility\n      Given user A posts a comment on an article\n      When user B opens the same article and posts their own comment\n      Then user B cannot see the delete control for user A's comment\n      And user B can see the delete control for their own comment\n",
+  "complete": true,
+  "spec": "generated/NB_gem_precise_S09_s3.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, apiCall, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('Comment deletion visibility (@item:S09)', async ({ page }) => {\n    // Given user A posts a comment on an article\n    const userA = await newUser();\n    const userB = await newUser();\n    const article = await newArticle(userA);\n\n    const commentBodyA = 'Comment by User A - ' + Date.now();\n    await apiCall(\n      `/articles/${article.slug}/comments`,\n      'POST',\n      { comment: { body: commentBodyA } },\n      userA.token\n    );\n\n    // When user B opens the same article and posts their own comment\n    await loginAs(page, userB);\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    const commentBodyB = 'Comment by User B - ' + Date.now();\n    await page.getByPlaceholder(/write a comment/i).fill(commentBodyB);\n    await page.getByRole('button', { name: /post comment/i }).click();\n\n    // Then user B cannot see the delete control for user A's comment\n    const commentCardA = page.locator('.card', { hasText: commentBodyA });\n    await expect(commentCardA).toBeVisible();\n    await expect(commentCardA.locator('.mod-options, .ion-trash-a, button:has-text(\"Delete\")')).not.toBeVisible();\n\n    // And user B can see the delete control for their own comment\n    const commentCardB = page.locator('.card', { hasText: commentBodyB });\n    await expect(commentCardB).toBeVisible();\n    await expect(commentCardB.locator('.mod-options, .ion-trash-a, button:has-text(\"Delete\")')).toBeVisible();\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 4.4,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

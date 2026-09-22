@@ -1,0 +1,53 @@
+{
+  "source": "NB_terra_precise_S02_s1.json",
+  "gen": "terra",
+  "arm": "precise",
+  "item": "S02",
+  "seed": 1,
+  "checks": [
+    {
+      "supported": true,
+      "file": "specs/e2e/error-handling.spec.ts",
+      "line_start": 50,
+      "line_end": 66,
+      "quote": "  test('should handle 400 on registration with validation errors', async ({ page }) => {\n    await mockApiError(page, '/users', 400, {\n      errors: {\n        email: ['is already taken'],\n        username: ['is too short (minimum is 3 characters)'],\n      },\n    });\n    await page.goto('/register');\n    await page.fill('input[name=\"username\"]', 'ab');\n    await page.fill('input[name=\"email\"]', 'taken@test.com');\n    await page.fill('input[name=\"password\"]', 'password123');\n    await page.click('button[type=\"submit\"]');\n    // Should show error messages\n    await expect(page.locator('.error-messages')).toBeVisible();\n    await expect(page).toHaveURL('/register');\n    await expect(page.locator('input[name=\"email\"]')).toBeVisible();\n  });",
+      "why": "前端 E2E 測試在註冊發生 email 已被佔用錯誤時，僅驗證了 `.error-messages` 元素可見（toBeVisible），公開契約中並未規定或斷言錯誤訊息必須包含特定正則文字。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 1,
+      "assertion": "await expect(page.locator('.error-messages')).toContainText(/email.*already|already.*email/i)",
+      "line": 17,
+      "p2_candidate": false
+    },
+    {
+      "status": "P4 confirmed",
+      "why": "公開材料中對於註冊頁面路由僅規範為 '/register'，且在失敗測試中僅有 specs/e2e/error-handling.spec.ts 第 64 行驗證 toHaveURL('/register')，完全未規定或支持 HashRouter 格式 '/#/register'。",
+      "row": 2,
+      "assertion": "await expect(page).toHaveURL(/#\\/register$/)",
+      "line": 19,
+      "p2_candidate": false
+    },
+    {
+      "supported": true,
+      "file": "docs/src/content/docs/specifications/frontend/templates.md",
+      "line_start": 34,
+      "line_end": 41,
+      "quote": "#### Unauthenticated user\n\nIf no user is logged in, then the header should include links to:\n\n- the home page\n- the login page\n- the register page",
+      "why": "規範明確規定未登入（unauthenticated）的使用者，其頂部導覽列應包含前往登入頁面（Sign in）的連結。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 3,
+      "assertion": "await expect(page.getByRole('link', { name: 'Sign in' })).toBeVisible()",
+      "line": 20,
+      "p2_candidate": false
+    },
+    {
+      "status": "P4 confirmed",
+      "why": "公開材料中僅定義了重複 email 註冊時 API 回傳 409 與錯誤訊息，並未規範或測試在此情境後主動向 GET /api/user 發送請求驗證其回傳 401。",
+      "row": 4,
+      "assertion": "expect(currentUser.status).toBe(401)",
+      "line": 23,
+      "p2_candidate": false
+    }
+  ]
+}

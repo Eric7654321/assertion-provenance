@@ -1,0 +1,31 @@
+{
+  "source": "NB_terra_precise_H02_s3.json",
+  "gen": "terra",
+  "arm": "precise",
+  "item": "H02",
+  "seed": 3,
+  "checks": [
+    {
+      "status": "P4 confirmed",
+      "why": "公開契約中並未明確要求或測試未登入訪客瀏覽文章頁時必須能看到已存在的留言內容。",
+      "row": 2,
+      "assertion": "await expect(page.getByText(authorComment)).toBeVisible()",
+      "line": 22,
+      "p2_candidate": true
+    },
+    {
+      "supported": true,
+      "file": "specs/e2e/comments.spec.ts",
+      "line_start": 31,
+      "line_end": 36,
+      "quote": "  test('should add a comment to an article', async ({ page }) => {\n    const commentText = 'This is a test comment from Playwright!';\n    await addComment(page, commentText);\n    // Comment should be visible\n    await expect(page.locator(`.card:not(.comment-form) .card-block:has-text(\"${commentText}\")`)).toBeVisible();\n  });",
+      "why": "E2E 測試明確驗證發布留言後，包含該留言內容的留言卡片應可見。",
+      "status": "P2 confirmed",
+      "verify": "ok",
+      "row": 9,
+      "assertion": "await expect(otherCommentCard).toBeVisible()",
+      "line": 47,
+      "p2_candidate": true
+    }
+  ]
+}

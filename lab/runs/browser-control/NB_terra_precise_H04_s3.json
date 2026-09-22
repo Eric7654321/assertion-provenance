@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_terra_precise_H04_s3",
+  "condition": "C0-none",
+  "generator": "terra",
+  "model": "gpt-5.6-terra",
+  "item": "H04",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H04\n    Scenario: Follow and unfollow\n      When user B opens author A's profile page and follows author A\n      Then the follow button switches to an unfollow state\n      When user B goes to the home page and switches to \"Your Feed\"\n      Then author A's articles appear in \"Your Feed\"\n      When user B returns to author A's profile page and unfollows author A\n      Then the button returns to its original follow state\n      When user B switches to \"Your Feed\" again\n      Then author A's articles no longer appear in \"Your Feed\"\n      And \"Your Feed\" displays an empty state when there are no articles\n",
+  "complete": true,
+  "spec": "generated/NB_terra_precise_H04_s3.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport {\n  newUser,\n  newArticle,\n  loginAs,\n  UI,\n} from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('@item:H04 Follow and unfollow', async ({ page }) => {\n    const author = await newUser();\n    const follower = await newUser();\n    const article = await newArticle(author);\n\n    await loginAs(page, follower);\n\n    await page.goto(`${UI}/#/profile/${author.username}`);\n\n    const followButton = page.getByRole('button', {\n      name: new RegExp(`Follow\\\\s+${author.username}`, 'i'),\n    });\n\n    await expect(followButton).toBeVisible();\n    await followButton.click();\n\n    const unfollowButton = page.getByRole('button', {\n      name: new RegExp(`Unfollow\\\\s+${author.username}`, 'i'),\n    });\n\n    await expect(unfollowButton).toBeVisible();\n\n    await page.goto(`${UI}/#/`);\n    await page.getByRole('link', { name: 'Your Feed' }).click();\n\n    await expect(page.getByRole('link', { name: article.title })).toBeVisible();\n\n    await page.goto(`${UI}/#/profile/${author.username}`);\n\n    await expect(unfollowButton).toBeVisible();\n    await unfollowButton.click();\n\n    await expect(followButton).toBeVisible();\n\n    await page.goto(`${UI}/#/`);\n    await page.getByRole('link', { name: 'Your Feed' }).click();\n\n    await expect(page.getByText('No articles are here... yet.')).toBeVisible();\n    await expect(page.getByRole('link', { name: article.title })).not.toBeVisible();\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 4.1,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

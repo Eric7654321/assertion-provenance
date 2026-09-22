@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_gem_precise_H03_s3",
+  "condition": "C0-none",
+  "generator": "gem",
+  "model": "gemini-3.8-flash",
+  "item": "H03",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:H03\n    Scenario: Pagination with tag filter\n      Given there are 15 articles under a specific tag\n      When a user filters articles by this tag on the home page\n      Then the number of displayed articles matches the pagination setting\n      When the user selects page 2 from the pagination controls\n      Then the second page shows the subsequent articles\n      And the URL reflects page 2\n      When the user directly opens the URL with page 2\n      Then the user arrives at the same page\n      When the user switches back to the all articles list\n      Then the list returns to the first page\n",
+  "complete": true,
+  "spec": "generated/NB_gem_precise_H03_s3.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('Pagination with tag filter', async ({ page }) => {\n    const user = await newUser();\n    const specificTag = `tag_${Date.now()}`;\n\n    // Given there are 15 articles under a specific tag\n    for (let i = 1; i <= 15; i++) {\n      await newArticle(user, {\n        title: `Tag Article ${String(i).padStart(2, '0')} ${Date.now()}_${i}`,\n        description: `Description ${i}`,\n        body: `Body content for article ${i}`,\n        tagList: [specificTag],\n      });\n    }\n\n    // Go to home page\n    await page.goto(`${UI}/#/`);\n\n    // When a user filters articles by this tag on the home page\n    const tagButton = page.locator(`.tag-list, .sidebar`).getByText(specificTag, { exact: true });\n    await expect(tagButton).toBeVisible();\n    await tagButton.click();\n\n    // Verify tag tab is active\n    const activeTab = page.locator('.feed-toggle .nav-link.active');\n    await expect(activeTab).toContainText(specificTag);\n\n    // Then the number of displayed articles matches the pagination setting (Conduit default is 10)\n    const articles = page.locator('.article-preview');\n    await expect(articles).toHaveCount(10);\n\n    // When the user selects page 2 from the pagination controls\n    const page2Button = page.locator('.pagination .page-item').getByText('2', { exact: true });\n    await expect(page2Button).toBeVisible();\n    await page2Button.click();\n\n    // Then the second page shows the subsequent articles (15 total - 10 = 5 articles)\n    await expect(articles).toHaveCount(5);\n\n    // And the URL reflects page 2\n    await expect(page).toHaveURL(/page=2/);\n    const page2Url = page.url();\n\n    // When the user directly opens the URL with page 2\n    await page.goto(page2Url);\n\n    // Then the user arrives at the same page\n    await expect(page.locator('.feed-toggle .nav-link.active')).toContainText(specificTag);\n    await expect(articles).toHaveCount(5);\n    const activePageItem = page.locator('.pagination .page-item.active');\n    await expect(activePageItem).toContainText('2');\n\n    // When the user switches back to the all articles list\n    const globalFeedTab = page.locator('.feed-toggle').getByRole('link', { name: 'Global Feed' });\n    await globalFeedTab.click();\n\n    // Then the list returns to the first page\n    await expect(page.locator('.feed-toggle .nav-link.active')).toContainText('Global Feed');\n    await expect(page.locator('.pagination .page-item.active')).toContainText('1');\n    expect(page.url()).not.toContain('page=2');\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 5.4,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

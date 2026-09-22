@@ -1,0 +1,154 @@
+{
+  "source": "NB_gem_precise_H01_s2.json",
+  "gen": "gem",
+  "gen_model": "gemini-3.8-flash",
+  "arm": "precise",
+  "condition": "C0-none",
+  "item": "H01",
+  "seed": 2,
+  "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:H01\n    Scenario: Article tags and editing\n      Given a logged-in user is on the new article page\n      When the user fills in a title and body, adds three tags, and publishes the article\n      Then the article page should display content matching the input\n      When the user edits the article from the article page\n      And changes the title to another string, removes all tags, and submits\n      Then the updated title should be displayed\n      And the tags should no longer appear\n",
+  "spec": "generated/NB_gem_precise_H01_s2.spec.ts",
+  "rows": [
+    {
+      "class": "P0",
+      "citation": "文章頁顯示的內容與輸入一致",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出發佈後文章頁顯示的內容與輸入一致，驗證文章標題（originalTitle）顯示可見直接對應此要求。",
+      "assertion": "await expect(page.getByRole('heading', { name: originalTitle, level: 1 })).toBeVisible()",
+      "line": 31
+    },
+    {
+      "class": "P0",
+      "citation": "文章頁顯示的內容與輸入一致",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出發佈後文章頁顯示的內容與輸入一致，驗證文章內文 body 可見直接對應此要求。",
+      "assertion": "await expect(page.getByText(body)).toBeVisible()",
+      "line": 32
+    },
+    {
+      "class": "P0",
+      "citation": "文章頁顯示的內容與輸入一致",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出發佈後文章頁顯示的內容與輸入一致，包含發佈時加入的三個標籤。",
+      "assertion": "await expect(page.getByRole('list').getByText(tag, { exact: true })).toBeVisible()",
+      "line": 34
+    },
+    {
+      "class": "P0",
+      "citation": "編輯送出後標題更新",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出編輯送出後標題更新，斷言驗證更新後的標題可見直接對應此項要求。",
+      "assertion": "await expect(page.getByRole('heading', { name: updatedTitle, level: 1 })).toBeVisible()",
+      "line": 53
+    },
+    {
+      "class": "P0",
+      "citation": "編輯送出後標題更新，標籤不再出現。",
+      "p2_candidate": false,
+      "borderline": false,
+      "why": "驗收要求明確指出編輯送出後標籤不再出現，斷言確認每個標籤在列表中不再可見。",
+      "assertion": "await expect(page.locator('.tag-list').getByText(tag, { exact: true })).not.toBeVisible()",
+      "line": 57
+    }
+  ],
+  "rows_by_judge": {
+    "gem": [
+      {
+        "class": "P0",
+        "citation": "文章頁顯示的內容與輸入一致",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出發佈後文章頁顯示的內容與輸入一致，驗證文章標題（originalTitle）顯示可見直接對應此要求。",
+        "assertion": "await expect(page.getByRole('heading', { name: originalTitle, level: 1 })).toBeVisible()",
+        "line": 31
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁顯示的內容與輸入一致",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出發佈後文章頁顯示的內容與輸入一致，驗證文章內文 body 可見直接對應此要求。",
+        "assertion": "await expect(page.getByText(body)).toBeVisible()",
+        "line": 32
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁顯示的內容與輸入一致",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出發佈後文章頁顯示的內容與輸入一致，包含發佈時加入的三個標籤。",
+        "assertion": "await expect(page.getByRole('list').getByText(tag, { exact: true })).toBeVisible()",
+        "line": 34
+      },
+      {
+        "class": "P0",
+        "citation": "編輯送出後標題更新",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出編輯送出後標題更新，斷言驗證更新後的標題可見直接對應此項要求。",
+        "assertion": "await expect(page.getByRole('heading', { name: updatedTitle, level: 1 })).toBeVisible()",
+        "line": 53
+      },
+      {
+        "class": "P0",
+        "citation": "編輯送出後標題更新，標籤不再出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "驗收要求明確指出編輯送出後標籤不再出現，斷言確認每個標籤在列表中不再可見。",
+        "assertion": "await expect(page.locator('.tag-list').getByText(tag, { exact: true })).not.toBeVisible()",
+        "line": 57
+      }
+    ],
+    "terra": [
+      {
+        "class": "P0",
+        "citation": "文章頁顯示的內容與輸入一致；",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "發佈後文章頁以 heading 顯示輸入的原始標題，是「內容與輸入一致」的直接驗證。",
+        "assertion": "await expect(page.getByRole('heading', { name: originalTitle, level: 1 })).toBeVisible()",
+        "line": 31
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁顯示的內容與輸入一致；編輯送出後標題更新，標籤不再出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在發佈後確認文章內文可見，直接對應文章頁內容與輸入一致的驗收要求。",
+        "assertion": "await expect(page.getByText(body)).toBeVisible()",
+        "line": 32
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁顯示的內容與輸入一致；編輯送出後標題更新，標籤不再出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "發佈後文章頁顯示所輸入的標籤，是「內容與輸入一致」的直接具體化。",
+        "assertion": "await expect(page.getByRole('list').getByText(tag, { exact: true })).toBeVisible()",
+        "line": 34
+      },
+      {
+        "class": "P0",
+        "citation": "編輯送出後標題更新，標籤不再出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "送出編輯後以一級標題可見來確認更新後標題已顯示，與驗收要求及 Gherkin 的標題更新主張一致。",
+        "assertion": "await expect(page.getByRole('heading', { name: updatedTitle, level: 1 })).toBeVisible()",
+        "line": 53
+      },
+      {
+        "class": "P0",
+        "citation": "文章頁顯示的內容與輸入一致；編輯送出後標題更新，標籤不再出現。",
+        "p2_candidate": false,
+        "borderline": false,
+        "why": "斷言在編輯送出後確認各標籤不再可見，直接對應驗收要求的「標籤不再出現」。",
+        "assertion": "await expect(page.locator('.tag-list').getByText(tag, { exact: true })).not.toBeVisible()",
+        "line": 57
+      }
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_gem_precise_S07_s3",
+  "condition": "C0-none",
+  "generator": "gem",
+  "model": "gemini-3.8-flash",
+  "item": "S07",
+  "seed": 3,
+  "feature": "Feature: Conduit Acceptance Tests\n\n  @item:S07\n    Scenario: Author deletes own article\n      Given an author opens their own article page\n      When the author deletes the article\n      Then the article no longer appears in the article list on the home page\n",
+  "complete": true,
+  "spec": "generated/NB_gem_precise_S07_s3.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { newUser, newArticle, loginAs, UI } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Tests', () => {\n  test('@item:S07 Scenario: Author deletes own article', async ({ page }) => {\n    // Given an author opens their own article page\n    const author = await newUser();\n    const article = await newArticle(author);\n\n    await loginAs(page, author);\n    await page.goto(`${UI}/#/article/${article.slug}`);\n\n    // When the author deletes the article\n    // Wait for the delete button to be available and click it\n    // Conduit standard usually has a button with text \"Delete Article\" or similar\n    const deleteButton = page.getByRole('button', { name: /delete article/i }).first();\n    await expect(deleteButton).toBeVisible();\n\n    // Sometimes a confirm dialog might appear; accept if dialog pops up\n    page.once('dialog', async (dialog) => {\n      await dialog.accept();\n    });\n\n    await deleteButton.click();\n\n    // Then the article no longer appears in the article list on the home page\n    // After deletion, the application should redirect to the home page\n    await page.waitForURL(`${UI}/#/`);\n\n    // Verify on home page (under Global Feed or Your Feed) that the article title does not appear\n    // Switch to Global Feed tab if needed, or check the article list\n    const globalFeedTab = page.getByRole('button', { name: /global feed/i }).or(page.getByText('Global Feed'));\n    if (await globalFeedTab.isVisible()) {\n      await globalFeedTab.click();\n    }\n\n    await expect(page.getByRole('heading', { name: article.title })).not.toBeVisible();\n    await expect(page.getByText(article.title)).not.toBeVisible();\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 2.4,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

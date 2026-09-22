@@ -1,0 +1,21 @@
+{
+  "run_id": "NB_gem_precise_S12_s2",
+  "condition": "C0-none",
+  "generator": "gem",
+  "model": "gemini-3.8-flash",
+  "item": "S12",
+  "seed": 2,
+  "feature": "Feature: Conduit Acceptance Criteria\n\n  @item:S12\n    Scenario: Article list pagination\n      Given a user scrolls to the pagination controls on the home page article list\n      When the user selects page 2\n      Then the articles displayed should be the continuation of the list\n",
+  "complete": true,
+  "spec": "generated/NB_gem_precise_S12_s2.spec.ts",
+  "generation_log": [
+    {
+      "role": "model",
+      "text": "FINAL\n```ts\nimport { test, expect } from '@playwright/test';\nimport { UI, newUser, newArticle } from '../support/fixtures';\n\ntest.describe('Conduit Acceptance Criteria', () => {\n  test('@item:S12 Scenario: Article list pagination', async ({ page }) => {\n    // 確保有足夠文章可供分頁（RealWorld Conduit 每頁通常為 10 篇）\n    // 建立使用者並發布文章以確保文章數超過一頁門檻\n    const author = await newUser();\n    const createdArticles: string[] = [];\n    for (let i = 1; i <= 11; i++) {\n      const art = await newArticle(author, {\n        title: `Pagination Test Article ${Date.now()}-${i}`,\n        description: `Description ${i}`,\n        body: `Body ${i}`,\n        tagList: ['pagination-test'],\n      });\n      createdArticles.push(art.title);\n    }\n\n    // 瀏覽至首頁（hash 路由）\n    await page.goto(`${UI}/#/`);\n\n    // 確保切換至 Global Feed\n    const globalFeedTab = page.locator('button, a', { hasText: 'Global Feed' });\n    if (await globalFeedTab.isVisible()) {\n      await globalFeedTab.click();\n    }\n\n    // 等待文章列表與分頁元件載入\n    await page.waitForSelector('.article-preview', { state: 'visible' });\n\n    // 記錄第一頁顯示的文章標題\n    const firstPageArticles = await page\n      .locator('.article-preview h1, .article-preview h2, .preview-link h1')\n      .allTextContents();\n    expect(firstPageArticles.length).toBeGreaterThan(0);\n\n    // Given a user scrolls to the pagination controls on the home page article list\n    const pagination = page.locator('.pagination, ul.pagination');\n    await expect(pagination).toBeVisible();\n    await pagination.scrollIntoViewIfNeeded();\n\n    // When the user selects page 2\n    const page2Button = pagination.locator('.page-item, li', { hasText: '2' }).locator('a, button');\n    await expect(page2Button).toBeVisible();\n    await page2Button.click();\n\n    // 等待分頁按鈕 2 變為 active 狀態\n    const page2Item = pagination.locator('.page-item', { hasText: '2' });\n    await expect(page2Item).toHaveClass(/active/);\n\n    // 等待第二頁文章載入\n    await page.waitForSelector('.article-preview', { state: 'visible' });\n\n    // Then the articles displayed should be the continuation of the list\n    const secondPageArticles = await page\n      .locator('.article-preview h1, .article-preview h2, .preview-link h1')\n      .allTextContents();\n    expect(secondPageArticles.length).toBeGreaterThan(0);\n\n    // 第二頁的第一篇文章不應出現在第一頁的第一篇，證明是清單的延續\n    expect(secondPageArticles[0]).not.toBe(firstPageArticles[0]);\n  });\n});\n```"
+    }
+  ],
+  "generation_wall_seconds": 4.7,
+  "probe_steps": 0,
+  "improvised_probe": 0,
+  "wanted_walk": 0
+}

@@ -57,9 +57,9 @@ lab/
   runs/provenance-benchmark.json  balanced 20-case known-answer judge benchmark
   conduit-setup.patch          our only change to the application under test (SQLite backend etc.)
   tools/fetch_contract.sh      re-creates the pinned public reference set (36 RealWorld files)
-paper/main.tex, refs.bib       paper source
-SE4AgenticAI.pdf               compiled eight-page manuscript
 ```
+
+The manuscript itself is not included in this artifact repository.
 
 ## Pinned versions
 
